@@ -31,3 +31,4 @@ MediSchedule is an appointment management system developed as a practical test f
 2. react-router-dom
 3. axios
 4. react-google-recaptcha
+5. react-hook-form
