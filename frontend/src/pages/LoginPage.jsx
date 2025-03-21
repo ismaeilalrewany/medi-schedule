@@ -13,6 +13,19 @@ const LoginPage = () => {
   const [recaptchaToken, setRecaptchaToken] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
+  const radioData = {
+    name: 'Role',
+    options: ['Admin', 'Doctor', 'Patient'],
+    checked: role,
+    setChecked: setRole
+  }
+
+  const submitData = {
+    name: 'Login',
+    isSubmitting,
+    recaptchaToken
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
@@ -35,27 +48,26 @@ const LoginPage = () => {
 
   return (
     <main className="flex justify-center items-center min-h-screen bg-gradient-to-br from-base-200 to-base-100 p-4">
-      <div className="card w-full max-w-md shadow-2xl bg-base-100">
+      <div className="card min-w-88 max-w-96 shadow-2xl bg-base-100">
         <div className="card-body p-8">
-          <div className="text-center mb-8"></div>
-          <h1 className="text-3xl font-bold text-neutral" style={{ fontFamily: 'Cursive, sans-serif' }}>Welcome Back!</h1>
-          <p className="text-neutral mt-2">Please login to continue</p>
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-neutral" style={{ fontFamily: 'Cursive, sans-serif' }}>Welcome Back!</h1>
+            <p className="text-neutral mt-2">Please login to continue</p>
+          </div>
+          <form className="space-y-4" onSubmit={handleSubmit}>
+            <EmailInput email={email} setEmail={setEmail} />
+            <PasswordInput password={password} setPassword={setPassword} />
+            <RadioInput data={radioData} />
+            <Recaptcha setRecaptchaToken={setRecaptchaToken} />
+            <SubmitButton data={submitData} />
+            <p className="text-sm text-neutral text-center">
+              <span className="pointer-events-none">Don't have an account? </span>
+              <a href="#" className="link text-neutral underline">
+                Register
+              </a>
+            </p>
+          </form>
         </div>
-
-        <form className="space-y-4" onSubmit={handleSubmit}>
-          <EmailInput email={email} setEmail={setEmail} />
-          <PasswordInput password={password} setPassword={setPassword} />
-          <RadioInput role={role} setRole={setRole} />
-          <Recaptcha setRecaptchaToken={setRecaptchaToken} />
-          <SubmitButton isSubmitting={isSubmitting} recaptchaToken={recaptchaToken} />
-
-          <p className="text-sm text-neutral text-center">
-            Don't have an account?{' '}
-            <a href="#" className="link text-neutral">
-              Register
-            </a>
-          </p>
-        </form>
       </div>
     </main>
   )

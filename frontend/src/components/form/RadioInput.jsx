@@ -1,29 +1,33 @@
-const RadioInput = ({ role, setRole }) => (
-  <div className="form-control">
-    <label className="label">
-      <span className="label-text font-semibold">Select Role</span>
-    </label>
-    <div className="join w-full">
-      {['Admin', 'Doctor', 'Patient'].map((r) => (
-        <label
-          key={r.toLowerCase()}
-          className={`join-item btn btn-outline no-animation ${
-            role === r.toLowerCase() ? 'btn-[--color-neutral]' : ''
-          }`}
-        >
-          <input
-            type="radio"
-            name="role"
-            value={r.toLowerCase()}
-            checked={role === r.toLowerCase()}
-            onChange={() => setRole(r.toLowerCase())}
-            className="hidden"
-          />
-          {r}
-        </label>
-      ))}
+const RadioInput = ({ data }) => {
+  return (
+    <div className="form-control">
+      <label htmlFor="role" className="label block mb-2">
+        <span className="label-text font-bold">{ data.name }</span>
+      </label>
+      <div className="w-full">
+        {data.options.map((r) => (
+          <label
+            key={`${r.toLowerCase()}`}
+            className={`me-2 btn no-animation ${
+              data.checked === r.toLowerCase() ? 'btn-neutral' : 'btn-outline hover:bg-inherit hover:border-neutral'
+            }`}
+          >
+            <input
+              id="role"
+              type="radio"
+              name="role"
+              value={r.toLowerCase()}
+              checked={data.checked === r.toLowerCase()}
+              onChange={() => data.setChecked(r.toLowerCase())}
+              className="hidden"
+              default="patient"
+            />
+            {r}
+          </label>
+        ))}
+      </div>
     </div>
-  </div>
-)
+  )
+}
 
 export default RadioInput
