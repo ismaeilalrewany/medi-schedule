@@ -1,6 +1,14 @@
+import Footer from "./layouts/Footer.jsx"
+import Navbar from "./layouts/Navbar.jsx"
+import LoginPage from "./pages/LoginPage.jsx"
+
 const App = () => {
   return (
-    <h1>App</h1>
+    <>
+      <Navbar />
+      <LoginPage />
+      <Footer />
+    </>
   )
 }
 

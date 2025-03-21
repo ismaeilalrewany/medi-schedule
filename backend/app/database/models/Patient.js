@@ -42,12 +42,6 @@ const PatientSchema = new mongoose.Schema({
     required: true, 
     lowercase: true 
   },
-  address: {
-    street: { type: String, trim: true },
-    city: { type: String, trim: true },
-    state: { type: String, trim: true },
-    zipCode: { type: String, trim: true }
-  },
   medicalHistory: { type: String, trim: true },
   tokens: [
     {
