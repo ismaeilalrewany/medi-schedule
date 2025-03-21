@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
-import Patient from './Patient'
-import Doctor from './Doctor'
+import Patient from './Patient.js'
+import Doctor from './Doctor.js'
 
 const AppointmentSchema = new mongoose.Schema({
   patient: { 

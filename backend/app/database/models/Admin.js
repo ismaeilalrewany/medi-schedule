@@ -1,9 +1,10 @@
 import mongoose from 'mongoose'
 import validator from 'validator'
-import passwordComplexity from './utils/passwordComplexity.js'
-import preSaveHook from './utils/preSaveHook.js'
+import { mongoosePasswordValidator, validatePasswordComplexity } from './utils/passwordComplexity.js'
+import preSaveHashHook from './utils/preSaveHashHook.js'
 import generateAuthToken from './utils/generateAuthToken.js'
 import applyToJSON from './utils/applyToJSON.js'
+import 'dotenv/config'
 
 const AdminSchema = new mongoose.Schema({
   fullName: { 
@@ -24,7 +25,10 @@ const AdminSchema = new mongoose.Schema({
     type: String, 
     required: true, 
     minlength: 8,
-    validate: passwordComplexity 
+    validate: {
+      validator: mongoosePasswordValidator,
+      message: () => validatePasswordComplexity(this.password).message
+    } 
   },
   phoneNumber: { 
     type: String, 
@@ -41,10 +45,44 @@ const AdminSchema = new mongoose.Schema({
   ]
 }, { timestamps: true })
 
-preSaveHook(AdminSchema)
+preSaveHashHook(AdminSchema)
 
 generateAuthToken(AdminSchema)
 
 applyToJSON(AdminSchema)
+
+// Create admin because there is no admin register api
+AdminSchema.statics.createDefaultAdmin = async function() {
+  try {
+    const existingAdmin = await this.findOne({ email: process.env.ADMIN_EMAIL })
+
+    if (existingAdmin) {
+      console.log('Default admin already exists')
+      return
+    }
+
+    if (!process.env.ADMIN_EMAIL || !process.env.ADMIN_PASSWORD) {
+      throw new Error('ADMIN_EMAIL and ADMIN_PASSWORD must be provided in environment variables')
+    }
+
+    const admin = new this({
+      fullName: process.env.ADMIN_NAME, 
+      email: process.env.ADMIN_EMAIL, 
+      password: process.env.ADMIN_PASSWORD ,
+      phoneNumber: process.env.ADMIN_PHONE 
+    })
+
+    const complexityCheck = validatePasswordComplexity(admin.password)
+    if (!complexityCheck.isValid) {
+      throw new Error(complexityCheck.message)
+    }
+
+    await admin.save()
+    console.log('Default admin created successfully')
+  } catch (error) {
+    console.error('Error creating default admin:', error.message)
+    process.exit(1)
+  }
+}
 
 export default mongoose.model('Admin', AdminSchema)

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import validator from 'validator'
-import passwordComplexity from './utils/passwordComplexity.js'
-import preSaveHook from './utils/preSaveHook.js'
+import { validatePasswordComplexity, mongoosePasswordValidator } from './utils/passwordComplexity.js'
+import preSaveHashHook from './utils/preSaveHashHook.js'
 import generateAuthToken from './utils/generateAuthToken.js'
 import applyToJSON from './utils/applyToJSON.js'
 
@@ -24,7 +24,10 @@ const DoctorSchema = new mongoose.Schema({
     type: String, 
     required: true, 
     minlength: 8,
-    validate: passwordComplexity 
+    validate: {
+      validator: validatePasswordComplexity,
+      message: () => mongoosePasswordValidator(this.message).message
+    } 
   },
   specialization: { type: String, required: true, trim: true },
   qualifications: [{ type: String, trim: true }],
@@ -60,7 +63,7 @@ const DoctorSchema = new mongoose.Schema({
   ]
 }, { timestamps: true })
 
-preSaveHook(DoctorSchema)
+preSaveHashHook(DoctorSchema)
 
 generateAuthToken(DoctorSchema)
 

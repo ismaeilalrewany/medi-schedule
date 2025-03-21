@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs'
 
-const preSaveHook = (schema) => {
+const preSaveHashHook = (schema) => {
   schema.pre('save', async function (next) {
     try {
       if (this.isModified('password')) {
@@ -13,4 +13,4 @@ const preSaveHook = (schema) => {
   })
 }
 
-export default preSaveHook
+export default preSaveHashHook
