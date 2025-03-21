@@ -3,7 +3,7 @@ import axios from 'axios'
 import EmailInput from '../components/form/EmailInput.jsx'
 import PasswordInput from '../components/form/PasswordInput.jsx'
 import RadioInput from '../components/form/RadioInput.jsx'
-import Recaptcha from '../components/form/recaptcha.jsx'
+import Recaptcha from '../components/form/Recaptcha.jsx'
 import SubmitButton from '../components/form/SubmitButton.jsx'
 
 const LoginPage = () => {
