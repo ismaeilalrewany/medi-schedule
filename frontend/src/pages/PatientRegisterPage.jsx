@@ -9,6 +9,7 @@ import TelInput from '../components/form/TelInput.jsx'
 import DateInput from '../components/form/DateInput.jsx'
 import Recaptcha from '../components/form/Recaptcha.jsx'
 import SubmitButton from '../components/form/SubmitButton.jsx'
+import RedirectLink from '../components/form/RedirectLink.jsx'
 
 const PatientRegisterPage = () => {
   const [fullName, setFullName] = useState('')
@@ -94,12 +95,7 @@ const PatientRegisterPage = () => {
             />
             <Recaptcha setRecaptchaToken={setRecaptchaToken} />
             <SubmitButton data={submitData} />
-            <p className="text-sm text-neutral text-center">
-              <span className="pointer-events-none">Already have an account? </span>
-              <a href="#" className="link text-neutral underline">
-                Login
-              </a>
-            </p>
+            <RedirectLink text="Already have an account? " path="/login" linkText="Login" />
           </form>
         </div>
       </div>

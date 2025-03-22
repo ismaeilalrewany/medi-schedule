@@ -3,3 +3,11 @@
 @plugin "daisyui" {
   themes: light --default;
 }
+
+.btn:hover, .btn:focus {
+  @apply bg-neutral border-neutral text-neutral-content;
+}
+
+.input:focus {
+  @apply outline-none ring ring-neutral;
+}

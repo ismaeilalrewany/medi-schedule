@@ -7,7 +7,7 @@ const EmailInput = ({ email, setEmail }) => (
       id="email"
       type="email"
       placeholder="Enter your email"
-      className="input input-bordered focus:input-neutral focus:ring-0 focus:outline-0"
+      className="input input-bordered"
       value={email}
       onChange={(e) => setEmail(e.target.value)}
       required

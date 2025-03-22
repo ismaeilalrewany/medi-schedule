@@ -1,11 +1,11 @@
 const TextInput = ({ label, value, setValue, placeholder }) => {
   return (
     <div className="form-control">
-      <label className="label mb-2 block" htmlFor="name">
+      <label className="label mb-2 block" htmlFor={`${label.toLowerCase()}`}>
         <span className="label-text font-bold">{label}</span>
       </label>
       <input
-        id="name"
+        id={`${label.toLowerCase()}`}
         type="text"
         placeholder={placeholder}
         className="input input-bordered"

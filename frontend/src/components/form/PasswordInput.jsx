@@ -7,7 +7,7 @@ const PasswordInput = ({ password, setPassword }) => (
       id="password"
       type="password"
       placeholder="Enter your password"
-      className="input input-bordered focus:input-neutral focus:ring-0 focus:outline-0"
+      className="input input-bordered"
       value={password}
       onChange={(e) => setPassword(e.target.value)}
       required

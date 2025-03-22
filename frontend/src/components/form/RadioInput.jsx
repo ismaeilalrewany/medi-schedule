@@ -9,7 +9,7 @@ const RadioInput = ({ data }) => {
           <label
             key={`${r.toLowerCase()}`}
             className={`me-2 btn no-animation ${
-              data.checked === r.toLowerCase() ? 'btn-neutral' : 'btn-outline hover:bg-inherit hover:border-neutral'
+              data.checked === r.toLowerCase() ? 'btn-neutral' : 'btn-outline'
             }`}
           >
             <input

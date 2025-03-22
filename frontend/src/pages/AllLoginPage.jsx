@@ -5,6 +5,7 @@ import PasswordInput from '../components/form/PasswordInput.jsx'
 import RadioInput from '../components/form/RadioInput.jsx'
 import Recaptcha from '../components/form/Recaptcha.jsx'
 import SubmitButton from '../components/form/SubmitButton.jsx'
+import RedirectLink from '../components/form/RedirectLink.jsx'
 
 const AllLoginPage = () => {
   const [email, setEmail] = useState('')
@@ -59,12 +60,7 @@ const AllLoginPage = () => {
             <RadioInput data={radioData} />
             <Recaptcha setRecaptchaToken={setRecaptchaToken} />
             <SubmitButton data={submitData} />
-            <p className="text-sm text-neutral text-center">
-              <span className="pointer-events-none">Don't have an account? </span>
-              <a href="#" className="link text-neutral underline">
-                Register
-              </a>
-            </p>
+            <RedirectLink text="Don't have an account? " linkText="Register" path="/register" />
           </form>
         </div>
       </div>
