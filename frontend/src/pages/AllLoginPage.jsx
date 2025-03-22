@@ -60,7 +60,7 @@ const AllLoginPage = () => {
             <RadioInput data={radioData} />
             <Recaptcha setRecaptchaToken={setRecaptchaToken} />
             <SubmitButton data={submitData} />
-            <RedirectLink text="Don't have an account? " linkText="Register" path="/register" />
+            <RedirectLink text="Don't have an account? " linkText="Register" path="/patients/register" />
           </form>
         </div>
       </div>

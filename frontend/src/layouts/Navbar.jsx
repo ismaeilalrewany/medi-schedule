@@ -1,4 +1,25 @@
+import { Link, useLocation } from 'react-router-dom'
+
 const Navbar = () => {
+  const location = useLocation()
+  const { pathname } = location
+
+  const authButtonController = () => {
+    switch (pathname) {
+      case '/login':
+        return { pathname: '/patients/register', linkText: 'Register' }
+      case '/patients/register':
+      case '/doctors/register':
+        return { pathname: '/login', linkText: 'Login' }
+      case '/patients/appointments':
+      case '/doctors/appointments':
+      case '/admin/*':
+        return { pathname: '/logout', linkText: 'Logout' }
+      default:
+        return '/login'
+    }
+  }
+
   return (
     <header className="bg-base-100 shadow-sm">
       <div className="container mx-auto">
@@ -11,23 +32,25 @@ const Navbar = () => {
               <ul
                 tabIndex={0}
                 className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                <li><a>Home</a></li>
+                <li>
+                  <Link to="/patients/appointments" className="btn btn-ghost">Appointments</Link>
+                </li>
               </ul>
             </div>
-            <a className="btn btn-ghost text-xl">ONNMED</a>
+            <Link to={'/patients/appointments'} className="btn btn-ghost text-xl">ONNMED</Link>
           </div>
           <div className="navbar-end hidden lg:flex">
             <ul className="menu menu-horizontal px-1">
               <li>
-                <a className="">Home</a>
+              <Link to="/patients/appointments" className="btn btn-ghost">Appointments</Link>
               </li>
             </ul>
             <div className="">
-              <a className="btn">Register</a>
+              <Link to={authButtonController().pathname} className='btn'>{ authButtonController().linkText }</Link>
             </div>
           </div>
           <div className="navbar-end lg:hidden">
-            <a className="btn">Register</a>
+            <Link to={authButtonController().pathname} className='btn'>{ authButtonController().linkText }</Link>
           </div>
         </nav>
       </div>
