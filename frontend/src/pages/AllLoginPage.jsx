@@ -6,7 +6,7 @@ import RadioInput from '../components/form/RadioInput.jsx'
 import Recaptcha from '../components/form/Recaptcha.jsx'
 import SubmitButton from '../components/form/SubmitButton.jsx'
 
-const LoginPage = () => {
+const AllLoginPage = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [role, setRole] = useState('patient')
@@ -31,10 +31,9 @@ const LoginPage = () => {
     setIsSubmitting(true)
 
     try {
-      const response = await axios.post('/api/login', {
+      const response = await axios.post(`/api/${role}s/login`, {
         email,
         password,
-        role,
         recaptchaToken
       })
 
@@ -73,4 +72,4 @@ const LoginPage = () => {
   )
 }
 
-export default LoginPage
+export default AllLoginPage
