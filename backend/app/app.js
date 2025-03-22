@@ -1,6 +1,7 @@
 import express from 'express'
 import connect from './database/connect.js'
 import cors from 'cors'
+import session from 'express-session'
 import AdminModel from './database/models/Admin.js'
 import patientsRouter from './routes/patients.js'
 import doctorsRouter from './routes/doctors.js'
@@ -20,6 +21,12 @@ export const startApp = async () => {
     app.use(cors())
     app.use(express.json())
     app.use(express.urlencoded({ extended: true }))
+    app.use(session({
+      secret: process.env.SESSION_SECRET,
+      resave: false,
+      saveUninitialized: false,
+      // cookie: { secure: false }
+    }))
 
     // Routes
     app.use('/api/patients', patientsRouter)

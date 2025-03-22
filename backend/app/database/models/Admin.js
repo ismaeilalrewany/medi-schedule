@@ -11,7 +11,9 @@ const AdminSchema = new mongoose.Schema({
     type: String, 
     required: true, 
     trim: true, 
-    lowercase: true 
+    lowercase: true ,
+    minlength: 3, 
+    validate: [validator.isAlpha, 'Invalid full name'] 
   },
   email: { 
     type: String, 

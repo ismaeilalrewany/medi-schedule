@@ -10,6 +10,7 @@ import DateInput from '../components/form/DateInput.jsx'
 import Recaptcha from '../components/form/Recaptcha.jsx'
 import SubmitButton from '../components/form/SubmitButton.jsx'
 import RedirectLink from '../components/form/RedirectLink.jsx'
+import { useNavigate } from 'react-router-dom'
 
 const PatientRegisterPage = () => {
   const [fullName, setFullName] = useState('')
@@ -21,13 +22,14 @@ const PatientRegisterPage = () => {
   const [medicalHistory, setMedicalHistory] = useState('')
   const [recaptchaToken, setRecaptchaToken] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
 
     try {
-      const response = await axios.post('/api/patients/register', {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/patients/register`, {
         fullName,
         email,
         password,
@@ -39,6 +41,7 @@ const PatientRegisterPage = () => {
       })
 
       console.log('Registration successful:', response.data)
+      navigate('/patients/appointments')
     } catch (error) {
       console.error('Registration error:', error.response?.data || error.message)
     } finally {

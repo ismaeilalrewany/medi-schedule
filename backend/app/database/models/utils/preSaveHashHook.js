@@ -5,7 +5,8 @@ const preSaveHashHook = (schema) => {
   schema.pre('save', async function (next) {
     try {
       if (this.isModified('password')) {
-        this.password = await bcrypt.hash(this.password, process.env.HASH_SALT)
+        const salt = bcrypt.genSaltSync(Number(process.env.HASH_SALT))
+        this.password = bcrypt.hashSync(this.password, salt)
       }
       next()
     } catch (error) {

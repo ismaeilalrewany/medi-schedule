@@ -1,8 +1,30 @@
+import { useState, useEffect } from 'react'
+
 const RadioInput = ({ name, options, checked, setChecked }) => {
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    // Validate when checked value changes
+    if (!checked) {
+      setError('Please select an option')
+    } else {
+      setError('')
+    }
+  }, [checked])
+
+  const handleChange = (value) => {
+    setChecked(value)
+    if (!value) {
+      setError('Please select an option')
+    } else {
+      setError('')
+    }
+  }
+
   return (
     <div className="form-control">
-      <label htmlFor="role" className="label block mb-2">
-        <span className="label-text font-bold">{ name }</span>
+      <label className="label block mb-2">
+        <span className="label-text font-bold">{name}</span>
       </label>
       <div className="w-full">
         {options.map((r) => (
@@ -13,19 +35,22 @@ const RadioInput = ({ name, options, checked, setChecked }) => {
             }`}
           >
             <input
-              id="role"
               type="radio"
-              name="role"
+              name={name.toLowerCase()}
               value={r.toLowerCase()}
               checked={checked === r.toLowerCase()}
-              onChange={() => setChecked(r.toLowerCase())}
+              onChange={() => handleChange(r.toLowerCase())}
               className="hidden"
-              default="patient"
             />
             {r}
           </label>
         ))}
       </div>
+      {error && (
+        <div className="validator-hint mt-1 text-sm text-error">
+          {error}
+        </div>
+      )}
     </div>
   )
 }
