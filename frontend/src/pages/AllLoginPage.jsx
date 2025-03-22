@@ -14,25 +14,12 @@ const AllLoginPage = () => {
   const [recaptchaToken, setRecaptchaToken] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const radioData = {
-    name: 'Role',
-    options: ['Admin', 'Doctor', 'Patient'],
-    checked: role,
-    setChecked: setRole
-  }
-
-  const submitData = {
-    name: 'Login',
-    isSubmitting,
-    recaptchaToken
-  }
-
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
 
     try {
-      const response = await axios.post(`/api/${role}s/login`, {
+      const response = await axios.post(`/api/${role.toLowerCase()}s/login`, {
         email,
         password,
         recaptchaToken
@@ -57,9 +44,9 @@ const AllLoginPage = () => {
           <form className="space-y-4" onSubmit={handleSubmit}>
             <EmailInput email={email} setEmail={setEmail} />
             <PasswordInput password={password} setPassword={setPassword} />
-            <RadioInput data={radioData} />
+            <RadioInput name="Role" options={['Admin', 'Doctor', 'Patient']} checked={role} setChecked={setRole} />
             <Recaptcha setRecaptchaToken={setRecaptchaToken} />
-            <SubmitButton data={submitData} />
+            <SubmitButton name="Login" isSubmitting={isSubmitting} recaptchaToken={recaptchaToken} />
             <RedirectLink text="Don't have an account? " linkText="Register" path="/patients/register" />
           </form>
         </div>

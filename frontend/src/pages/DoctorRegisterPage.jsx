@@ -23,19 +23,6 @@ const DoctorRegisterPage = () => {
   const [recaptchaToken, setRecaptchaToken] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const genderRadioData = {
-    name: 'Gender',
-    options: ['Male', 'Female'],
-    checked: gender,
-    setChecked: setGender
-  }
-
-  const submitData = {
-    name: 'Register',
-    isSubmitting,
-    recaptchaToken
-  }
-
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
@@ -70,36 +57,16 @@ const DoctorRegisterPage = () => {
             <p className="text-neutral mt-2">Please fill in your professional details</p>
           </div>
           <form className="space-y-4" onSubmit={handleSubmit}>
-            <TextInput
-              label="Full Name"
-              value={fullName}
-              setValue={setFullName}
-              placeholder="Dr. John Doe"
-            />
+            <TextInput label="Full Name" value={fullName} setValue={setFullName} placeholder="Dr. John Doe" />
             <EmailInput email={email} setEmail={setEmail} />
             <PasswordInput password={password} setPassword={setPassword} />
-            <TextInput
-              label="Specialization"
-              value={specialization}
-              setValue={setSpecialization}
-              placeholder="Cardiology"
-            />
-            <QualificationsInput
-              qualifications={qualifications}
-              setQualifications={setQualifications}
-            />
-            <TelInput
-              value={phoneNumber}
-              setValue={setPhoneNumber}
-              placeholder="+1 234 567 890"
-            />
-            <RadioInput data={genderRadioData} />
-            <AvailableTimeSlots
-              timeSlots={timeSlots}
-              setTimeSlots={setTimeSlots}
-            />
+            <TextInput label="Specialization" value={specialization} setValue={setSpecialization} placeholder="Cardiology" />
+            <QualificationsInput qualifications={qualifications} setQualifications={setQualifications} />
+            <TelInput value={phoneNumber} setValue={setPhoneNumber} placeholder="+1 234 567 890" />
+            <RadioInput name={'Gender'} options={['Male', 'Female']} checked={gender} setChecked={setGender} />
+            <AvailableTimeSlots timeSlots={timeSlots} setTimeSlots={setTimeSlots} />
             <Recaptcha setRecaptchaToken={setRecaptchaToken} />
-            <SubmitButton data={submitData} />
+            <SubmitButton name={'Register'} isSubmitting={isSubmitting} recaptchaToken={recaptchaToken} />
             <RedirectLink text={`Already have an account? `} linkText={`Login`} path={`/login`} />
           </form>
         </div>

@@ -22,19 +22,6 @@ const PatientRegisterPage = () => {
   const [recaptchaToken, setRecaptchaToken] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const genderRadioData = {
-    name: 'Gender',
-    options: ['Male', 'Female'],
-    checked: gender,
-    setChecked: setGender
-  }
-
-  const submitData = {
-    name: 'Register',
-    isSubmitting,
-    recaptchaToken
-  }
-
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
@@ -68,33 +55,15 @@ const PatientRegisterPage = () => {
             <p className="text-neutral mt-2">Please register to continue</p>
           </div>
           <form className="space-y-4" onSubmit={handleSubmit}>
-            <TextInput
-              label="Full Name"
-              value={fullName}
-              setValue={setFullName}
-              placeholder="John Doe"
-            />
+            <TextInput label="Full Name" value={fullName} setValue={setFullName} placeholder="John Doe" />
             <EmailInput email={email} setEmail={setEmail} />
             <PasswordInput password={password} setPassword={setPassword} />
-            <TelInput
-              value={phoneNumber}
-              setValue={setPhoneNumber}
-              placeholder="+1 234 567 890"
-            />
-            <DateInput
-              label="Date of Birth"
-              value={dateOfBirth}
-              setValue={setDateOfBirth}
-            />
-            <RadioInput data={genderRadioData} />
-            <TextareaInput
-              label="Medical History"
-              value={medicalHistory}
-              setValue={setMedicalHistory}
-              placeholder="Any past medical conditions..."
-            />
+            <TelInput value={phoneNumber} setValue={setPhoneNumber} placeholder="+1 234 567 890" />
+            <DateInput label="Date of Birth" value={dateOfBirth} setValue={setDateOfBirth} />
+            <RadioInput name="Gender" options={['Male', 'Female']} checked={gender} setChecked={setGender} />
+            <TextareaInput label="Medical History" value={medicalHistory} setValue={setMedicalHistory} placeholder="Any past medical conditions..." />
             <Recaptcha setRecaptchaToken={setRecaptchaToken} />
-            <SubmitButton data={submitData} />
+            <SubmitButton name="Register" isSubmitting={isSubmitting} recaptchaToken={recaptchaToken} />
             <RedirectLink text="Already have an account? " path="/login" linkText="Login" />
           </form>
         </div>

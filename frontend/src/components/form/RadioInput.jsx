@@ -1,15 +1,15 @@
-const RadioInput = ({ data }) => {
+const RadioInput = ({ name, options, checked, setChecked }) => {
   return (
     <div className="form-control">
       <label htmlFor="role" className="label block mb-2">
-        <span className="label-text font-bold">{ data.name }</span>
+        <span className="label-text font-bold">{ name }</span>
       </label>
       <div className="w-full">
-        {data.options.map((r) => (
+        {options.map((r) => (
           <label
             key={`${r.toLowerCase()}`}
             className={`me-2 btn no-animation ${
-              data.checked === r.toLowerCase() ? 'btn-neutral' : 'btn-outline'
+              checked === r.toLowerCase() ? 'btn-neutral' : 'btn-outline'
             }`}
           >
             <input
@@ -17,8 +17,8 @@ const RadioInput = ({ data }) => {
               type="radio"
               name="role"
               value={r.toLowerCase()}
-              checked={data.checked === r.toLowerCase()}
-              onChange={() => data.setChecked(r.toLowerCase())}
+              checked={checked === r.toLowerCase()}
+              onChange={() => setChecked(r.toLowerCase())}
               className="hidden"
               default="patient"
             />

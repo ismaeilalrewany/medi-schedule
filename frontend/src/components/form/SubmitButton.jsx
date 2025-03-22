@@ -1,15 +1,15 @@
-const SubmitButton = ({ data }) => {
+const SubmitButton = ({ name, isSubmitting, recaptchaToken }) => {
   return (
     <button
       type="submit"
       className="btn btn-neutral w-full mt-4 text-lg items-center"
-      disabled={data.isSubmitting || !data.recaptchaToken}
+      disabled={isSubmitting || !recaptchaToken}
     >
-      {data.isSubmitting ? (
+      {isSubmitting ? (
         <span className="loading loading-spinner"></span>
       ) : (
         <>
-          <span>{ data.name }</span>
+          <span>{ name }</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5 mt-1"
