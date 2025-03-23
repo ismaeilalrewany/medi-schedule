@@ -45,14 +45,16 @@ const PatientRegisterPage = () => {
           recaptchaToken,
         },
         {
-          withCredentials: true, 
-          headers: { 'Content-Type': 'application/json' }
+          credentials: true,
+          headers: { 'Content-Type': 'application/json' },
+          // withCredentials: true, 
         }
       )
 
       // setToken(response.data.token)
 
-      console.log('Registration successful:', response.data)
+      localStorage.setItem('token', response.data.token)
+
       navigate('/patients/appointments')
     } catch (error) {
       console.error('Registration error:', error.response?.data || error.message)

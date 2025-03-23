@@ -20,8 +20,23 @@ function ProtectedRoute() {
         //   },
         //   withCredentials: true
         // })
+
+        // if there are cookies, the browser will automatically send them
+        // await axios.get(`${baseURL}/api/check-auth`, {
+        //   withCredentials: true
+        // })
+        const token = localStorage.getItem('token')
+
+        if (!token) {
+          setIsAuthenticated(false)
+          return
+        }
+
         await axios.get(`${baseURL}/api/check-auth`, {
-          withCredentials: true
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+          credentials: true
         })
         setIsAuthenticated(true)
       } catch (error) {

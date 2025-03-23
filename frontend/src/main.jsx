@@ -2,9 +2,9 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { RouterProvider } from "react-router-dom"
 import routes from "./routes/routes.jsx"
-import axios from 'axios'
+// import axios from 'axios'
 
-axios.defaults.withCredentials = true
+// axios.defaults.withCredentials = true
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

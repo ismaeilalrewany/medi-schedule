@@ -4,7 +4,9 @@ import PatientModel from '../database/models/Patient.js'
 
 const auth = async (req, res, next) => {
   try {
-    const token = req.cookies.token || req.headers.authorizatiom?.split(' ')[1]
+    // const token = req.cookies.token || req.headers.authorization?.split(' ')[1]
+
+    const token = await req.headers.authorization?.split(' ')[1]
     console.log('Received token:', token)
 
     if (!token) {

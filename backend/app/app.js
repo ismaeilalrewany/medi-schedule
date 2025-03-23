@@ -1,6 +1,6 @@
 import express from 'express'
 import connect from './database/connect.js'
-import cookieParser from 'cookie-parser'
+// import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import AdminModel from './database/models/Admin.js'
 import patientsRouter from './routes/patients.js'
@@ -19,26 +19,27 @@ export const startApp = async () => {
     await AdminModel.createDefaultAdmin()
 
     // Middleware
-    app.use(cors({
-      // origin: (origin, callback) => {
-      //   if (!origin || origin === process.env.FRONTEND_URL) {
-      //     callback(null, true);
-      //   } else {
-      //     callback(new Error('Not allowed by CORS'))
-      //   }
-      // },
-      origin: '*', // Allow all
-      credentials: true,
-      exposedHeaders: ['Set-Cookie'],
-      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-      allowedHeaders: ['Content-Type', 'Authorization'],
-    }))
+    // app.use(cors({
+    //   origin: (origin, callback) => {
+    //     if (!origin || origin === process.env.FRONTEND_URL) {
+    //       callback(null, true);
+    //     } else {
+    //       callback(new Error('Not allowed by CORS'))
+    //     }
+    //   },
+    //   origin: '*', // Allow all
+    //   credentials: true,
+    //   exposedHeaders: ['Set-Cookie'],
+    //   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    //   allowedHeaders: ['Content-Type', 'Authorization'],
+    // }))
 
-    app.options('*', cors())
+    // app.options('*', cors())
 
+    app.use(cors())
     app.use(express.json())
     app.use(express.urlencoded({ extended: true }))
-    app.use(cookieParser())
+    // app.use(cookieParser())
 
     // Routes
     app.use('/api/patients', patientsRouter)
