@@ -34,6 +34,7 @@ export const startApp = async () => {
     //   allowedHeaders: ['Content-Type', 'Authorization'],
     // }))
 
+    // Set CORS for all routes (including preflight)
     app.use(
       cors({
         origin: process.env.FRONTEND_URL || "https://medi-schedule-epst.vercel.app",
@@ -42,7 +43,9 @@ export const startApp = async () => {
         credentials: true,
       })
     )
-    app.options('*', cors())
+
+    // Explicitly handle OPTIONS for all routes
+    app.options("*", (req, res) => res.sendStatus(200))
 
     app.use(express.json())
     app.use(express.urlencoded({ extended: true }))
