@@ -39,6 +39,12 @@ export const startApp = async () => {
       res.status(200).json({ message: 'Authenticated' })
     })
 
+    // Normalize URL
+    app.use((req, res, next) => {
+      req.url = req.url.replace(/\/+/g, '/');
+      next();
+    })
+
     console.log('App initialized successfully')
   } catch (error) {
     console.error('Error initializing app:', error)
