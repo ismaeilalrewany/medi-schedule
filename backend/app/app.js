@@ -20,13 +20,14 @@ export const startApp = async () => {
 
     // Middleware
     app.use(cors({
-      origin: (origin, callback) => {
-        if (!origin || origin === process.env.FRONTEND_URL) {
-          callback(null, true);
-        } else {
-          callback(new Error('Not allowed by CORS'))
-        }
-      },
+      // origin: (origin, callback) => {
+      //   if (!origin || origin === process.env.FRONTEND_URL) {
+      //     callback(null, true);
+      //   } else {
+      //     callback(new Error('Not allowed by CORS'))
+      //   }
+      // },
+      origin: '*', // Allow all
       credentials: true,
       exposedHeaders: ['Set-Cookie'],
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
