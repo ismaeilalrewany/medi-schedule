@@ -1,11 +1,12 @@
 import express from 'express'
 import connect from './database/connect.js'
+import cookieParser from 'cookie-parser'
 import cors from 'cors'
-import session from 'express-session'
 import AdminModel from './database/models/Admin.js'
 import patientsRouter from './routes/patients.js'
 import doctorsRouter from './routes/doctors.js'
 import adminsRouter from './routes/admins.js'
+import auth from './middleware/auth.js'
 
 export const app = express()
 
@@ -18,20 +19,25 @@ export const startApp = async () => {
     await AdminModel.createDefaultAdmin()
 
     // Middleware
-    app.use(cors())
+    app.use(cors({
+      origin: process.env.FRONTEND_URL,
+      credentials: true,
+      exposedHeaders: ['Set-Cookie'],
+      // methods: ['GET', 'POST', 'PUT', 'DELETE']
+    }))
     app.use(express.json())
     app.use(express.urlencoded({ extended: true }))
-    app.use(session({
-      secret: process.env.SESSION_SECRET,
-      resave: false,
-      saveUninitialized: false,
-      // cookie: { secure: false }
-    }))
+    app.use(cookieParser())
 
     // Routes
     app.use('/api/patients', patientsRouter)
     app.use('/api/doctors', doctorsRouter)
     app.use('/api/admins', adminsRouter)
+
+    // Check auth common route
+    app.get('/api/check-auth', auth, (req, res) => {
+      res.status(200).json({ message: 'Authenticated' })
+    })
 
     console.log('App initialized successfully')
   } catch (error) {

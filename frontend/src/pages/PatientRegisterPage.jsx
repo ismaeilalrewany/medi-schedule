@@ -1,3 +1,4 @@
+// import { useEffect, useState } from 'react'
 import { useState } from 'react'
 import axios from 'axios'
 import TextInput from '../components/form/TextInput.jsx'
@@ -11,6 +12,7 @@ import Recaptcha from '../components/form/Recaptcha.jsx'
 import SubmitButton from '../components/form/SubmitButton.jsx'
 import RedirectLink from '../components/form/RedirectLink.jsx'
 import { useNavigate } from 'react-router-dom'
+import Cookies from 'js-cookie'
 
 const PatientRegisterPage = () => {
   const [fullName, setFullName] = useState('')
@@ -22,6 +24,7 @@ const PatientRegisterPage = () => {
   const [medicalHistory, setMedicalHistory] = useState('')
   const [recaptchaToken, setRecaptchaToken] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  // const [token, setToken] = useState('')
   const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
@@ -29,16 +32,25 @@ const PatientRegisterPage = () => {
     setIsSubmitting(true)
 
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/patients/register`, {
-        fullName,
-        email,
-        password,
-        phoneNumber,
-        dateOfBirth,
-        gender: gender.toLowerCase(),
-        medicalHistory,
-        recaptchaToken
-      })
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/patients/register`,
+        {
+          fullName,
+          email,
+          password,
+          phoneNumber,
+          dateOfBirth,
+          gender: gender.toLowerCase(),
+          medicalHistory,
+          recaptchaToken,
+        },
+        {
+          withCredentials: true, 
+          headers: { 'Content-Type': 'application/json' }
+        }
+      )
+
+      // setToken(response.data.token)
 
       console.log('Registration successful:', response.data)
       navigate('/patients/appointments')
@@ -48,6 +60,17 @@ const PatientRegisterPage = () => {
       setIsSubmitting(false)
     }
   }
+
+  // Manually set cookie for server domain
+  // useEffect(() => {
+  //   Cookies.set('token', token, 
+  //     { expires: 7, 
+  //       domain: new URL(import.meta.env.VITE_API_URL).hostname, 
+  //       secure: import.meta.env.VITE_API_URL.startsWith('https'), 
+  //       sameSite: 'lax' 
+  //     }
+  //   )
+  // }, [token])
 
   return (
     <main className="flex justify-center items-center min-h-screen bg-gradient-to-br from-base-200 to-base-100 p-4">

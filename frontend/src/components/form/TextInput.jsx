@@ -7,8 +7,8 @@ const TextInput = ({ label, value, setValue, placeholder }) => {
     const inputValue = e.target.value
 
     // Validation logic
-    if (!/^[A-Za-z\s]*$/.test(inputValue)) {
-      setError('Invalid full name. Only letters are allowed.')
+    if (!/^[A-Za-z\s.]*$/.test(inputValue)) {
+      setError('Invalid full name. Only letters, spaces, and periods are allowed.')
     } else if (inputValue.trim().length < 3) {
       setError('Full name must be at least 3 characters long.')
     } else {

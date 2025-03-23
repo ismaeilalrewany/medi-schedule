@@ -45,13 +45,40 @@ class PatientsController {
       // Generate a JWT token
       const token = await newPatient.generateAuthToken()
 
-      // Store the token in the session
-      req.session.token = token
+      // Store the token in the cookies
+      res.cookie('token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production', 
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        sameSite: 'lax',
+        // domain: 'localhost',
+        path: '/',
+      })
 
       res.status(201).json({ message: 'Registration successful', token })
     } catch (error) {
       console.error(error)
       res.status(500).json({ message: 'An error occurred while registering the patient' })
+    }
+  }
+
+  static async logout(req, res) {
+    try {
+      req.user.tokens = req.user.tokens.filter(tokenObj => tokenObj.token !== req.token)
+      await req.user.save()
+
+      // Clear the token from the cookies
+      res.clearCookie('token', {
+        // domain: 'localhost',
+        path: '/',
+        sameSite: 'lax',
+        secure: process.env.NODE_ENV === 'production'
+      })
+
+      res.status(200).json({ message: 'Logout successful' })
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({ message: 'An error occurred while logging out the patient' })
     }
   }
 }

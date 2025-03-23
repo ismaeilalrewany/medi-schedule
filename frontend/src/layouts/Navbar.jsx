@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
+import NavButton from '../components/navbar/NavButton.jsx'
 
 const Navbar = () => {
   const location = useLocation()
@@ -19,6 +20,8 @@ const Navbar = () => {
         return '/login'
     }
   }
+
+  const authButton = authButtonController()
 
   return (
     <header className="bg-base-100 shadow-sm">
@@ -46,11 +49,11 @@ const Navbar = () => {
               </li>
             </ul>
             <div className="">
-              <Link to={authButtonController().pathname} className='btn'>{ authButtonController().linkText }</Link>
+              <NavButton authButton={authButton} path={pathname} />
             </div>
           </div>
           <div className="navbar-end lg:hidden">
-            <Link to={authButtonController().pathname} className='btn'>{ authButtonController().linkText }</Link>
+            <NavButton authButton={authButton} path={pathname} />
           </div>
         </nav>
       </div>

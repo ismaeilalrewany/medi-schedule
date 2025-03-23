@@ -11,8 +11,7 @@ const PatientSchema = new mongoose.Schema({
     required: true, 
     trim: true, 
     lowercase: true ,
-    minlength: 3, 
-    validate: [validator.isAlpha, 'Invalid full name'] 
+    minlength: 3 
   },
   email: { 
     type: String, 
