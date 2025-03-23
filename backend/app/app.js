@@ -6,6 +6,7 @@ import patientsRouter from './routes/patients.js'
 import doctorsRouter from './routes/doctors.js'
 import adminsRouter from './routes/admins.js'
 import auth from './middleware/auth.js'
+import 'dotenv/config'
 
 export const app = express()
 
@@ -17,7 +18,13 @@ export const startApp = async () => {
     // Create the default admin after connection is established
     await AdminModel.createDefaultAdmin()
 
-    app.use(cors())
+    app.use(
+      cors({
+        origin: process.env.FRONTEND_URL,
+        credentials: true,
+      })
+    )
+
     app.use(express.json())
     app.use(express.urlencoded({ extended: true }))
 
