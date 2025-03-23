@@ -34,9 +34,16 @@ export const startApp = async () => {
     //   allowedHeaders: ['Content-Type', 'Authorization'],
     // }))
 
-    // app.options('*', cors())
+    app.use(
+      cors({
+        origin: process.env.FRONTEND_URL || "https://medi-schedule-epst.vercel.app",
+        methods: "GET,OPTIONS,PATCH,DELETE,POST,PUT",
+        allowedHeaders: "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
+        credentials: true,
+      })
+    )
+    app.options('*', cors())
 
-    app.use(cors())
     app.use(express.json())
     app.use(express.urlencoded({ extended: true }))
     // app.use(cookieParser())
