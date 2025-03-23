@@ -1,6 +1,5 @@
 import express from 'express'
 import connect from './database/connect.js'
-// import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import AdminModel from './database/models/Admin.js'
 import patientsRouter from './routes/patients.js'
@@ -18,38 +17,9 @@ export const startApp = async () => {
     // Create the default admin after connection is established
     await AdminModel.createDefaultAdmin()
 
-    // Middleware
-    // app.use(cors({
-    //   origin: (origin, callback) => {
-    //     if (!origin || origin === process.env.FRONTEND_URL) {
-    //       callback(null, true);
-    //     } else {
-    //       callback(new Error('Not allowed by CORS'))
-    //     }
-    //   },
-    //   origin: '*', // Allow all
-    //   credentials: true,
-    //   exposedHeaders: ['Set-Cookie'],
-    //   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    //   allowedHeaders: ['Content-Type', 'Authorization'],
-    // }))
-
-    // Set CORS for all routes (including preflight)
-    app.use(
-      cors({
-        origin: process.env.FRONTEND_URL || "https://medi-schedule-epst.vercel.app",
-        methods: "GET,OPTIONS,PATCH,DELETE,POST,PUT",
-        allowedHeaders: "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
-        credentials: true,
-      })
-    )
-
-    // Explicitly handle OPTIONS for all routes
-    app.options("*", (req, res) => res.sendStatus(200))
-
+    app.use(cors())
     app.use(express.json())
     app.use(express.urlencoded({ extended: true }))
-    // app.use(cookieParser())
 
     // Routes
     app.use('/api/patients', patientsRouter)

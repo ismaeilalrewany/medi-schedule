@@ -33,10 +33,6 @@ const logout = async (baseURL, route, navigate) => {
       localStorage.removeItem('token')
     }
 
-    // await axios.post(`${baseURL}/api/${route}/logout`, {}, {
-    //   withCredentials: true
-    // })
-
     await axios.post(`${baseURL}/api/${route}/logout`, {}, {
       headers: {
       Authorization: `Bearer ${token}`

@@ -1,6 +1,6 @@
-import 'dotenv/config'
-import axios from 'axios'
 import PatientModel from '../database/models/Patient.js'
+import comparePassword from '../database/models/utils/comparePassword.js'
+import verifyRecaptcha from '../database/models/utils/verifyRecaptcha.js'
 
 class PatientsController {
   static async register(req, res) {
@@ -8,19 +8,8 @@ class PatientsController {
       const patientData = req.body
 
       // Verify reCAPTCHA
-      const recaptchaSecret = process.env.RECAPTCHA_SECRET_KEY
-      const recaptchaResponse = await axios.post(
-        `https://www.google.com/recaptcha/api/siteverify`,
-        null,
-        {
-          params: {
-            secret: recaptchaSecret,
-            response: patientData.recaptchaToken,
-          },
-        }
-      )
-
-      if (!recaptchaResponse.data.success) {
+      const isRecaptchaValid = await verifyRecaptcha(patientData.recaptchaToken)
+      if (!isRecaptchaValid) {
         return res.status(400).json({ message: 'reCAPTCHA verification failed' })
       }
 
@@ -45,16 +34,6 @@ class PatientsController {
       // Generate a JWT token
       const token = await newPatient.generateAuthToken()
 
-      // Store the token in the cookies
-      // res.cookie('token', token, {
-      //   httpOnly: true,
-      //   secure: process.env.NODE_ENV === 'production', 
-      //   maxAge: 7 * 24 * 60 * 60 * 1000,
-      //   sameSite: 'lax',
-      //   // domain: 'localhost',
-      //   path: '/',
-      // })
-
       res.status(201).json({ message: 'Registration successful', token })
     } catch (error) {
       console.error(error)
@@ -62,18 +41,42 @@ class PatientsController {
     }
   }
 
+  static async login(req, res) {
+    try {
+      const { email, password, recaptchaToken } = req.body
+
+      // Verify reCAPTCHA
+      const isRecaptchaValid = await verifyRecaptcha(recaptchaToken)
+      if (!isRecaptchaValid) {
+        return res.status(400).json({ message: 'reCAPTCHA verification failed' })
+      }
+
+      // Find the patient by email
+      const patient = await PatientModel.findOne({ email })
+      if (!patient) {
+        return res.status(400).json({ message: 'Invalid email' })
+      }
+
+      // Check if the password is correct
+      const isPasswordMatch = comparePassword(password, patient.password)
+      if (!isPasswordMatch) {
+        return res.status(400).json({ message: 'Invalid password' })
+      }
+
+      // Generate a JWT token
+      const token = await patient.generateAuthToken()
+
+      res.status(200).json({ message: 'Login successful', token })
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({ message: 'An error occurred while logging in the patient' })
+    }
+  }
+
   static async logout(req, res) {
     try {
       req.user.tokens = req.user.tokens.filter(tokenObj => tokenObj.token !== req.token)
       await PatientModel.findByIdAndUpdate(req.user._id, { tokens: req.user.tokens })
-
-      // Clear the token from the cookies
-      // res.clearCookie('token', {
-      //   // domain: 'localhost',
-      //   path: '/',
-      //   sameSite: 'lax',
-      //   secure: process.env.NODE_ENV === 'production'
-      // })
 
       res.status(200).json({ message: 'Logout successful' })
     } catch (error) {

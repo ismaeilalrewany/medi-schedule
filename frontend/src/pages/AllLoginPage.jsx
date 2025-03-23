@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import EmailInput from '../components/form/EmailInput.jsx'
 import PasswordInput from '../components/form/PasswordInput.jsx'
@@ -13,19 +14,27 @@ const AllLoginPage = () => {
   const [role, setRole] = useState('patient')
   const [recaptchaToken, setRecaptchaToken] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
 
     try {
-      const response = await axios.post(`/api/${role.toLowerCase()}s/login`, {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/${role.toLowerCase()}s/login`, {
         email,
         password,
         recaptchaToken
+      },
+      {
+        headers: { 'Content-Type': 'application/json' },
+        credentials: true,
       })
 
-      console.log('Login successful:', response.data)
+      const token = await response.data.token
+      localStorage.setItem('token', token)
+
+      navigate(`/${role.toLowerCase()}s/appointments`)
     } catch (error) {
       console.error('Login error:', error.response?.data || error.message)
     } finally {

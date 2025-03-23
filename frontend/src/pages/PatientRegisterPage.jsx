@@ -1,5 +1,5 @@
-// import { useEffect, useState } from 'react'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import TextInput from '../components/form/TextInput.jsx'
 import EmailInput from '../components/form/EmailInput.jsx'
@@ -11,8 +11,6 @@ import DateInput from '../components/form/DateInput.jsx'
 import Recaptcha from '../components/form/Recaptcha.jsx'
 import SubmitButton from '../components/form/SubmitButton.jsx'
 import RedirectLink from '../components/form/RedirectLink.jsx'
-import { useNavigate } from 'react-router-dom'
-import Cookies from 'js-cookie'
 
 const PatientRegisterPage = () => {
   const [fullName, setFullName] = useState('')
@@ -24,7 +22,6 @@ const PatientRegisterPage = () => {
   const [medicalHistory, setMedicalHistory] = useState('')
   const [recaptchaToken, setRecaptchaToken] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  // const [token, setToken] = useState('')
   const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
@@ -47,11 +44,8 @@ const PatientRegisterPage = () => {
         {
           credentials: true,
           headers: { 'Content-Type': 'application/json' },
-          // withCredentials: true, 
         }
       )
-
-      // setToken(response.data.token)
 
       localStorage.setItem('token', response.data.token)
 
@@ -62,17 +56,6 @@ const PatientRegisterPage = () => {
       setIsSubmitting(false)
     }
   }
-
-  // Manually set cookie for server domain
-  // useEffect(() => {
-  //   Cookies.set('token', token, 
-  //     { expires: 7, 
-  //       domain: new URL(import.meta.env.VITE_API_URL).hostname, 
-  //       secure: import.meta.env.VITE_API_URL.startsWith('https'), 
-  //       sameSite: 'lax' 
-  //     }
-  //   )
-  // }, [token])
 
   return (
     <main className="flex justify-center items-center min-h-screen bg-gradient-to-br from-base-200 to-base-100 p-4">

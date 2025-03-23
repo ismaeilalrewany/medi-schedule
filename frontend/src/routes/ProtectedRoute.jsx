@@ -9,22 +9,6 @@ function ProtectedRoute() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        // const token = document.cookie
-        //   .split('; ')
-        //   .find(row => row.startsWith('token='))
-        //   ?.split('=')[1]
-
-        // await axios.get(`${baseURL}/api/check-auth`, {
-        //   headers: {
-        //     Authorization: `Bearer ${token}`
-        //   },
-        //   withCredentials: true
-        // })
-
-        // if there are cookies, the browser will automatically send them
-        // await axios.get(`${baseURL}/api/check-auth`, {
-        //   withCredentials: true
-        // })
         const token = localStorage.getItem('token')
 
         if (!token) {
