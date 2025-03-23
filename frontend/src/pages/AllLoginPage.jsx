@@ -27,7 +27,10 @@ const AllLoginPage = () => {
         recaptchaToken
       },
       {
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
         credentials: true,
       })
 
