@@ -20,11 +20,21 @@ export const startApp = async () => {
 
     // Middleware
     app.use(cors({
-      origin: process.env.FRONTEND_URL,
+      origin: (origin, callback) => {
+        if (!origin || origin === process.env.FRONTEND_URL) {
+          callback(null, true);
+        } else {
+          callback(new Error('Not allowed by CORS'))
+        }
+      },
       credentials: true,
       exposedHeaders: ['Set-Cookie'],
-      // methods: ['GET', 'POST', 'PUT', 'DELETE']
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization'],
     }))
+
+    app.options('*', cors())
+
     app.use(express.json())
     app.use(express.urlencoded({ extended: true }))
     app.use(cookieParser())
