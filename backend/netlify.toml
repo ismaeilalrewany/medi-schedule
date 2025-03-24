@@ -1,0 +1,14 @@
+[build]
+  functions = "functions"
+  command = "npm install && npm run start"
+
+[functions]
+  mode_bundler = "esbuild
+
+[[headers]]
+  for = "/api/*"
+    [headers.values]
+      Access-Control-Allow-Origin = "https://medi-schedule-frontend.netlify.app"
+      Access-Control-Allow-Headers = "*"
+      Access-Control-Allow-Methods = "*"
+      Access-Control-Allow-Credentials = true
