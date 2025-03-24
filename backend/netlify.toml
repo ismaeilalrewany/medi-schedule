@@ -2,9 +2,6 @@
   functions = "functions"
   command = "npm install && npm run start"
 
-[functions]
-  mode_bundler = "esbuild
-
 [[headers]]
   for = "/api/*"
     [headers.values]
