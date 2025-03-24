@@ -37,7 +37,7 @@ const logout = async (baseURL, route, navigate) => {
       headers: {
       Authorization: `Bearer ${token}`
       },
-      credentials: true
+      withCredentials: true
     })
 
     navigate('/login')

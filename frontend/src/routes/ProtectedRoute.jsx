@@ -20,7 +20,7 @@ function ProtectedRoute() {
           headers: {
             Authorization: `Bearer ${token}`
           },
-          credentials: true
+          withCredentials: true
         })
         setIsAuthenticated(true)
       } catch (error) {

@@ -21,11 +21,7 @@ export const startApp = async () => {
     app.use(cors({
       origin: (origin, callback) => {
           console.log('Request Origin:', origin)
-          const allowedOrigins = [
-            process.env.FRONTEND_URL,
-            'http://localhost:3000',
-            'http://localhost:5173'
-          ]
+          const allowedOrigins = [process.env.FRONTEND_URL]
           if (!origin || allowedOrigins.indexOf(origin) !== -1) {
               callback(null, origin)
           } else {
@@ -33,7 +29,6 @@ export const startApp = async () => {
           }
       },
       credentials: true,
-      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     }))
 
     app.use(express.json())

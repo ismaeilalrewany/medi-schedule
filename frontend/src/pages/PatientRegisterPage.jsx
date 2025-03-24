@@ -42,7 +42,7 @@ const PatientRegisterPage = () => {
           recaptchaToken,
         },
         {
-          credentials: true,
+          withCredentials: true,
           headers: { 'Content-Type': 'application/json' },
         }
       )
