@@ -46,7 +46,7 @@ export const startApp = async () => {
 
     // Check if server is running
     app.get('/api/check-server', (req, res) => {
-      res.status(200).json({ message: 'Server is running' })
+      res.status(200).send({ message: 'Server is running' })
     })
 
     // Normalize URL
