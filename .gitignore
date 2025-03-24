@@ -29,4 +29,4 @@ dist-ssr
 *.sw?
 
 # vercel.json or netlify.toml
-vercel.json
+*/vercel.json
