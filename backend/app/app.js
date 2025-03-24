@@ -44,6 +44,11 @@ export const startApp = async () => {
       res.status(200).json({ message: 'Authenticated' })
     })
 
+    // Check if server is running
+    app.get('/api/check-server', (req, res) => {
+      res.status(200).json({ message: 'Server is running' })
+    })
+
     // Normalize URL
     app.use((req, res, next) => {
       req.url = req.url.replace(/\/+/g, '/');
