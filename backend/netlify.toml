@@ -1,5 +1,4 @@
 [build]
-  functions = "functions"
   command = "npm install && npm run start"
 
 [[headers]]
