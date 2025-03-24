@@ -36,6 +36,7 @@ const AdminSchema = new mongoose.Schema({
     trim: true, 
     validate: [validator.isMobilePhone, 'Invalid phone number'] 
   },
+  role: {type: String, required: true, default: 'admin'},
   tokens: [
     {
       token: {

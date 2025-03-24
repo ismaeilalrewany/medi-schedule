@@ -11,17 +11,39 @@ const routes = createBrowserRouter([
     element: <App />, // Outlet
     children: [
       {
-        element: <ProtectedRoute />,
+        element: <ProtectedRoute role={'patient'} />,
         children: [
-          {
-            index: true, 
-            element: <h1>Patients Appointments</h1>,
-          },
           {
             path: "patients/appointments", 
             element: <h1>Patients Appointments</h1>,
           },
         ]
+      },
+      {
+        element: <ProtectedRoute role={'doctor'} />,
+        children: [
+          {
+            path: "doctors/appointments",
+            element: <h1>Doctors Appointments</h1>,
+          },
+        ]
+      },
+      {
+        element: <ProtectedRoute role={'admin'} />,
+        children: [
+          {
+            path: "doctors/register",
+            element: <DoctorRegisterPage />,
+          },
+          {
+            path: "admin",
+            element: <h1>Admin Page</h1>,
+          },
+        ]
+      },
+      {
+        index: true, 
+        element: <h1>Home Page</h1>,
       },
       {
         path: "login",
@@ -30,11 +52,7 @@ const routes = createBrowserRouter([
       {
         path: "patients/register",
         element: <PatientRegisterPage />,
-      },
-      {
-        path: "doctors/register",
-        element: <DoctorRegisterPage />,
-      },
+      }
     ],
   },
   {

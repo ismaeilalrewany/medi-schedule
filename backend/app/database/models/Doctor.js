@@ -44,6 +44,7 @@ const DoctorSchema = new mongoose.Schema({
     required: true, 
     lowercase: true 
   },
+  role: {type: String, required: true, default: 'doctor'},
   availableTimeSlots: [{
     day: { 
       type: String, 

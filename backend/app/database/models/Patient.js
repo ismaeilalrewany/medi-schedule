@@ -43,6 +43,7 @@ const PatientSchema = new mongoose.Schema({
     required: true, 
     lowercase: true 
   },
+  role: {type: String, required: true, default: 'patient'},
   medicalHistory: { type: String, trim: true },
   tokens: [
     {

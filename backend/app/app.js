@@ -20,7 +20,7 @@ export const startApp = async () => {
 
     app.use(cors({
       origin: (origin, callback) => {
-          console.log('Request Origin:', origin)
+          // console.log('Request Origin:', origin)
           const allowedOrigins = [process.env.FRONTEND_URL]
           if (!origin || allowedOrigins.indexOf(origin) !== -1) {
               callback(null, origin)
@@ -41,7 +41,7 @@ export const startApp = async () => {
 
     // Check auth common route
     app.get('/api/check-auth', auth, (req, res) => {
-      res.status(200).json({ message: 'Authenticated' })
+      res.status(200).json({ message: 'Authenticated', role: req.user.role })
     })
 
     // Check if server is running
