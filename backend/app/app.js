@@ -18,23 +18,23 @@ export const startApp = async () => {
     // Create the default admin after connection is established
     await AdminModel.createDefaultAdmin()
 
-    console.log("FRONTEND_URL is:", process.env.FRONTEND_URL)
-    app.use((req, res, next)=>{
-        console.log("begining of app.use cors function")
-        next()
-    }, cors({
-        origin: (origin, callback) => {
-            console.log('Request Origin:', origin)
-            const allowedOrigins = [process.env.FRONTEND_URL]
-            if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-                callback(null, origin);
-            } else {
-                callback(new Error('Not allowed by CORS'))
-            }
-        },
-        credentials: true,
+    app.use(cors({
+      origin: (origin, callback) => {
+          console.log('Request Origin:', origin)
+          const allowedOrigins = [
+            process.env.FRONTEND_URL,
+            'http://localhost:3000',
+            'http://localhost:5173'
+          ]
+          if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+              callback(null, origin)
+          } else {
+              callback(new Error('Not allowed by CORS'))
+          }
+      },
+      credentials: true,
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     }))
-    console.log("end of app.use cors function")
 
     app.use(express.json())
     app.use(express.urlencoded({ extended: true }))

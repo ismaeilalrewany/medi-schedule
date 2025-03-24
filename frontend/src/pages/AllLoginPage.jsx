@@ -28,7 +28,7 @@ const AllLoginPage = () => {
       },
       {
         headers: { 'Content-Type': 'application/json' },
-        credentials: true,
+        withCredentials: true,
       })
 
       const token = await response.data.token
