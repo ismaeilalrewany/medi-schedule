@@ -13,16 +13,7 @@ function ProtectedRoute({ role }) {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const token = localStorage.getItem('token')
-        if (!token) {
-          setAuthState({ isAuthenticated: false, userRole: null })
-          return
-        }
-
         const response = await axios.get(`${baseURL}/api/check-auth`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
           withCredentials: true,
         })
 

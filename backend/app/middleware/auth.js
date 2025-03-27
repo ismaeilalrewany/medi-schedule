@@ -4,10 +4,6 @@ import PatientModel from '../database/models/Patient.js'
 import DoctorModel from '../database/models/Doctor.js'
 import AdminModel from '../database/models/Admin.js'
 
-const extractTokenFromRequest = (req) => {
-  return req.headers.authorization?.split(' ')[1]
-}
-
 const sendUnauthorizedResponse = (res, message) => {
   return res.status(401).json({ message })
 }
@@ -25,14 +21,9 @@ const findUserByRole = (role, userId) => {
   }
 }
 
-const attachUserAndTokenToRequest = (req, user, token) => {
-  req.user = user
-  req.token = token
-}
-
 const auth = async (req, res, next) => {
   try {
-    const token = await extractTokenFromRequest(req)
+    const token = req.signedCookies.jwt
     if (!token) {
       return sendUnauthorizedResponse(res, 'Unauthorized')
     }
@@ -47,7 +38,8 @@ const auth = async (req, res, next) => {
       return sendUnauthorizedResponse(res, 'User not found')
     }
 
-    attachUserAndTokenToRequest(req, user, token)
+    req.user = user
+    req.token = token
     next()
   } catch (error) {
     console.error('Authentication error:', error)

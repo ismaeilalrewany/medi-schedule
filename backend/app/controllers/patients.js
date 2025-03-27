@@ -3,6 +3,23 @@ import comparePassword from '../database/models/utils/comparePassword.js'
 import verifyRecaptcha from '../database/models/utils/verifyRecaptcha.js'
 
 class PatientsController {
+  static #createCookie(res, key, value) {
+    return res.cookie(key, value, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      signed: true})
+  }
+
+  static #removeCookie(res, key) {
+    return res.clearCookie(key, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      signed: true})
+  }
+
   static async register(req, res) {
     try {
       const patientData = req.body
@@ -33,6 +50,7 @@ class PatientsController {
 
       // Generate a JWT token
       const token = await newPatient.generateAuthToken()
+      PatientsController.#createCookie(res, 'jwt', token)
 
       return res.status(201).json({ message: 'Registration successful', token })
     } catch (error) {
@@ -65,8 +83,9 @@ class PatientsController {
 
       // Generate a JWT token
       const token = await patient.generateAuthToken()
+      PatientsController.#createCookie(res, 'jwt', token)
 
-      return res.status(200).json({ message: 'Login successful', token })
+      return res.status(200).json({ message: 'Login successful' })
     } catch (error) {
       console.error(error)
       return res.status(500).json({ message: 'An error occurred while logging in the patient' })
@@ -78,6 +97,7 @@ class PatientsController {
       req.user.tokens = req.user.tokens.filter(tokenObj => tokenObj.token !== req.token)
       await PatientModel.findByIdAndUpdate(req.user._id, { tokens: req.user.tokens })
 
+      PatientsController.#removeCookie(res, 'jwt')
       return res.status(200).json({ message: 'Logout successful' })
     } catch (error) {
       console.error(error)

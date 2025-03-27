@@ -28,7 +28,7 @@ const DoctorRegisterPage = () => {
     setIsSubmitting(true)
 
     try {
-      const response = await axios.post('/api/doctors/register', {
+      await axios.post('/api/doctors/register', {
         fullName: fullName.trim().toLowerCase(),
         email: email.trim().toLowerCase(),
         password,
@@ -40,7 +40,7 @@ const DoctorRegisterPage = () => {
         recaptchaToken
       })
 
-      console.log('Doctor registration successful:', response.data)
+      console.log('Doctor registration successful')
     } catch (error) {
       console.error('Registration error:', error.response?.data || error.message)
     } finally {

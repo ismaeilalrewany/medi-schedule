@@ -21,18 +21,14 @@ const AllLoginPage = () => {
     setIsSubmitting(true)
 
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/${role.toLowerCase()}s/login`, {
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/${role.toLowerCase()}s/login`, {
         email,
         password,
         recaptchaToken
       },
       {
-        headers: { 'Content-Type': 'application/json' },
         withCredentials: true,
       })
-
-      const token = await response.data.token
-      localStorage.setItem('token', token)
 
       navigate(`/${role.toLowerCase()}s/appointments`)
     } catch (error) {

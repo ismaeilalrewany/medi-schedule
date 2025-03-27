@@ -1,6 +1,7 @@
 import express from 'express'
 import connect from './database/connect.js'
 import cors from 'cors'
+import cookieParser from 'cookie-parser'
 // import AdminModel from './database/models/Admin.js'
 import patientsRouter from './routes/patients.js'
 import doctorsRouter from './routes/doctors.js'
@@ -12,15 +13,11 @@ export const app = express()
 
 export const startApp = async () => {
   try {
-    // Wait for the database connection
     await connect()
-
-    // Create the default admin after connection is established
     // await AdminModel.createDefaultAdmin()
 
     app.use(cors({
       origin: (origin, callback) => {
-          // console.log('Request Origin:', origin)
           const allowedOrigins = [process.env.FRONTEND_URL]
           if (!origin || allowedOrigins.indexOf(origin) !== -1) {
               callback(null, origin)
@@ -31,6 +28,7 @@ export const startApp = async () => {
       credentials: true,
     }))
 
+    app.use(cookieParser(process.env.COOKIE_SECRET))
     app.use(express.json())
     app.use(express.urlencoded({ extended: true }))
 

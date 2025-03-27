@@ -29,9 +29,7 @@ const PatientRegisterPage = () => {
     setIsSubmitting(true)
 
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/patients/register`,
-        {
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/patients/register`,{
           fullName,
           email,
           password,
@@ -43,11 +41,8 @@ const PatientRegisterPage = () => {
         },
         {
           withCredentials: true,
-          headers: { 'Content-Type': 'application/json' },
         }
       )
-
-      localStorage.setItem('token', response.data.token)
 
       navigate('/patients/appointments')
     } catch (error) {

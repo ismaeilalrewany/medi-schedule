@@ -28,15 +28,7 @@ const NavButton = ({ authButton, path }) => {
 
 const logout = async (baseURL, route, navigate) => {
   try {
-    const token = localStorage.getItem('token')
-    if (token) {
-      localStorage.removeItem('token')
-    }
-
     await axios.post(`${baseURL}/api/${route}/logout`, {}, {
-      headers: {
-      Authorization: `Bearer ${token}`
-      },
       withCredentials: true
     })
 
