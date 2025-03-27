@@ -34,10 +34,10 @@ class PatientsController {
       // Generate a JWT token
       const token = await newPatient.generateAuthToken()
 
-      res.status(201).json({ message: 'Registration successful', token })
+      return res.status(201).json({ message: 'Registration successful', token })
     } catch (error) {
       console.error(error)
-      res.status(500).json({ message: 'An error occurred while registering the patient' })
+      return res.status(500).json({ message: 'An error occurred while registering the patient' })
     }
   }
 
@@ -66,10 +66,10 @@ class PatientsController {
       // Generate a JWT token
       const token = await patient.generateAuthToken()
 
-      res.status(200).json({ message: 'Login successful', token })
+      return res.status(200).json({ message: 'Login successful', token })
     } catch (error) {
       console.error(error)
-      res.status(500).json({ message: 'An error occurred while logging in the patient' })
+      return res.status(500).json({ message: 'An error occurred while logging in the patient' })
     }
   }
 
@@ -78,10 +78,10 @@ class PatientsController {
       req.user.tokens = req.user.tokens.filter(tokenObj => tokenObj.token !== req.token)
       await PatientModel.findByIdAndUpdate(req.user._id, { tokens: req.user.tokens })
 
-      res.status(200).json({ message: 'Logout successful' })
+      return res.status(200).json({ message: 'Logout successful' })
     } catch (error) {
       console.error(error)
-      res.status(500).json({ message: 'An error occurred while logging out the patient' })
+      return res.status(500).json({ message: 'An error occurred while logging out the patient' })
     }
   }
 }

@@ -29,3 +29,6 @@ dist-ssr
 *.sw?
 
 # vercel.json or netlify.toml
+
+# delete generate-ssl folders
+generate-ssl

@@ -16,7 +16,7 @@ export const startApp = async () => {
     await connect()
 
     // Create the default admin after connection is established
-    // await AdminModel.createDefaultAdmin()
+    await AdminModel.createDefaultAdmin()
 
     app.use(cors({
       origin: (origin, callback) => {

@@ -29,7 +29,7 @@ function ProtectedRoute({ role }) {
         const userRole = response.data.role
         setAuthState({
           isAuthenticated: true,
-          userRole: userRole,
+          userRole,
         })
       } catch (error) {
         console.log('Error checking authentication:', error)
