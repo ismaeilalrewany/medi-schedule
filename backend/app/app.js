@@ -1,11 +1,11 @@
 import express from 'express'
 import connect from './database/connect.js'
 import cors from 'cors'
-import AdminModel from './database/models/Admin.js'
+// import AdminModel from './database/models/Admin.js'
 import patientsRouter from './routes/patients.js'
 import doctorsRouter from './routes/doctors.js'
 import adminsRouter from './routes/admins.js'
-import auth from './middleware/auth.js'
+import commonRouter from './routes/common.js'
 import 'dotenv/config'
 
 export const app = express()
@@ -16,7 +16,7 @@ export const startApp = async () => {
     await connect()
 
     // Create the default admin after connection is established
-    await AdminModel.createDefaultAdmin()
+    // await AdminModel.createDefaultAdmin()
 
     app.use(cors({
       origin: (origin, callback) => {
@@ -38,16 +38,7 @@ export const startApp = async () => {
     app.use('/api/patients', patientsRouter)
     app.use('/api/doctors', doctorsRouter)
     app.use('/api/admins', adminsRouter)
-
-    // Check auth common route
-    app.get('/api/check-auth', auth, (req, res) => {
-      res.status(200).json({ message: 'Authenticated', role: req.user.role })
-    })
-
-    // Check if server is running
-    app.get('/api/check-server', (req, res) => {
-      res.status(200).send({ message: 'Server is running' })
-    })
+    app.use('/api', commonRouter)
 
     // Normalize URL
     app.use((req, res, next) => {
