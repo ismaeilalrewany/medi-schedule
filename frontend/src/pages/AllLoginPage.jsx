@@ -30,7 +30,11 @@ const AllLoginPage = () => {
         withCredentials: true,
       })
 
-      navigate(`/${role.toLowerCase()}s/appointments`)
+      if (role === 'patient' || role === 'doctor') {
+        navigate(`/${role.toLowerCase()}s/appointments`)
+      } else {
+        navigate('/admins/dashboard')
+      }
     } catch (error) {
       console.error('Login error:', error.response?.data || error.message)
     } finally {

@@ -36,7 +36,7 @@ const routes = createBrowserRouter([
             element: <DoctorRegisterPage />,
           },
           {
-            path: "admin",
+            path: "admins/dashboard",
             element: <h1>Admin Page</h1>,
           },
         ]

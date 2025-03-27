@@ -4,6 +4,7 @@ import NavButton from '../components/navbar/NavButton.jsx'
 const Navbar = () => {
   const location = useLocation()
   const { pathname } = location
+  const route = pathname?.split('/')[1]
 
   const authButtonController = () => {
     switch (pathname) {
@@ -14,7 +15,7 @@ const Navbar = () => {
         return { pathname: '/login', linkText: 'Login' }
       case '/patients/appointments':
       case '/doctors/appointments':
-      case '/admin/*':
+      case '/admins/dashboard':
         return { pathname: '/logout', linkText: 'Logout' }
       default:
         return '/login'
@@ -45,7 +46,13 @@ const Navbar = () => {
           <div className="navbar-end hidden lg:flex">
             <ul className="menu menu-horizontal px-1">
               <li>
-              <Link to="/patients/appointments" className="btn btn-ghost">Appointments</Link>
+                <Link to="/" className="btn btn-ghost">Home</Link>
+              </li>
+              <li>
+                <Link to={`/${route}/appointments`} className="btn btn-ghost">Appointments</Link>
+              </li>
+              <li>
+                <Link to={`/${route}/profile`} className="btn btn-ghost">Profile</Link>
               </li>
             </ul>
             <div className="">
