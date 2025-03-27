@@ -32,3 +32,10 @@ MediSchedule is an appointment management system developed as a practical test f
 3. axios
 4. react-google-recaptcha
 5. react-hook-form
+
+## Fix
+
+- [ ] Password message makes the form bigger
+- [ ] Date input outline remove at all
+- [ ] Don't login again while the user logged in
+- [ ] 
