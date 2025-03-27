@@ -8,6 +8,10 @@
   @apply bg-neutral border-neutral text-neutral-content;
 }
 
+.input {
+  @apply outline-none
+}
+
 .input:focus, .textarea:focus {
   @apply outline-none ring ring-neutral;
 }
