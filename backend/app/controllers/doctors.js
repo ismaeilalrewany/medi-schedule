@@ -48,11 +48,49 @@ class DoctorsController {
   }
 
   static async login(req, res) {
-    return res.status(200).json({ message: 'Login successful' })
+    try {
+      const { email, password, recaptchaToken } = req.body
+
+      // Verify reCAPTCHA
+      const isRecaptchaValid = await verifyRecaptcha(recaptchaToken)
+      if (!isRecaptchaValid) {
+        return res.status(400).json({ message: 'reCAPTCHA verification failed' })
+      }
+
+      // Find the doctor by email
+      const doctor = await DoctorModel.findOne({ email })
+      if (!doctor) {
+        return res.status(400).json({ message: 'Invalid email' })
+      }
+
+      // Compare the password
+      const isPasswordMatch = await comparePassword(password, doctor.password)
+      if (!isPasswordMatch) {
+        return res.status(400).json({ message: 'Invalid password' })
+      }
+
+      // Generate a JWT token
+      const token = await doctor.generateAuthToken()
+      DoctorsController.#createCookie(res, 'jwt', token)
+
+      return res.status(200).json({ message: 'Login successful' })
+    } catch (error) {
+      console.error('Login error:', error)
+      return res.status(500).json({ message: 'An error occurred while logging in the doctor' })
+    }
   }
 
   static async logout(req, res) {
-    return res.status(200).json({ message: 'Logout successful' })
+    try {
+      req.user.tokens = req.user.tokens.filter((tokenObj) => tokenObj.token !== req.token)
+      await DoctorModel.findByIdAndUpdate(req.user._id, { tokens: req.user.tokens })
+
+      DoctorsController.#removeCookie(res, 'jwt')
+      return res.status(200).json({ message: 'Logout successful' })
+    } catch (error) {
+      console.error('Logout error:', error)
+      return res.status(500).json({ message: 'An error occurred while logging out the doctor' })
+    }
   }
 }
 
