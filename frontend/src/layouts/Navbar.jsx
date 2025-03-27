@@ -11,9 +11,9 @@ const Navbar = () => {
       case '/login':
         return { pathname: '/patients/register', linkText: 'Register' }
       case '/patients/register':
-      case '/doctors/register':
         return { pathname: '/login', linkText: 'Login' }
-      case '/patients/appointments':
+        case '/patients/appointments':
+        case '/doctors/register':
       case '/doctors/appointments':
       case '/admins/dashboard':
         return { pathname: '/logout', linkText: 'Logout' }

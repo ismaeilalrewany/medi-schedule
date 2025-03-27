@@ -52,6 +52,19 @@ class AdminsController {
       return res.status(500).json({ message: 'Internal server error' })
     }
   }
+
+  static async logout(req, res) {
+    try {
+      req.user.tokens = req.user.tokens.filter(tokenObj => tokenObj.token !== req.token)
+      await AdminModel.findByIdAndUpdate(req.user._id, { tokens: req.user.tokens })
+
+      AdminsController.#removeCookie(res, 'jwt')
+      return res.status(200).json({ message: 'Logout successful' })
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json({ message: 'An error occurred while logging out the admin' })
+    }
+  }
 }
 
 export default AdminsController
