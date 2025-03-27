@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 import TextInput from '../components/form/TextInput.jsx'
 import EmailInput from '../components/form/EmailInput.jsx'
 import PasswordInput from '../components/form/PasswordInput.jsx'
@@ -22,13 +23,14 @@ const DoctorRegisterPage = () => {
   const [timeSlots, setTimeSlots] = useState([])
   const [recaptchaToken, setRecaptchaToken] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
 
     try {
-      await axios.post('/api/doctors/register', {
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/doctors/register`, {
         fullName: fullName.trim().toLowerCase(),
         email: email.trim().toLowerCase(),
         password,
@@ -38,9 +40,11 @@ const DoctorRegisterPage = () => {
         gender: gender.toLowerCase(),
         availableTimeSlots: timeSlots,
         recaptchaToken
+      }, {
+        withCredentials: true,
       })
 
-      console.log('Doctor registration successful')
+      navigate('/admins/dashboard')
     } catch (error) {
       console.error('Registration error:', error.response?.data || error.message)
     } finally {

@@ -4,7 +4,7 @@
   themes: light --default;
 }
 
-.btn:hover {
+.btn:hover, .btn:active {
   @apply bg-neutral border-neutral text-neutral-content;
 }
 
