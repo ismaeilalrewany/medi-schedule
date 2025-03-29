@@ -15,3 +15,7 @@
 .input:focus, .textarea:focus {
   @apply outline-none ring ring-neutral;
 }
+
+.join-item {
+  @apply border-neutral-300 bg-transparent;
+}
