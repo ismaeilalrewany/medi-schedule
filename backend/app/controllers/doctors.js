@@ -92,6 +92,16 @@ class DoctorsController {
       return res.status(500).json({ message: 'An error occurred while logging out the doctor' })
     }
   }
+
+  static async getAllDoctors(req, res) {
+    try {
+      const doctors = await DoctorModel.find({}).select('-password')
+      return res.status(200).json(doctors)
+    } catch (error) {
+      console.error(error)
+      return res.status(500).json({ message: 'An error occurred while fetching doctors' })
+    }
+  }
 }
 
 export default DoctorsController

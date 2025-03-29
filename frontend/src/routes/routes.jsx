@@ -4,6 +4,7 @@ import ProtectedRoute from "./ProtectedRoute.jsx"
 import AllLoginPage from "../pages/AllLoginPage.jsx"
 import PatientRegisterPage from "../pages/PatientRegisterPage.jsx"
 import DoctorRegisterPage from "../pages/DoctorRegisterPage.jsx"
+import DashboardPage from "../pages/DashboardPage.jsx"
 
 const routes = createBrowserRouter([
   {
@@ -37,7 +38,7 @@ const routes = createBrowserRouter([
           },
           {
             path: "admins/dashboard",
-            element: <h1>Admin Page</h1>,
+            element: <DashboardPage />,
           },
         ]
       },

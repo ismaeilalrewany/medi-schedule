@@ -52,6 +52,9 @@ const Navbar = () => {
                 <Link to={`/${route}/appointments`} className="btn btn-ghost">Appointments</Link>
               </li>
               <li>
+                <Link to="/admins/dashboard" className="btn btn-ghost">Dashboard</Link>
+              </li>
+              <li>
                 <Link to={`/${route}/profile`} className="btn btn-ghost">Profile</Link>
               </li>
             </ul>
