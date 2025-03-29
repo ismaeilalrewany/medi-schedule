@@ -19,3 +19,7 @@
 .join-item {
   @apply border-neutral-300 bg-transparent;
 }
+
+label.input:focus, label.input:focus-within {
+  @apply ring ring-neutral;
+}
