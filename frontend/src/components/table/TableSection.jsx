@@ -24,11 +24,11 @@ const TableSection = ({ name }) => {
   }, [])
 
   return (
-    <section className="overflow-hidden rounded-lg ring-1 ring-neutral-300 bg-base-100 p-6">
+    <section className="overflow-hidden rounded-lg ring-1 ring-neutral-300 bg-base-100 p-6 w-[800px]">
       <header className="mb-6 text-neutral">
         <div className="flex items-center justify-between mb-4">
           <h1 className="text-2xl font-bold text-base-content">{name.charAt(0).toUpperCase() + name.slice(1)}s</h1>
-          <Link to="/patients/register" className="btn btn-neutral btn-sm">Add {name.charAt(0).toUpperCase() + name.slice(1)}</Link>
+          <Link to={`/${name}s/register`} className="btn btn-neutral btn-sm">Add {name.charAt(0).toUpperCase() + name.slice(1)}</Link>
         </div>
         <SearchUser />
       </header>
