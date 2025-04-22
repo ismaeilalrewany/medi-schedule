@@ -107,8 +107,44 @@ class PatientsController {
 
   static async getAllPatients(req, res) {
     try {
-      const patients = await PatientModel.find({}).select('-password')
-      return res.status(200).json(patients)
+      // This is a placeholder for pagination logic
+      const limit = parseInt(req.query.limit) || 6
+      const page = parseInt(req.query.page) || 1
+      const skip = (page - 1) * limit
+
+      // This is a placeholder for search logic
+      const search = req.query.search || ''
+      const searchRegex = new RegExp(search.trim(), 'i')
+      const searchQuery = {
+        $or: [
+          { fullName: searchRegex },
+          { email: searchRegex },
+          { phoneNumber: searchRegex },
+        ],
+      }
+
+      // Fetch patients from the database
+      const patients = await PatientModel.find(searchQuery)
+        .select('-password')
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+
+      // Count total patients for pagination
+      const totalPatients = await PatientModel.countDocuments(searchQuery)
+
+      // Calculate total pages for pagination
+      const totalPages = Math.ceil(totalPatients / limit)
+
+      return res.status(200).json({
+        patients,
+        pagination: {
+          currentPage: page,
+          itemsPerPage: limit,
+          totalItems: totalPatients,
+          totalPages,
+        }
+      })
     } catch (error) {
       console.error(error)
       return res.status(500).json({ message: 'An error occurred while fetching patients' })

@@ -95,8 +95,44 @@ class DoctorsController {
 
   static async getAllDoctors(req, res) {
     try {
-      const doctors = await DoctorModel.find({}).select('-password')
-      return res.status(200).json(doctors)
+      // This is a placeholder for pagination logic
+      const limit = parseInt(req.query.limit) || 6
+      const page = parseInt(req.query.page) || 1
+      const skip = (page - 1) * limit
+
+      // This is a placeholder for search logic
+      const search = req.query.search || ''
+      const searchRegex = new RegExp(search.trim(), 'i')
+      const searchQuery = {
+        $or: [
+          { fullName: searchRegex },
+          { email: searchRegex },
+          { phoneNumber: searchRegex },
+        ],
+      }
+
+      // Fetch doctors from the database
+      const doctors = await DoctorModel.find(searchQuery)
+        .select('-password')
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+
+      // Count total patients for pagination
+      const totalDoctors = await DoctorModel.countDocuments(searchQuery)
+
+      // Calculate total pages for pagination
+      const totalPages = Math.ceil(totalDoctors / limit)
+
+      return res.status(200).json({
+        doctors,
+        pagination: {
+          currentPage: page,
+          itemsPerPage: limit,
+          totalItems: totalDoctors,
+          totalPages,
+        }
+      })
     } catch (error) {
       console.error(error)
       return res.status(500).json({ message: 'An error occurred while fetching doctors' })
