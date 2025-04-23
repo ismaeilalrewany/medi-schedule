@@ -9,6 +9,7 @@ export default defineConfig({
     https: {
       key: './generated-ssl/cert.key',
       cert: './generated-ssl/cert.crt'
-    }
+    },
+    open: true,
   }
 })
