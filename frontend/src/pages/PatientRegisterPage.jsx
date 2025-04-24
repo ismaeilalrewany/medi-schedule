@@ -53,8 +53,8 @@ const PatientRegisterPage = () => {
   }
 
   return (
-    <main className="flex justify-center items-center min-h-screen bg-gradient-to-br from-base-200 to-base-100 p-4">
-      <div className="card min-w-88 max-w-96 shadow-2xl bg-base-100">
+    <main className="flex justify-center items-center min-h-screen bg-gradient-to-br from-base-200 to-base-100 py-8">
+      <div className="card min-w-88 max-w-96 shadow ring-1 ring-neutral-300 bg-base-100">
         <div className="card-body p-8">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-neutral" style={{ fontFamily: 'Cursive, sans-serif' }}>Welcome!</h1>
