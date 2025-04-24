@@ -16,9 +16,13 @@ const Pagination = ({ data, setPage }) => {
 
   return (
     <div className="join text-neutral">
-      <button className="join-item btn btn-sm" onClick={prevPage}>«</button>
+      <button className="join-item btn btn-sm" onClick={prevPage}>
+        <i class="fa-solid fa-angles-left"></i>
+      </button>
       <button className="join-item btn btn-sm pointer-events-none">Page {currentPage}</button>
-      <button className="join-item btn btn-sm" onClick={nextPage}>»</button>
+      <button className="join-item btn btn-sm" onClick={nextPage}>
+        <i class="fa-solid fa-angles-right"></i>
+      </button>
     </div>
   )
 }
