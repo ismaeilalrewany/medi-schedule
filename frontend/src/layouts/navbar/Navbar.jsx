@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import NavButton from '../components/navbar/NavButton.jsx'
+import NavButton from './components/NavButton.jsx'
 
 const Navbar = () => {
   const location = useLocation()
