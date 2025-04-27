@@ -10,7 +10,7 @@ const SubmitButton = ({ name, isSubmitting, recaptchaToken }) => {
       ) : (
         <>
           <span>{ name }</span>
-          <i class="fa-solid fa-circle-arrow-right"></i>
+          <i className="fa-solid fa-circle-arrow-right"></i>
         </>
       )}
     </button>
