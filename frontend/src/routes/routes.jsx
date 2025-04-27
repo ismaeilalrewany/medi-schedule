@@ -5,6 +5,7 @@ import AllLoginPage from "../pages/AllLoginPage.jsx"
 import PatientRegisterPage from "../pages/PatientRegisterPage.jsx"
 import DoctorRegisterPage from "../pages/DoctorRegisterPage.jsx"
 import DashboardPage from "../pages/DashboardPage.jsx"
+import ProfilePage from "../pages/ProfilePage.jsx"
 
 const routes = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const routes = createBrowserRouter([
             path: "patients/appointments", 
             element: <h1>Patients Appointments</h1>,
           },
+          {
+            path: "patients/profile",
+            element: <ProfilePage />,
+          }
         ]
       },
       {
@@ -27,6 +32,10 @@ const routes = createBrowserRouter([
             path: "doctors/appointments",
             element: <h1>Doctors Appointments</h1>,
           },
+          {
+            path: "doctors/profile",
+            element: <ProfilePage />,
+          }
         ]
       },
       {
@@ -40,6 +49,18 @@ const routes = createBrowserRouter([
             path: "admins/dashboard",
             element: <DashboardPage />,
           },
+          {
+            path: "admins/profile",
+            element: <ProfilePage />,
+          },
+          {
+            path: "admins/patients/:id",
+            element: <h1>Patient Details</h1>,
+          },
+          {
+            path: "admins/doctors/:id",
+            element: <h1>Doctor Details</h1>,
+          }
         ]
       },
       {
