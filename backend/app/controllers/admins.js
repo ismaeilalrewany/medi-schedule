@@ -1,3 +1,4 @@
+// import { ObjectId } from 'mongodb'
 import AdminModel from '../database/models/Admin.js'
 import verifyRecaptcha from '../database/models/utils/verifyRecaptcha.js'
 import comparePassword from '../database/models/utils/comparePassword.js'
@@ -63,6 +64,22 @@ class AdminsController {
     } catch (error) {
       console.log(error)
       return res.status(500).json({ message: 'An error occurred while logging out the admin' })
+    }
+  }
+
+  static async getProfile(req, res) {
+    try {
+      // const admin = await AdminModel.findById({_id: new ObjectId('67e5310da121f0cdfdb047c8')}).select('-password -tokens -_id')
+      const admin = await AdminModel.findById(req.user._id).select('-password -tokens -_id')
+
+      if (!admin) {
+        return res.status(404).json({ message: 'Admin not found' })
+      }
+
+      return res.status(200).json(admin)
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json({ message: 'An error occurred while fetching the admin profile' })
     }
   }
 }
