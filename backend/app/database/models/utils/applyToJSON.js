@@ -6,7 +6,12 @@ const applyToJSON = (schema, removeFields = ['__v', 'password', 'tokens']) => {
     // Transform _id to id
     document.id = document._id
     delete document._id
-    
+
+    // Transform dateOfBirth to only date string
+    if (document.dateOfBirth) {
+      document.dateOfBirth = document.dateOfBirth.toISOString().split('T')[0]
+    }
+
     return document
   }
 }
