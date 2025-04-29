@@ -21,7 +21,7 @@ const routes = createBrowserRouter([
           },
           {
             path: "patients/profile",
-            element: <ProfilePage />,
+            element: <ProfilePage endpoint={'patients/profile'} />,
           }
         ]
       },
@@ -34,7 +34,7 @@ const routes = createBrowserRouter([
           },
           {
             path: "doctors/profile",
-            element: <ProfilePage />,
+            element: <ProfilePage endpoint={'doctors/profile'} />,
           }
         ]
       },
@@ -51,15 +51,15 @@ const routes = createBrowserRouter([
           },
           {
             path: "admins/profile",
-            element: <ProfilePage />,
+            element: <ProfilePage endpoint={'admins/profile'} />,
           },
           {
             path: "admins/patients/:id",
-            element: <h1>Patient Details</h1>,
+            element: <ProfilePage endpoint={'admins/patients/:id'} />,
           },
           {
             path: "admins/doctors/:id",
-            element: <h1>Doctor Details</h1>,
+            element: <ProfilePage endpoint={'admins/doctors/:id'} />,
           }
         ]
       },

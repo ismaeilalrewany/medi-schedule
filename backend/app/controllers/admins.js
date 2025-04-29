@@ -1,5 +1,6 @@
-// import { ObjectId } from 'mongodb'
 import AdminModel from '../database/models/Admin.js'
+import PatientModal from '../database/models/Patient.js'
+import DoctorModel from '../database/models/Doctor.js'
 import verifyRecaptcha from '../database/models/utils/verifyRecaptcha.js'
 import comparePassword from '../database/models/utils/comparePassword.js'
 
@@ -19,6 +20,22 @@ class AdminsController {
       secure: true,
       sameSite: 'none',
       signed: true})
+  }
+
+  static async #getUserById(req, res, model, notFoundMessage) {
+    try {
+      const userId = req.params.id
+      const user = await model.findById(userId).select('-password -tokens -_id')
+
+      if (!user) {
+        return res.status(404).json({ message: notFoundMessage })
+      }
+
+      return res.status(200).json(user)
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json({ message: `An error occurred while fetching the ${notFoundMessage.toLowerCase()}` })
+    }
   }
 
   static async login(req, res) {
@@ -69,7 +86,6 @@ class AdminsController {
 
   static async getProfile(req, res) {
     try {
-      // const admin = await AdminModel.findById({_id: new ObjectId('67e5310da121f0cdfdb047c8')}).select('-password -tokens -_id')
       const admin = await AdminModel.findById(req.user._id).select('-password -tokens -_id')
 
       if (!admin) {
@@ -81,6 +97,14 @@ class AdminsController {
       console.log(error)
       return res.status(500).json({ message: 'An error occurred while fetching the admin profile' })
     }
+  }
+
+  static async getPatient(req, res) {
+    return AdminsController.#getUserById(req, res, PatientModal, 'Patient not found')
+  }
+
+  static async getDoctor(req, res) {
+    return AdminsController.#getUserById(req, res, DoctorModel, 'Doctor not found')
   }
 }
 

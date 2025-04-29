@@ -19,7 +19,7 @@ const Table = ({ users }) => {
               <td className="border-r border-neutral-300 p-4">{user.email}</td>
               <td className="border-r border-neutral-300 p-4">{user.phoneNumber}</td>
               <td className="p-4">
-                <Link to={`/patients/${user.id}/edit`} className="text-neutral underline hover:text-neutral/80">Edit</Link>
+                <Link to={`/admins/${user.role}s/${user.id}`} className="text-neutral underline hover:text-neutral/80">Edit</Link>
               </td>
             </tr>
           ))}
