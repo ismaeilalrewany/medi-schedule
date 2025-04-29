@@ -138,6 +138,21 @@ class DoctorsController {
       return res.status(500).json({ message: 'An error occurred while fetching doctors' })
     }
   }
+
+  static async getProfile(req, res) {
+    try {
+      const doctor = await DoctorModel.findById(req.user._id).select('-password -tokens -_id')
+
+      if (!doctor) {
+        return res.status(404).json({ message: 'Doctor not found' })
+      }
+
+      return res.status(200).json(doctor)
+    } catch (error) {
+      console.error(error)
+      return res.status(500).json({ message: 'An error occurred while fetching the doctor profile' })
+    }
+  }
 }
 
 export default DoctorsController
