@@ -7,8 +7,8 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     https: {
-      key: './generated-ssl/cert.key',
-      cert: './generated-ssl/cert.crt'
+      key: '../localssl/cert.key',
+      cert: '../localssl/cert.crt'
     },
     open: true,
   }

@@ -11,8 +11,8 @@ async function startServer() {
 
     if (process.env.USE_HTTPS === 'true') {
       const options = {
-        key: fs.readFileSync("./generated-ssl/cert.key"),
-        cert: fs.readFileSync("./generated-ssl/cert.crt")
+        key: fs.readFileSync("../localssl/cert.key"),
+        cert: fs.readFileSync("../localssl/cert.crt")
       }
 
       https.createServer(options, app).listen(PORT, () => {

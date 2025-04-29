@@ -30,5 +30,5 @@ dist-ssr
 
 # vercel.json or netlify.toml
 
-# delete generate-ssl folders
-generate-ssl
+# delete local ssl certs
+localssl/
