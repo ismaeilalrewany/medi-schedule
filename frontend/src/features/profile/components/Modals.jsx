@@ -14,7 +14,7 @@ const Modals = ({
   modalFormData
 }) => (
   <>
-    <EditModal isOpen={activeModal === 'name'} onClose={closeModal} title="Edit Full Name" onSave={handleSaveChanges}>
+    <EditModal isOpen={activeModal === 'fullName'} onClose={closeModal} title="Edit Full Name" onSave={handleSaveChanges}>
       <div className="form-group">
         <label htmlFor="modal-edit-fullname" className="block text-sm font-medium text-neutral/80 mb-1">Full Name</label>
         <input type="text" id="modal-edit-fullname" name="fullname" value={modalFormData.fullname || ''} onChange={handleModalInputChange} className="input input-bordered w-full bg-base-200/50 text-neutral" required />
@@ -24,6 +24,7 @@ const Modals = ({
     <EditModal isOpen={activeModal === 'dateOfBirth'} onClose={closeModal} title="Edit Date of Birth" onSave={handleSaveChanges}>
       <div className="form-group">
         <label htmlFor="modal-edit-dateOfBirth" className="block text-sm font-medium text-neutral/80 mb-1">Date of Birth</label>
+        {console.log(modalFormData.dateOfBirth)}
         <input type="date" id="modal-edit-dateOfBirth" name="dateOfBirth" value={modalFormData.dateOfBirth || ''} onChange={handleModalInputChange} className="input input-bordered w-full bg-base-200/50 text-neutral"/>
       </div>
     </EditModal>
@@ -32,7 +33,7 @@ const Modals = ({
       <div className="form-group">
         <label className="block text-sm font-medium text-neutral/80 mb-2">Gender</label>
         <div className="flex gap-2">
-          {['Male', 'Female'].map(genderOption => (
+          {['male', 'female'].map(genderOption => (
             <button key={genderOption} type="button" className={`btn grow ${modalFormData.gender === genderOption ? 'bg-neutral text-neutral-content border-0' : 'btn-outline text-neutral/80'}`} onClick={() => handleGenderChangeInModal(genderOption)} >
               {genderOption}
             </button>
@@ -44,7 +45,7 @@ const Modals = ({
     <EditModal isOpen={activeModal === 'medicalHistory'} onClose={closeModal} title="Edit Medical History" onSave={handleSaveChanges}>
       <div className="form-group">
         <label htmlFor="modal-edit-medical-medicalHistory" className="block text-sm font-medium text-neutral/80 mb-1">Medical History</label>
-        <textarea id="modal-edit-medical-medicalHistory" name="medical_history" value={modalFormData.medical_history || ''} onChange={handleModalInputChange} rows="5" className="textarea textarea-bordered w-full bg-base-200/50 text-neutral"></textarea>
+        <textarea id="modal-edit-medical-medicalHistory" name="medical_history" value={modalFormData.medicalHistory || ''} onChange={handleModalInputChange} rows="5" className="textarea textarea-bordered w-full bg-base-200/50 text-neutral"></textarea>
       </div>
     </EditModal>
 

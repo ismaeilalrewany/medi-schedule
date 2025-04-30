@@ -85,14 +85,11 @@ const ProfilePage = ({ endpoint, isViewerAdmin = false }) => {
     setCurrentUser(prevUser => {
       let updatedUser = { ...prevUser }
       switch (activeModal) {
-        case 'name':
-          updatedUser.fullName = modalFormData.fullname
+        case 'fullName':
+          updatedUser.fullName = modalFormData.fullName
           break
         case 'dateOfBirth':
-          if (modalFormData.dateOfBirth) {
-            const parts = modalFormData.dateOfBirth.split('-')
-            updatedUser.dateOfBirth = `${parts[2]}/${parts[1]}/${parts[0]}`
-          }
+          updatedUser.dateOfBirth = modalFormData.dateOfBirth
           break
         case 'gender':
           updatedUser.gender = modalFormData.gender
@@ -117,22 +114,6 @@ const ProfilePage = ({ endpoint, isViewerAdmin = false }) => {
           break
         case 'availableTimeSlots':
           updatedUser.availableTimeSlots = modalFormData.availableTimeSlots
-          break
-        case 'delete':
-          updatedUser = {
-            fullName: '',
-            dateOfBirth: '',
-            gender: '',
-            medicalHistory: '',
-            email: '',
-            phoneNumber: '',
-            role: '',
-            specialization: '',
-            qualifications: [],
-            availableTimeSlots: [],
-          }
-          break
-        default:
           break
       }
       return updatedUser

@@ -7,7 +7,7 @@ const PersonalDetailsSection = ({ currentUser, isPatient, isDoctor, openModal, g
     <div className="profile-items-wrapper border border-neutral/20 rounded-md overflow-hidden bg-base-100">
       <div
         className="profile-item block relative p-4 border-b border-neutral/20 last:border-b-0 hover:bg-neutral/5 transition-colors duration-150 cursor-pointer pr-10"
-        onClick={() => openModal('name', { fullname: getInitialModalValue('fullname') })}
+        onClick={() => openModal('fullName', { fullname: getInitialModalValue('fullName') })}
       >
         <h5 className="item-label font-semibold text-neutral mb-1 text-sm">Full Name</h5>
         <span className="item-value text-sm text-neutral/80 block break-words" id="display-name">
@@ -42,7 +42,7 @@ const PersonalDetailsSection = ({ currentUser, isPatient, isDoctor, openModal, g
       {isPatient && (
         <div
           className="profile-item block relative p-4 border-b border-neutral/20 last:border-b-0 hover:bg-neutral/5 transition-colors duration-150 cursor-pointer pr-10"
-          onClick={() => openModal('medicalHistory', { medical_history: getInitialModalValue('medical_history') })}
+          onClick={() => openModal('medicalHistory', { medicalHistory: getInitialModalValue('medicalHistory') })}
         >
           <h5 className="item-label font-semibold text-neutral mb-1 text-sm">Medical History</h5>
           <span className="item-value text-sm text-neutral/80 block break-words item-value-truncated" id="display-medicalHistory">
