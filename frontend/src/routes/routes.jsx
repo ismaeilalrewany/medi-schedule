@@ -55,11 +55,11 @@ const routes = createBrowserRouter([
           },
           {
             path: "admins/patients/:id",
-            element: <ProfilePage endpoint={'admins/patients/:id'} />,
+            element: <ProfilePage endpoint={'admins/patients/:id'} isViewerAdmin={true} />,
           },
           {
             path: "admins/doctors/:id",
-            element: <ProfilePage endpoint={'admins/doctors/:id'} />,
+            element: <ProfilePage endpoint={'admins/doctors/:id'}  isViewerAdmin={true} />,
           }
         ]
       },
