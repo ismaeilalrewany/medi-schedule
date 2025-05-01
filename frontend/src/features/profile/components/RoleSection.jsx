@@ -8,8 +8,7 @@ const RoleSection = ({ isAdmin, isViewerAdmin, currentUser, openModal }) => (
         className={`profile-item block relative p-4 border-b border-neutral/20 last:border-b-0 pr-10 ${!isAdmin && isViewerAdmin ? 'cursor-pointer hover:bg-neutral/5 transition-colors duration-150' : 'opacity-60 cursor-default'}`}
         onClick={() => !isAdmin && isViewerAdmin ? openModal('role', { role: currentUser.role }) : null}
       >
-        <h5 className={`item-label font-semibold mb-1 text-sm ${!isAdmin && isViewerAdmin ? 'text-neutral' : 'text-neutral/60'}`}>Change Role</h5>
-        <span className="item-value text-sm text-neutral/80 block break-words"></span>
+        <h5 className={`item-label font-semibold text-sm ${!isAdmin && isViewerAdmin ? 'text-neutral' : 'text-neutral/60'}`}>Change Role</h5>
         <i className={`fa-solid fa-chevron-right item-chevron absolute top-1/2 right-4 -translate-y-1/2 ${!isAdmin && isViewerAdmin ? 'text-neutral/40' : 'text-neutral/30'}`}></i>
       </div>
     </div>

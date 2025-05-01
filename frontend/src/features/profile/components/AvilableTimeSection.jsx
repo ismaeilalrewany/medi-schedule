@@ -8,8 +8,7 @@ const AvailableTimeSection = ({ isDoctor, currentUser, openModal }) => (
           className="profile-item block relative p-4 border-b border-neutral/20 last:border-b-0 hover:bg-neutral/5 transition-colors duration-150 cursor-pointer pr-10"
           onClick={() => openModal('availableTimeSlots', { availableTimeSlots: (currentUser.availableTimeSlots || []) })}
         >
-          <h5 className="item-label font-semibold text-neutral mb-1 text-sm">Change Available Time Slots</h5>
-          <span className="item-value text-sm text-neutral/80 block break-words" id="display-availableTimeSlots"></span>
+          <h5 className="item-label font-semibold text-neutral text-sm">Change Available Time Slots</h5>
           <i className="fa-solid fa-chevron-right item-chevron absolute top-1/2 right-4 -translate-y-1/2 text-neutral/40"></i>
         </div>
       </div>
