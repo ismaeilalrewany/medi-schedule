@@ -78,9 +78,27 @@ const Modals = ({
 
     <EditModal isOpen={activeModal === 'availableTimeSlots'} onClose={closeModal} title="Edit Available Time" onSave={handleSaveChanges}>
       {console.log(modalFormData.availableTimeSlots)}
-      <div className="form-group">
+      {/* <div className="form-group">
         <label htmlFor="modal-edit-availableTimeSlots" className="block text-sm font-medium text-neutral/80 mb-1">Available Time Slots</label>
         <input type="text" id="modal-edit-availableTimeSlots" name="availableTimeSlots" value={modalFormData.availableTimeSlots || ''} onChange={handleTimeSlotsChange} className="input input-bordered w-full bg-base-200/50 text-neutral" placeholder="Mon 9-11, Tue 14-16" />
+      </div> */}
+
+      <h4 className="text-sm font-medium text-neutral/80 mb-1">Available Time Slots</h4>
+      <div className="available-time-items-wrapper border border-neutral/20 rounded-md overflow-hidden bg-base-100">
+        {modalFormData.availableTimeSlots && modalFormData.availableTimeSlots.map(slot => (
+          <div
+            key={slot._id}
+            className="available-time-item block relative p-4 border-b border-neutral/20 last:border-b-0 hover:bg-neutral/5 transition-colors duration-150 cursor-pointer pr-10"
+            // onClick={() => openModal('availableTimeSlots', { availableTimeSlots: (currentUser.availableTimeSlots || []) })}
+          >
+            <p className="item-label text-neutral text-sm">
+              <span className="border rounded-2xl px-2 py-1 mr-2">{slot.day}</span>
+              <span className="border rounded-2xl px-2 py-1 mr-2">{slot.startTime} - {slot.endTime}</span>
+              <span className={`border rounded-2xl px-2 py-1 mr-2 ${slot.isAvailable ? 'border-green-500 text-green-500' : 'border-red-500 text-red-500'}`}>{slot.isAvailable ? 'Available' : 'Unavailable'}</span>
+            </p>
+            <i className="fa-solid fa-chevron-right item-chevron absolute top-1/2 right-4 -translate-y-1/2 text-neutral/40"></i>
+          </div>
+        ))}
       </div>
     </EditModal>
 
