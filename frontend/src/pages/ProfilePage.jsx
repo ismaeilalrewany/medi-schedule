@@ -4,6 +4,7 @@ import PasswordSecuritySection from '../features/profile/components/PasswordSecu
 import RoleSection from '../features/profile/components/RoleSection.jsx'
 import AccountManagementSection from '../features/profile/components/AccountManagementSection.jsx'
 import Modals from '../features/profile/components/Modals.jsx'
+import AvailableTimeSection from '../features/profile/components/AvilableTimeSection.jsx'
 import useProfileData from '../features/profile/hooks/useProfileData'
 import useProfileModals from '../features/profile/hooks/useProfileModals'
 import { getInitialModalValue } from '../features/profile/utils/profileUtils'
@@ -50,6 +51,12 @@ const ProfilePage = ({ endpoint, isViewerAdmin = false }) => {
             currentUser={currentUser}
             openModal={openModal}
             getInitialModalValue={field => getInitialModalValue(field, currentUser)}
+          />
+
+          <AvailableTimeSection
+            currentUser={currentUser}
+            isDoctor={isDoctor}
+            openModal={openModal}
           />
 
           <PasswordSecuritySection openModal={openModal} />

@@ -63,13 +63,6 @@ const Modals = ({
       </div>
     </EditModal>
 
-    <EditModal isOpen={activeModal === 'availableTimeSlots'} onClose={closeModal} title="Edit Available Time Slots" onSave={handleSaveChanges}>
-      <div className="form-group">
-        <label htmlFor="modal-edit-availableTimeSlots" className="block text-sm font-medium text-neutral/80 mb-1">Available Time Slots (comma separated)</label>
-        <input type="text" id="modal-edit-availableTimeSlots" name="availableTimeSlots" value={modalFormData.availableTimeSlots || ''} onChange={handleTimeSlotsChange} className="input input-bordered w-full bg-base-200/50 text-neutral" placeholder="Mon 9-11, Tue 14-16" />
-      </div>
-    </EditModal>
-
     <EditModal isOpen={activeModal === 'email'} onClose={closeModal} title="Edit Email" onSave={handleSaveChanges}>
       <div className="form-group">
         <label htmlFor="modal-edit-email" className="block text-sm font-medium text-neutral/80 mb-1">Email</label>
@@ -81,6 +74,13 @@ const Modals = ({
       <div className="form-group">
         <label htmlFor="modal-edit-phoneNumber" className="block text-sm font-medium text-neutral/80 mb-1">Phone Number</label>
         <input type="tel" id="modal-edit-phoneNumber" name="phoneNumber" value={modalFormData.phoneNumber || ''} onChange={handleModalInputChange} className="input input-bordered w-full bg-base-200/50 text-neutral" />
+      </div>
+    </EditModal>
+
+    <EditModal isOpen={activeModal === 'availableTimeSlots'} onClose={closeModal} title="Edit Available Time" onSave={handleSaveChanges}>
+      <div className="form-group">
+        <label htmlFor="modal-edit-availableTimeSlots" className="block text-sm font-medium text-neutral/80 mb-1">Available Time Slots</label>
+        <input type="text" id="modal-edit-availableTimeSlots" name="availableTimeSlots" value={modalFormData.availableTimeSlots || ''} onChange={handleTimeSlotsChange} className="input input-bordered w-full bg-base-200/50 text-neutral" placeholder="Mon 9-11, Tue 14-16" />
       </div>
     </EditModal>
 
