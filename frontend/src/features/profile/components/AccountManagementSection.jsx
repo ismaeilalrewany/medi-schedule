@@ -1,5 +1,3 @@
-import React from 'react'
-
 const AccountManagementSection = ({ isAdmin, openModal }) => (
   <section className="profile-section delete-section">
     <h3 className="text-lg font-semibold text-neutral/90 mb-1">Account Management</h3>

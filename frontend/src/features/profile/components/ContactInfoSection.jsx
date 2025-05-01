@@ -1,5 +1,3 @@
-import React from 'react'
-
 const ContactInfoSection = ({ currentUser, openModal, getInitialModalValue }) => (
   <section className="profile-section mb-8">
     <h3 className="text-lg font-semibold text-neutral/90 mb-1">Contact Info</h3>

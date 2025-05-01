@@ -1,5 +1,3 @@
-import React from 'react'
-
 const RoleSection = ({ isAdmin, isViewerAdmin, currentUser, openModal }) => (
   <section className="profile-section mb-8 role-section">
     <h3 className="text-lg font-semibold text-neutral/90 mb-1">User Role</h3>
