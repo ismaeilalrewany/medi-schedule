@@ -6,6 +6,7 @@ import PatientRegisterPage from "../pages/PatientRegisterPage.jsx"
 import DoctorRegisterPage from "../pages/DoctorRegisterPage.jsx"
 import DashboardPage from "../pages/DashboardPage.jsx"
 import ProfilePage from "../pages/ProfilePage.jsx"
+import AppointmentsPage from "../pages/appointmentsPage.jsx"
 
 const routes = createBrowserRouter([
   {
@@ -17,7 +18,7 @@ const routes = createBrowserRouter([
         children: [
           {
             path: "patients/appointments", 
-            element: <h1>Patients Appointments</h1>,
+            element: <AppointmentsPage endpoint={'patients/appointments'} />,
           },
           {
             path: "patients/profile",
@@ -30,7 +31,7 @@ const routes = createBrowserRouter([
         children: [
           {
             path: "doctors/appointments",
-            element: <h1>Doctors Appointments</h1>,
+            element: <AppointmentsPage endpoint={'doctors/appointments'} />,
           },
           {
             path: "doctors/profile",
@@ -63,11 +64,11 @@ const routes = createBrowserRouter([
           },
           {
             path: "admins/patients/:id/appointments",
-            element: <h1>Admin Patient Appointments</h1>,
+            element: <AppointmentsPage endpoint={'admins/patients/:id/appointments'} isViewerAdmin={true} />,
           },
           {
             path: "admins/doctors/:id/appointments",
-            element: <h1>Admin Doctor Appointments</h1>,
+            element: <AppointmentsPage endpoint={'admins/doctors/:id/appointments'} isViewerAdmin={true} />,
           }
         ]
       },
