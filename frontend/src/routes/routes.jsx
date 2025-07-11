@@ -60,6 +60,14 @@ const routes = createBrowserRouter([
           {
             path: "admins/doctors/:id",
             element: <ProfilePage endpoint={'admins/doctors/:id'}  isViewerAdmin={true} />,
+          },
+          {
+            path: "admins/patients/:id/appointments",
+            element: <h1>Admin Patient Appointments</h1>,
+          },
+          {
+            path: "admins/doctors/:id/appointments",
+            element: <h1>Admin Doctor Appointments</h1>,
           }
         ]
       },
