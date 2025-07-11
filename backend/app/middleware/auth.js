@@ -40,6 +40,7 @@ const auth = async (req, res, next) => {
 
     req.user = user
     req.token = token
+    req.userRole = user.role
     next()
   } catch (error) {
     console.error('Authentication error:', error)
