@@ -1,6 +1,6 @@
 import PatientModel from '../database/models/Patient.js'
 import comparePassword from '../utils/comparePassword.js'
-import verifyRecaptcha from '../utils/verifyRecaptcha.js'
+import verifyRecaptcha from '../services/verifyRecaptcha.js'
 
 class PatientsController {
   static #createCookie(res, key, value) {

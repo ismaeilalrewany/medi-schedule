@@ -1,7 +1,7 @@
 import AdminModel from '../database/models/Admin.js'
 import PatientModal from '../database/models/Patient.js'
 import DoctorModel from '../database/models/Doctor.js'
-import verifyRecaptcha from '../utils/verifyRecaptcha.js'
+import verifyRecaptcha from '../services/verifyRecaptcha.js'
 import comparePassword from '../utils/comparePassword.js'
 
 class AdminsController {
