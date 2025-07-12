@@ -1,4 +1,4 @@
-class CommonController {
+class CommonsController {
   static checkAuth (req, res) {
     res.status(200).json({ message: 'Authenticated', role: req.user.role })
   }
@@ -8,4 +8,4 @@ class CommonController {
   }
 }
 
-export default CommonController
+export default CommonsController
