@@ -119,6 +119,14 @@ class AppointmentsController {
       return res.status(500).json({ message: 'An error occurred while creating the appointment' })
     }
   }
+
+  static async getAppointments(req, res) {
+    try {
+      
+    } catch (error) {
+      
+    }
+  }
 }
 
 export default AppointmentsController
