@@ -14,11 +14,8 @@ const AppointmentSchema = new mongoose.Schema({
     required: true 
   },
   date: { type: Date, required: true },
-  timeSlot: { 
-    type: String, 
-    required: true,
-    trim: true 
-  },
+  startTime: { type: String, required: true, trim: true },
+  endTime: { type: String, required: true, trim: true },
   status: { 
     type: String, 
     enum: ['pending', 'confirmed', 'completed', 'canceled'],
@@ -26,7 +23,7 @@ const AppointmentSchema = new mongoose.Schema({
     lowercase: true 
   },
   reason: { type: String, trim: true },
-  notes: { type: String, trim: true },
+  notes: { type: String, trim: true, default: '' },
   createdBy: {
     type: String,
     enum: ['admin', 'patient'],

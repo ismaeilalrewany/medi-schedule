@@ -48,7 +48,7 @@ const DoctorSchema = new mongoose.Schema({
   availableTimeSlots: [{
     day: { 
       type: String, 
-      enum: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'], 
+      enum: ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'], 
       lowercase: true 
     },
     startTime: { type: String },
