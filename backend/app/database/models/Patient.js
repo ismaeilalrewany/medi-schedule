@@ -1,9 +1,9 @@
 import mongoose from 'mongoose'
 import validator from 'validator'
-import { validatePasswordComplexity, mongoosePasswordValidator } from './utils/passwordComplexity.js'
-import preSaveHashHook from './utils/preSaveHashHook.js'
-import generateAuthToken from './utils/generateAuthToken.js'
-import applyToJSON from './utils/applyToJSON.js'
+import { validatePasswordComplexity, mongoosePasswordValidator } from '../../utils/passwordComplexity.js'
+import preSaveHashHook from '../../utils/preSaveHashHook.js'
+import generateAuthToken from '../../utils/generateAuthToken.js'
+import applyToJSON from '../../utils/applyToJSON.js'
 
 const PatientSchema = new mongoose.Schema({
   fullName: { 

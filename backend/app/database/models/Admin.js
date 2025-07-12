@@ -1,9 +1,9 @@
 import mongoose from 'mongoose'
 import validator from 'validator'
-import { mongoosePasswordValidator, validatePasswordComplexity } from './utils/passwordComplexity.js'
-import preSaveHashHook from './utils/preSaveHashHook.js'
-import generateAuthToken from './utils/generateAuthToken.js'
-import applyToJSON from './utils/applyToJSON.js'
+import { mongoosePasswordValidator, validatePasswordComplexity } from '../../utils/passwordComplexity.js'
+import preSaveHashHook from '../../utils/preSaveHashHook.js'
+import generateAuthToken from '../../utils/generateAuthToken.js'
+import applyToJSON from '../../utils/applyToJSON.js'
 import 'dotenv/config'
 
 const AdminSchema = new mongoose.Schema({
