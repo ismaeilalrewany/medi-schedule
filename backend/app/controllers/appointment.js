@@ -59,6 +59,12 @@ class AppointmentsController {
         patientId = req.user._id
       }
 
+      // Check if the doctor exists
+      const doctor = await DoctorModel.findById(doctorId)
+      if (!doctor) {
+        return res.status(404).json({ message: 'Doctor not found' })
+      }
+
       // Check if the patient has appointment already exists in the same date and time
       // Here is the same problem I descriped below with the doctorAppointments
       // I will make it better later Insha Allah
@@ -69,12 +75,6 @@ class AppointmentsController {
       })
       if (existingAppointment) {
         return res.status(400).json({ message: 'Appointment already exists for this date and time' })
-      }
-
-      // Check if the doctor exists
-      const doctor = await DoctorModel.findById(doctorId)
-      if (!doctor) {
-        return res.status(404).json({ message: 'Doctor not found' })
       }
 
       // Check if doctor is available at the given date and time
