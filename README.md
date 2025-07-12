@@ -38,3 +38,8 @@ MediSchedule is an appointment management system developed as a practical test f
 - useTransition and useDeferredValue for loading states
 - useMemo and useCallback for performance optimization
 - useReducer for complex state management
+
+## Middleware To Create
+
+1. logger
+2. errorHandler
