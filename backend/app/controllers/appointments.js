@@ -1,4 +1,4 @@
-import AppointmentModal from '../database/models/Appointment.js'
+import AppointmentModel from '../database/models/Appointment.js'
 import PatientModel from '../database/models/Patient.js'
 import DoctorModel from '../database/models/Doctor.js'
 
@@ -68,7 +68,7 @@ class AppointmentsController {
       // Check if the patient has appointment already exists in the same date and time
       // Here is the same problem I descriped below with the doctorAppointments
       // I will make it better later Insha Allah
-      const existingAppointment = await AppointmentModal.findOne({
+      const existingAppointment = await AppointmentModel.findOne({
         patient: patientId,
         date: new Date(date),
         startTime: startTime
@@ -92,7 +92,7 @@ class AppointmentsController {
       // This is very simple because it only checks the start time
       // But the doctor could have appointment starts earlier and ends at the same end time
       // Or starts in the middle of the appointment or ends in the middle of the appointment
-      const doctorAppointment = await AppointmentModal.findOne({
+      const doctorAppointment = await AppointmentModel.findOne({
         doctor: doctorId,
         date: new Date(date),
         startTime: startTime,
@@ -102,7 +102,7 @@ class AppointmentsController {
       }
 
       // Create the appointment
-      const appointment = new AppointmentModal({
+      const appointment = new AppointmentModel({
         patient: patientId,
         doctor: doctorId,
         date: new Date(date),
