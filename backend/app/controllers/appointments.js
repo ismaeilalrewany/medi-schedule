@@ -1,6 +1,7 @@
 import AppointmentModel from '../database/models/Appointment.js'
 import PatientModel from '../database/models/Patient.js'
 import DoctorModel from '../database/models/Doctor.js'
+import { app } from '../app.js'
 
 class AppointmentsController {
   static #dayNamesToNumbers = {
@@ -59,10 +60,9 @@ class AppointmentsController {
     try {
       // Don't need status and notes because doctors put them
       const {doctorId, date, startTime, endTime, reason} = req.body
-      let patientId = null
 
       // Check if the appointment creator is a patient or an admin and set patientId accordingly
-      patientId = await AppointmentsController.#getUserId(req, 'patient')
+      const patientId = await AppointmentsController.#getUserId(req, 'patient')
       if (!patientId) {
         return res.status(404).json({ message: 'Patient not found' })
       }
@@ -129,9 +129,59 @@ class AppointmentsController {
 
   static async getPatientAppointments(req, res) {
     try {
-      
+      // Check if the appointment creator is a patient or an admin and set patientId accordingly
+      const patientId = await AppointmentsController.#getUserId(req, 'patient')
+      if (!patientId) {
+        return res.status(404).json({ message: 'Patient not found' })
+      }
+
+      // Pagination
+      const limit = parseInt(req.query.limit) || 6
+      const page = parseInt(req.query.page) || 1
+      const skip = (page - 1) * limit
+
+      // Find query
+      const filterQuery = {patient: patientId}
+
+      // Filter by status
+      if (req.query.status && req.query.status !== 'all') {
+        filterQuery.status = req.query.status.toLowerCase()
+      }
+
+      // Filter by date
+      if (req.query.date) {
+        filterQuery.date = new Date(req.query.date).toISOString()
+      }
+
+      // Search by name
+      const searchRegex = new RegExp((req.query.search || '').trim(), 'i')
+      if (req.query.search) {
+        filterQuery['doctor.fullName'] = searchRegex
+      }
+
+      const appointments = await AppointmentModel.find(filterQuery)
+        .populate('patient doctor', 'fullName specialization -_id')
+        .select('-__v -createdAt -updatedAt')
+        .sort({ date: 1, startTime: 1 })
+        .skip(skip)
+        .limit(limit)
+
+      if (!appointments || appointments.length === 0) {
+        return res.status(404).json({ message: 'No appointments found for this patient' })
+      }
+
+      return res.status(200).json({ message: 'Patient appointments retrieved successfully',
+        appointments,
+        pagination: {
+          currentPage: page,
+          itemsPerPage: limit,
+          totalItems: appointments.length,
+          totalPages: Math.ceil(appointments.length / limit)
+        }
+      })
     } catch (error) {
-      
+      console.error(error)
+      return res.status(500).json({ message: 'An error occurred while retrieving patient appointments' })
     }
   }
 
