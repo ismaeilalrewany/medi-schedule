@@ -13,10 +13,10 @@ class AppointmentsController {
     'saturday': 6
   }
 
-  static async #getUserId(createdBy, req, role) {
-    if (createdBy === 'admin') {
+  static async #getUserId(req, model) {
+    if (req.user.role === 'admin') {
       const userId = req.params.id
-      const user = role === 'patient' ? await PatientModel.findById(userId) : await DoctorModel.findById(userId)
+      const user = model === 'patient' ? await PatientModel.findById(userId) : await DoctorModel.findById(userId)
 
       if (!user) {
         return null
@@ -58,12 +58,11 @@ class AppointmentsController {
   static async createAppointment(req, res) {
     try {
       // Don't need status and notes because doctors put them
-      const createdBy = req.user.role
       const {doctorId, date, startTime, endTime, reason} = req.body
       let patientId = null
 
       // Check if the appointment creator is a patient or an admin and set patientId accordingly
-      patientId = await AppointmentsController.#getUserId(createdBy, req, 'patient')
+      patientId = await AppointmentsController.#getUserId(req, 'patient')
       if (!patientId) {
         return res.status(404).json({ message: 'Patient not found' })
       }
@@ -117,7 +116,7 @@ class AppointmentsController {
         startTime: startTime,
         endTime: endTime,
         reason: reason,
-        createdBy: createdBy,
+        createdBy: req.user.role,
       })
 
       const savedAppointment = await appointment.save()
