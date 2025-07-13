@@ -9,7 +9,7 @@ async function startServer() {
   try {
     await startApp()
 
-    if (process.env.USE_HTTPS === 'true') {
+    if (process.env.USE_HTTPS === 'false') {
       const options = {
         key: fs.readFileSync("../localssl/cert.key"),
         cert: fs.readFileSync("../localssl/cert.crt")

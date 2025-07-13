@@ -13,6 +13,21 @@ class AppointmentsController {
     'saturday': 6
   }
 
+  static async #getUserId(createdBy, req, role) {
+    if (createdBy === 'admin') {
+      const userId = req.params.id
+      const user = role === 'patient' ? await PatientModel.findById(userId) : await DoctorModel.findById(userId)
+
+      if (!user) {
+        return null
+      }
+
+      return userId
+    } else {
+      return req.user._id
+    }
+  }
+
   static #getDayNumber(day) {
     return AppointmentsController.#dayNamesToNumbers[day.toLowerCase()]
   }
@@ -33,10 +48,10 @@ class AppointmentsController {
     return (hours1 > hours2) || (hours1 === hours2 && minutes1 >= minutes2)
   }
 
-  static #checkDoctorAvailability(doctorAvailability, index, date, startTime, endTime) {
-    let isAvailableDate = AppointmentsController.#getDayNumber(doctorAvailability.availableTimeSlots[index].day) === new Date(date).getDay()
-    let isAvailableTime = AppointmentsController.#greaterTimeOrEqual(doctorAvailability.availableTimeSlots[index].startTime, startTime) && AppointmentsController.#lesserTimeOrEqual(doctorAvailability.availableTimeSlots[index].endTime, endTime)
-    let isAvailable = doctorAvailability.availableTimeSlots[index].isAvailable
+  static #checkDoctorAvailability(doctor, index, date, startTime, endTime) {
+    let isAvailableDate = AppointmentsController.#getDayNumber(doctor.availableTimeSlots[index].day) === new Date(date).getDay()
+    let isAvailableTime = AppointmentsController.#greaterTimeOrEqual(doctor.availableTimeSlots[index].startTime, startTime) && AppointmentsController.#lesserTimeOrEqual(doctor.availableTimeSlots[index].endTime, endTime)
+    let isAvailable = doctor.availableTimeSlots[index].isAvailable
     return isAvailable && isAvailableDate && isAvailableTime
   }
 
@@ -48,15 +63,9 @@ class AppointmentsController {
       let patientId = null
 
       // Check if the appointment creator is a patient or an admin and set patientId accordingly
-      if (createdBy === 'admin') {
-        patientId = req.params.id
-
-        const patient = await PatientModel.findById(patientId)
-        if (!patient) {
-          return res.status(404).json({ message: 'Patient not found' })
-        }
-      } else {
-        patientId = req.user._id
+      patientId = await AppointmentsController.#getUserId(createdBy, req, 'patient')
+      if (!patientId) {
+        return res.status(404).json({ message: 'Patient not found' })
       }
 
       // Check if the doctor exists
@@ -78,12 +87,11 @@ class AppointmentsController {
       }
 
       // Check if doctor is available at the given date and time
-      const doctorAvailability = await DoctorModel.findById(doctorId).select('availableTimeSlots')
-      for(let i = 0; i < doctorAvailability.availableTimeSlots.length; i++) {
-        if (AppointmentsController.#checkDoctorAvailability(doctorAvailability, i, date, startTime, endTime)) {
+      for(let i = 0; i < doctor.availableTimeSlots.length; i++) {
+        if (AppointmentsController.#checkDoctorAvailability(doctor, i, date, startTime, endTime)) {
           break
         }
-        if (i === doctorAvailability.availableTimeSlots.length - 1) {
+        if (i === doctor.availableTimeSlots.length - 1) {
           return res.status(400).json({ message: 'Doctor is not available at this time' })
         }
       }
