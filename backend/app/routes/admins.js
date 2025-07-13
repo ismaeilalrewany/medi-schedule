@@ -11,7 +11,7 @@ router.get('/profile', auth, AdminsController.getProfile)
 router.get('/patients/:id', auth, AdminsController.getPatient)
 router.get('/doctors/:id', auth, AdminsController.getDoctor)
 router.post('/patients/:id/appointments', auth, AppointmentsController.createAppointment)
-router.get('/patients/:id/appointments', auth, AppointmentsController.getAppointments)
-router.get('/doctors/:id/appointments', auth, AppointmentsController.getAppointments)
+router.get('/patients/:id/appointments', auth, AppointmentsController.getPatientAppointments)
+router.get('/doctors/:id/appointments', auth, AppointmentsController.getDoctorAppointments)
 
 export default router

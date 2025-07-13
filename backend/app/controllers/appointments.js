@@ -120,7 +120,15 @@ class AppointmentsController {
     }
   }
 
-  static async getAppointments(req, res) {
+  static async getPatientAppointments(req, res) {
+    try {
+      
+    } catch (error) {
+      
+    }
+  }
+
+  static async getDoctorAppointments(req, res) {
     try {
       
     } catch (error) {

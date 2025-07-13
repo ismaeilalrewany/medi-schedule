@@ -11,6 +11,6 @@ router.post('/login', PatientsController.login)
 router.get('/', auth, PatientsController.getAllPatients)
 router.get('/profile', auth, PatientsController.getProfile)
 router.post('/appointments', auth, AppointmentsController.createAppointment)
-router.get('/appointments', auth, AppointmentsController.getAppointments)
+router.get('/appointments', auth, AppointmentsController.getPatientAppointments)
 
 export default router

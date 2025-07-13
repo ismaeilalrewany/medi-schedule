@@ -10,6 +10,6 @@ router.post('/login', DoctorsController.login)
 router.post('/logout', auth, DoctorsController.logout)
 router.get('/', auth, DoctorsController.getAllDoctors)
 router.get('/profile', auth, DoctorsController.getProfile)
-router.get('/appointments', auth, AppointmentsController.getAppointments)
+router.get('/appointments', auth, AppointmentsController.getDoctorAppointments)
 
 export default router
