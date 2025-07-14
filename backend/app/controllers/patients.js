@@ -64,10 +64,10 @@ class PatientsController {
       const { email, password, recaptchaToken } = req.body
 
       // Verify reCAPTCHA
-      // const isRecaptchaValid = await verifyRecaptcha(recaptchaToken)
-      // if (!isRecaptchaValid) {
-      //   return res.status(400).json({ message: 'reCAPTCHA verification failed' })
-      // }
+      const isRecaptchaValid = await verifyRecaptcha(recaptchaToken)
+      if (!isRecaptchaValid) {
+        return res.status(400).json({ message: 'reCAPTCHA verification failed' })
+      }
 
       // Find the patient by email
       const patient = await PatientModel.findOne({ email })
