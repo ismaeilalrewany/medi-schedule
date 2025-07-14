@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import Pagination from '../components/table/Pagination'
+import Pagination from '../components/table/Pagination.jsx'
+import Modal from '../components/modal/Modal.jsx'
 
 const AppointmentsPage = ({ endpoint, isViewerAdmin = false }) => {
   const [appointments, setAppointments] = useState([])
@@ -72,6 +73,18 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false }) => {
     // Add to appointments or refresh from API
   }
 
+
+  const handleOpenDetailsModal = (appointment) => {
+    setSelectedAppointment(appointment);
+    setIsDetailsModalOpen(true);
+  }
+
+  const handleBookModalSubmit = (e) => {
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+    handleBookAppointment(data);
+  }
+
   const getStatusBadge = (status) => {
     const statusClasses = {
       confirmed: 'badge-success',
@@ -127,7 +140,7 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false }) => {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Date Range</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
                 <input 
                   type="date" 
                   className="input input-bordered w-full"
@@ -208,130 +221,94 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false }) => {
       </main>
 
       {/* Book Appointment Modal */}
-      {isBookModalOpen && (
-        <div className="modal modal-open">
-          <div className="modal-box">
-            <button 
-              onClick={() => setIsBookModalOpen(false)}
-              className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-            >
-              ✕
-            </button>
-            <h3 className="font-bold text-lg mb-4">Book New Appointment</h3>
-            
-            <form onSubmit={(e) => {
-              e.preventDefault();
-              const formData = new FormData(e.target);
-              handleBookAppointment(Object.fromEntries(formData.entries()));
-            }}>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Select Doctor</label>
-                  <select name="doctor" className="select select-bordered w-full" required>
-                    <option disabled selected>Choose a doctor</option>
-                    <option value="dr_carter">Dr. Emily Carter (Cardiology)</option>
-                    <option value="dr_smith">Dr. John Smith (General Practice)</option>
-                    <option value="dr_miller">Dr. Sarah Miller (Dermatology)</option>
-                  </select>
-                </div>
+      <Modal
+        isOpen={isBookModalOpen}
+        onClose={() => setIsBookModalOpen(false)}
+        title="Book New Appointment"
+        onSubmit={handleBookModalSubmit} // Pass the onSubmit handler
+        submitButtonText="Request Appointment"
+      >
+        <form id="book-appointment-form"> {/* Add an ID to the form if needed for onSubmit */}
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Select Doctor</label>
+              <select name="doctor" className="select select-bordered w-full" required>
+                <option disabled selected>Choose a doctor</option>
+                <option value="dr_carter">Dr. Emily Carter (Cardiology)</option>
+                <option value="dr_smith">Dr. John Smith (General Practice)</option>
+                <option value="dr_miller">Dr. Sarah Miller (Dermatology)</option>
+              </select>
+            </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
-                  <input type="date" name="date" className="input input-bordered w-full" required />
-                </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
+              <input type="date" name="date" className="input input-bordered w-full" required />
+            </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Preferred Time Slot</label>
-                  <select name="timeSlot" className="select select-bordered w-full" required>
-                    <option disabled selected>Select a time</option>
-                    <option>09:00 AM - 09:30 AM</option>
-                    <option>10:00 AM - 10:30 AM</option>
-                    <option>11:00 AM - 11:30 AM</option>
-                    <option>02:00 PM - 02:30 PM</option>
-                  </select>
-                </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Preferred Time Slot</label>
+              <select name="timeSlot" className="select select-bordered w-full" required>
+                <option disabled selected>Select a time</option>
+                <option>09:00 AM - 09:30 AM</option>
+                <option>10:00 AM - 10:30 AM</option>
+                <option>11:00 AM - 11:30 AM</option>
+                <option>02:00 PM - 02:30 PM</option>
+              </select>
+            </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Reason for Visit</label>
-                  <input 
-                    type="text" 
-                    name="reason" 
-                    className="input input-bordered w-full" 
-                    placeholder="e.g., Annual Checkup, Consultation" 
-                  />
-                </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Reason for Visit</label>
+              <input
+                type="text"
+                name="reason"
+                className="input input-bordered w-full"
+                placeholder="e.g., Annual Checkup, Consultation"
+                required
+              />
+            </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Additional Notes (Optional)</label>
-                  <textarea 
-                    name="notes" 
-                    className="textarea textarea-bordered w-full" 
-                    placeholder="Any other information..."
-                  ></textarea>
-                </div>
-              </div>
-
-              <div className="modal-action">
-                <button 
-                  type="button" 
-                  onClick={() => setIsBookModalOpen(false)}
-                  className="btn btn-ghost text-neutral/80"
-                >
-                  Cancel
-                </button>
-                <button type="submit" className="btn bg-neutral text-neutral-content border-0">
-                  Request Appointment
-                </button>
-              </div>
-            </form>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Additional Notes (Optional)</label>
+              <textarea
+                name="notes"
+                className="textarea textarea-bordered w-full"
+                placeholder="Any other information..."
+              ></textarea>
+            </div>
           </div>
-        </div>
-      )}
+        </form>
+      </Modal>
 
       {/* Appointment Details Modal */}
-      {isDetailsModalOpen && selectedAppointment && (
-        <div className="modal modal-open">
-          <div className="modal-box">
-            <button 
-              onClick={() => setIsDetailsModalOpen(false)}
-              className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-            >
-              ✕
-            </button>
-            <h3 className="font-bold text-lg mb-4">Appointment Details</h3>
-            
-            <div className="space-y-3">
-              <p><strong>Doctor:</strong> {selectedAppointment.doctorName} ({selectedAppointment.doctorSpecialty})</p>
-              <p><strong>Patient:</strong> {selectedAppointment.patientName} (You)</p>
-              <p><strong>Date:</strong> {selectedAppointment.date}</p>
-              <p><strong>Time:</strong> {selectedAppointment.timeSlot}</p>
-              <p>
-                <strong>Status:</strong> 
-                <span className={`ml-2 px-2 py-1 rounded-full text-xs font-semibold ${getStatusColor(selectedAppointment.status)}`}>
-                  {selectedAppointment.status.charAt(0).toUpperCase() + selectedAppointment.status.slice(1)}
-                </span>
+      <Modal
+        isOpen={isDetailsModalOpen && selectedAppointment !== null}
+        onClose={() => setIsDetailsModalOpen(false)}
+        title="Appointment Details"
+        showSubmitButton={false} // This modal doesn't need a submit button
+      >
+        {selectedAppointment && (
+          <div className="space-y-3">
+            <p><strong>Doctor:</strong> {selectedAppointment.doctorName} ({selectedAppointment.doctorSpecialty})</p>
+            <p><strong>Patient:</strong> {selectedAppointment.patientName} (You)</p>
+            <p><strong>Date:</strong> {selectedAppointment.date}</p>
+            <p><strong>Time:</strong> {selectedAppointment.timeSlot}</p>
+            <p>
+              <strong>Status:</strong>
+              <span className={`ml-2 px-2 py-1 rounded-full text-xs font-semibold ${getStatusColor(selectedAppointment.status)}`}>
+                {selectedAppointment.status.charAt(0).toUpperCase() + selectedAppointment.status.slice(1)}
+              </span>
+            </p>
+            <p><strong>Reason:</strong> {selectedAppointment.reason}</p>
+            <div>
+              <strong>Notes:</strong>
+              <p className="mt-1 p-2 bg-gray-50 rounded text-sm text-gray-700">
+                {selectedAppointment.notes || 'No additional notes.'}
               </p>
-              <p><strong>Reason:</strong> {selectedAppointment.reason}</p>
-              <div>
-                <strong>Notes:</strong>
-                <p className="mt-1 p-2 bg-gray-50 rounded text-sm text-gray-700">
-                  {selectedAppointment.notes || 'No additional notes.'}
-                </p>
-              </div>
-              <p><strong>Booked By:</strong> {selectedAppointment.createdBy}</p>
             </div>
-
-            <div className="modal-action">
-              <button 
-                onClick={() => setIsDetailsModalOpen(false)}
-                className="btn bg-neutral text-neutral-content border-0"
-              >
-                Close
-              </button>
-            </div>
+            <p><strong>Booked By:</strong> {selectedAppointment.createdBy}</p>
           </div>
-        </div>
-      )}
+        )}
+      </Modal>
     </>
   )
 }
