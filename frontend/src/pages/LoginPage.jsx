@@ -8,7 +8,7 @@ import Recaptcha from '../components/form/Recaptcha.jsx'
 import SubmitButton from '../components/form/SubmitButton.jsx'
 import RedirectLink from '../components/form/RedirectLink.jsx'
 
-const AllLoginPage = () => {
+const LoginPage = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [role, setRole] = useState('patient')
@@ -64,4 +64,4 @@ const AllLoginPage = () => {
   )
 }
 
-export default AllLoginPage
+export default LoginPage

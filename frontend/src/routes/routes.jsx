@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom"
 import App from "../App.jsx"
 import ProtectedRoute from "./ProtectedRoute.jsx"
-import AllLoginPage from "../pages/AllLoginPage.jsx"
+import LoginPage from "../pages/LoginPage.jsx"
 import PatientRegisterPage from "../pages/PatientRegisterPage.jsx"
 import DoctorRegisterPage from "../pages/DoctorRegisterPage.jsx"
 import DashboardPage from "../pages/DashboardPage.jsx"
@@ -78,7 +78,7 @@ const routes = createBrowserRouter([
       },
       {
         path: "login",
-        element: <AllLoginPage />,
+        element: <LoginPage />,
       },
       {
         path: "patients/register",
