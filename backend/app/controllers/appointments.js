@@ -1,7 +1,6 @@
 import AppointmentModel from '../database/models/Appointment.js'
 import PatientModel from '../database/models/Patient.js'
 import DoctorModel from '../database/models/Doctor.js'
-import { app } from '../app.js'
 
 class AppointmentsController {
   static #dayNamesToNumbers = {
@@ -12,6 +11,20 @@ class AppointmentsController {
     'thursday': 4,
     'friday': 5,
     'saturday': 6
+  }
+
+  static #pagination = {
+    limit : 6,
+    page : 1,
+    skip : (this.page - 1) * this.limit
+  }
+
+  static #setPagination(req) {
+    const limit = parseInt(req.query.limit) || AppointmentsController.#pagination.limit
+    const page = parseInt(req.query.page) || AppointmentsController.#pagination.page
+
+    AppointmentsController.#pagination.limit = limit
+    AppointmentsController.#pagination.page = page
   }
 
   static async #getUserId(req, model) {
@@ -56,10 +69,32 @@ class AppointmentsController {
     return isAvailable && isAvailableDate && isAvailableTime
   }
 
+  static #createFilterQuery(req, userId, role) {
+    const filterQuery = {[role]: userId}
+
+    // Filter by status
+    if (req.query.status && req.query.status !== 'all') {
+      filterQuery.status = req.query.status.toLowerCase()
+    }
+
+    // Filter by date
+    if (req.query.date) {
+      filterQuery.date = new Date(req.query.date)
+    }
+
+    // Search by name
+    const searchRegex = new RegExp((req.query.search || '').trim(), 'i')
+    if (req.query.search) {
+      filterQuery[`${role}.fullName`] = searchRegex
+    }
+
+    return filterQuery
+  }
+
   static async createAppointment(req, res) {
     try {
       // Don't need status and notes because doctors put them
-      const {doctorId, date, startTime, endTime, reason} = req.body
+      const {doctorId, date, startTime, endTime, reason, notes} = req.body
 
       // Check if the appointment creator is a patient or an admin and set patientId accordingly
       const patientId = await AppointmentsController.#getUserId(req, 'patient')
@@ -116,6 +151,7 @@ class AppointmentsController {
         startTime: startTime,
         endTime: endTime,
         reason: reason,
+        notes: notes,
         createdBy: req.user.role,
       })
 
@@ -135,30 +171,11 @@ class AppointmentsController {
         return res.status(404).json({ message: 'Patient not found' })
       }
 
-      // Pagination
-      const limit = parseInt(req.query.limit) || 6
-      const page = parseInt(req.query.page) || 1
-      const skip = (page - 1) * limit
+      // Set and get pagination data
+      AppointmentsController.#setPagination(req)
+      const { limit, page, skip } = AppointmentsController.#pagination
 
-      // Find query
-      const filterQuery = {patient: patientId}
-
-      // Filter by status
-      if (req.query.status && req.query.status !== 'all') {
-        filterQuery.status = req.query.status.toLowerCase()
-      }
-
-      // Filter by date
-      if (req.query.date) {
-        filterQuery.date = new Date(req.query.date).toISOString()
-      }
-
-      // Search by name
-      const searchRegex = new RegExp((req.query.search || '').trim(), 'i')
-      if (req.query.search) {
-        filterQuery['doctor.fullName'] = searchRegex
-      }
-
+      const filterQuery = AppointmentsController.#createFilterQuery(req, patientId, 'patient')
       const appointments = await AppointmentModel.find(filterQuery)
         .populate('patient doctor', 'fullName specialization -_id')
         .select('-__v -createdAt -updatedAt')
@@ -175,7 +192,7 @@ class AppointmentsController {
         pagination: {
           currentPage: page,
           itemsPerPage: limit,
-          totalItems: appointments.length,
+          totalItems: await AppointmentModel.countDocuments(filterQuery),
           totalPages: Math.ceil(appointments.length / limit)
         }
       })
@@ -187,9 +204,40 @@ class AppointmentsController {
 
   static async getDoctorAppointments(req, res) {
     try {
-      
+      // Check if the appointment creator is a doctor or an admin and set doctorId accordingly
+      const doctorId = await AppointmentsController.#getUserId(req, 'doctor')
+      if (!doctorId) {
+        return res.status(404).json({ message: 'Doctor not found' })
+      }
+
+      // Set and get pagination data
+      AppointmentsController.#setPagination(req)
+      const { limit, page, skip } = AppointmentsController.#pagination
+
+      const filterQuery = AppointmentsController.#createFilterQuery(req, doctorId, 'doctor')
+      const appointments = await AppointmentModel.find(filterQuery)
+        .populate('patient doctor', 'fullName specialization -_id')
+        .select('-__v -createdAt -updatedAt')
+        .sort({ date: 1, startTime: 1 })
+        .skip(skip)
+        .limit(limit)
+
+      if (!appointments || appointments.length === 0) {
+        return res.status(404).json({ message: 'No appointments found for this doctor' })
+      }
+
+      return res.status(200).json({ message: 'Doctor appointments retrieved successfully',
+        appointments,
+        pagination: {
+          currentPage: page,
+          itemsPerPage: limit,
+          totalItems: await AppointmentModel.countDocuments(filterQuery),
+          totalPages: Math.ceil(appointments.length / limit)
+        }
+      })
     } catch (error) {
-      
+      console.error(error)
+      return res.status(500).json({ message: 'An error occurred while retrieving doctor appointments' })
     }
   }
 }
