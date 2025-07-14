@@ -11,49 +11,11 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false }) => {
   const [paginationData, setPaginationData] = useState({})
   const [paginationPage, setPaginationPage] = useState(paginationData.currentPage || 1)
 
-  // Mock data - replace with actual API calls
-  const mockAppointments = [
-    {
-      id: "1",
-      doctorName: "Dr. Emily Carter",
-      doctorSpecialty: "Cardiology",
-      patientName: "John Patient Doe",
-      date: "October 25, 2023",
-      timeSlot: "10:00 AM - 10:30 AM",
-      status: "confirmed",
-      reason: "Annual Checkup",
-      notes: "Patient reports feeling well. Standard checks performed. Advised on diet and exercise.",
-      createdBy: "Patient"
-    },
-    {
-      id: "2",
-      doctorName: "Dr. John Smith",
-      doctorSpecialty: "General Practice",
-      patientName: "John Patient Doe",
-      date: "November 02, 2023",
-      timeSlot: "02:30 PM - 03:00 PM",
-      status: "pending",
-      reason: "Follow-up Consultation",
-      notes: "Patient needs to discuss recent lab results.",
-      createdBy: "Admin"
-    },
-    {
-      id: "3",
-      doctorName: "Dr. Sarah Miller",
-      doctorSpecialty: "Dermatology",
-      patientName: "John Patient Doe",
-      date: "September 15, 2023",
-      timeSlot: "11:00 AM - 11:30 AM",
-      status: "completed",
-      reason: "Skin Rash",
-      notes: "Prescribed topical cream. Follow up if no improvement in 1 week.",
-      createdBy: "Patient"
-    }
-  ]
+
 
   useEffect(() => {
     // Load appointments
-    setAppointments(mockAppointments)
+    // setAppointments(mockAppointments)
     setPaginationPage(1)
   }, [])
 
@@ -164,59 +126,68 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false }) => {
             </div>
           </section>
 
-          {/* Appointments Grid */}
-          <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {appointments.map((appointment) => (
-              <div 
-                key={appointment.id} 
-                className={`bg-white rounded-lg p-5 ring-1 ring-neutral-300 shadow hover:shadow-lg hover:-translate-y-1 transition-all duration-200`}
-              >
-                <div className="flex justify-between items-start mb-3">
-                  <h3 className="text-lg font-semibold text-neutral">{appointment.doctorName}</h3>
-                  <span className={`px-2 py-1 rounded-full text-sm font-semibold ${getStatusColor(appointment.status)}`}>
-                    {appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1)}
-                  </span>
-                </div>
-
-                <div className="space-y-1 mb-4">
-                  <p className="text-sm text-gray-600">
-                    <i className="fas fa-user-md mr-2 text-gray-400"></i>
-                    {appointment.doctorSpecialty}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    <i className="fas fa-calendar-alt mr-2 text-gray-400"></i>
-                    {appointment.date}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    <i className="fas fa-clock mr-2 text-gray-400"></i>
-                    {appointment.timeSlot}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    <strong>Reason:</strong> {appointment.reason}
-                  </p>
-                </div>
-
-                <div className="flex space-x-2 pt-4 border-t border-neutral-200">
-                  {appointment.status !== 'completed' && (
-                    <button className="btn text-neutral btn-sm flex-1">
-                      Cancel
-                    </button>
-                  )}
-                  <button 
-                    onClick={() => handleViewDetails(appointment)}
-                    className="btn bg-neutral text-neutral-content border-0 btn-sm flex-1"
+          {appointments.length > 0 ? (
+            <>
+              {/* Appointments Grid */}
+              <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {appointments.map((appointment) => (
+                  <div 
+                    key={appointment.id} 
+                    className={`bg-white rounded-lg p-5 ring-1 ring-neutral-300 shadow hover:shadow-lg hover:-translate-y-1 transition-all duration-200`}
                   >
-                    View Details
-                  </button>
-                </div>
-              </div>
-            ))}
-          </section>
+                    <div className="flex justify-between items-start mb-3">
+                      <h3 className="text-lg font-semibold text-neutral">{appointment.doctorName}</h3>
+                      <span className={`px-2 py-1 rounded-full text-sm font-semibold ${getStatusColor(appointment.status)}`}>
+                        {appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1)}
+                      </span>
+                    </div>
 
-          {/* Pagination */}
-          <footer className="flex justify-end mt-8">
-            <Pagination data={paginationData} setPage={setPaginationPage} />
-          </footer>
+                    <div className="space-y-1 mb-4">
+                      <p className="text-sm text-gray-600">
+                        <i className="fas fa-user-md mr-2 text-gray-400"></i>
+                        {appointment.doctorSpecialty}
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        <i className="fas fa-calendar-alt mr-2 text-gray-400"></i>
+                        {appointment.date}
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        <i className="fas fa-clock mr-2 text-gray-400"></i>
+                        {appointment.timeSlot}
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        <strong>Reason:</strong> {appointment.reason}
+                      </p>
+                    </div>
+
+                    <div className="flex space-x-2 pt-4 border-t border-neutral-200">
+                      {appointment.status !== 'completed' && (
+                        <button className="btn text-neutral btn-sm flex-1">
+                          Cancel
+                        </button>
+                      )}
+                      <button 
+                        onClick={() => handleViewDetails(appointment)}
+                        className="btn bg-neutral text-neutral-content border-0 btn-sm flex-1"
+                      >
+                        View Details
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </section>
+
+              {/* Pagination */}
+              <footer className="flex justify-end mt-8">
+                <Pagination data={paginationData} setPage={setPaginationPage} />
+              </footer>
+            </>
+            ) : (
+              <div className="text-center text-neutral-400">
+                <p className="text-lg">No appointments found.</p>
+                <p className="mt-2">Try adjusting your filters or book a new appointment.</p>
+              </div>
+            )}
         </div>
       </main>
 
