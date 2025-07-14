@@ -41,7 +41,7 @@ const Navbar = () => {
                 </li>
               </ul>
             </div>
-            <Link to={'/patients/appointments'} className="btn btn-ghost text-xl">ONNMED</Link>
+            <Link to={'/patients/appointments'} className="btn btn-ghost text-xl">MediSchedule</Link>
           </div>
           <div className="navbar-end hidden lg:flex">
             <ul className="menu menu-horizontal px-1">
