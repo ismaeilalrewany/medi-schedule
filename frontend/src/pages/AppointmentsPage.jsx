@@ -1,9 +1,337 @@
+import { useState, useEffect } from 'react'
+import Pagination from '../components/table/Pagination'
+
 const AppointmentsPage = ({ endpoint, isViewerAdmin = false }) => {
+  const [appointments, setAppointments] = useState([])
+  const [filters, setFilters] = useState({ status: 'all', date: '', search: '' })
+  const [selectedAppointment, setSelectedAppointment] = useState(null)
+  const [isBookModalOpen, setIsBookModalOpen] = useState(false)
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false)
+  const [paginationData, setPaginationData] = useState({})
+  const [paginationPage, setPaginationPage] = useState(paginationData.currentPage || 1)
+
+  // Mock data - replace with actual API calls
+  const mockAppointments = [
+    {
+      id: "1",
+      doctorName: "Dr. Emily Carter",
+      doctorSpecialty: "Cardiology",
+      patientName: "John Patient Doe",
+      date: "October 25, 2023",
+      timeSlot: "10:00 AM - 10:30 AM",
+      status: "confirmed",
+      reason: "Annual Checkup",
+      notes: "Patient reports feeling well. Standard checks performed. Advised on diet and exercise.",
+      createdBy: "Patient"
+    },
+    {
+      id: "2",
+      doctorName: "Dr. John Smith",
+      doctorSpecialty: "General Practice",
+      patientName: "John Patient Doe",
+      date: "November 02, 2023",
+      timeSlot: "02:30 PM - 03:00 PM",
+      status: "pending",
+      reason: "Follow-up Consultation",
+      notes: "Patient needs to discuss recent lab results.",
+      createdBy: "Admin"
+    },
+    {
+      id: "3",
+      doctorName: "Dr. Sarah Miller",
+      doctorSpecialty: "Dermatology",
+      patientName: "John Patient Doe",
+      date: "September 15, 2023",
+      timeSlot: "11:00 AM - 11:30 AM",
+      status: "completed",
+      reason: "Skin Rash",
+      notes: "Prescribed topical cream. Follow up if no improvement in 1 week.",
+      createdBy: "Patient"
+    }
+  ]
+
+  useEffect(() => {
+    // Load appointments
+    setAppointments(mockAppointments)
+    setPaginationPage(1)
+  }, [])
+
+  const handleFilterChange = (filterType, value) => {
+    setFilters(prev => ({ ...prev, [filterType]: value }))
+  }
+
+  const handleViewDetails = (appointment) => {
+    setSelectedAppointment(appointment)
+    setIsDetailsModalOpen(true)
+  }
+
+  const handleBookAppointment = (formData) => {
+    // Handle booking logic here
+    console.log('Booking appointment:', formData)
+    setIsBookModalOpen(false);
+    // Add to appointments or refresh from API
+  }
+
+  const getStatusBadge = (status) => {
+    const statusClasses = {
+      confirmed: 'badge-success',
+      pending: 'badge-warning',
+      completed: 'badge-info',
+      canceled: 'badge-error'
+    }
+    return `badge ${statusClasses[status] || 'badge-neutral'}`
+  }
+
+  const getStatusColor = (status) => {
+    const colors = {
+      confirmed: 'text-green-700 bg-green-100',
+      pending: 'text-yellow-700 bg-yellow-100',
+      completed: 'text-blue-700 bg-blue-100',
+      canceled: 'text-red-700 bg-red-100'
+    }
+    return colors[status] || 'text-gray-700 bg-gray-100'
+  }
+
   return (
     <>
-      <h1>Appointments Page</h1>
-      <p>Endpoint: {endpoint}</p>
-      <p>Is Viewer Admin: {isViewerAdmin ? 'Yes' : 'No'}</p>
+      <main className="min-h-screen bg-gradient-to-br from-base-200 to-base-100 py-8">
+        <div className="container mx-auto px-2">
+          {/* Page Header */}
+          <header className="flex justify-between flex-wrap items-center mb-6 gap-4">
+            <h1 className="text-2xl font-semibold text-neutral">My Appointments</h1>
+            <button 
+              onClick={() => setIsBookModalOpen(true)}
+              className="btn bg-neutral text-neutral-content border-0 btn-sm"
+            >
+              <i className="fas fa-plus mr-2"></i>
+              Book New Appointment
+            </button>
+          </header>
+
+          {/* Filters */}
+          <section className="bg-white rounded-lg p-4 mb-6 ring-1 ring-neutral-300 shadow">
+            <h3 className="text-lg font-semibold text-neutral/90 mb-3">Filter Appointments</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                <select 
+                  className="select select-bordered w-full"
+                  value={filters.status}
+                  onChange={(e) => handleFilterChange('status', e.target.value)}
+                >
+                  <option value="">All</option>
+                  <option value="pending">Pending</option>
+                  <option value="confirmed">Confirmed</option>
+                  <option value="completed">Completed</option>
+                  <option value="canceled">Canceled</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Date Range</label>
+                <input 
+                  type="date" 
+                  className="input input-bordered w-full"
+                  value={filters.date}
+                  onChange={(e) => handleFilterChange('date', e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Search</label>
+                <input 
+                  type="text"
+                  className="input input-bordered w-full"
+                  placeholder="Patient/Doctor name"
+                  value={filters.search}
+                  onChange={(e) => handleFilterChange('search', e.target.value)}
+                />
+              </div>
+              <div className="self-end">
+                <button type="submit" className="btn text-neutral/80" >Apply Filters</button>
+              </div>
+            </div>
+          </section>
+
+          {/* Appointments Grid */}
+          <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {appointments.map((appointment) => (
+              <div 
+                key={appointment.id} 
+                className={`bg-white rounded-lg p-5 ring-1 ring-neutral-300 shadow hover:shadow-lg hover:-translate-y-1 transition-all duration-200`}
+              >
+                <div className="flex justify-between items-start mb-3">
+                  <h3 className="text-lg font-semibold text-neutral">{appointment.doctorName}</h3>
+                  <span className={`px-2 py-1 rounded-full text-sm font-semibold ${getStatusColor(appointment.status)}`}>
+                    {appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1)}
+                  </span>
+                </div>
+
+                <div className="space-y-1 mb-4">
+                  <p className="text-sm text-gray-600">
+                    <i className="fas fa-user-md mr-2 text-gray-400"></i>
+                    {appointment.doctorSpecialty}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    <i className="fas fa-calendar-alt mr-2 text-gray-400"></i>
+                    {appointment.date}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    <i className="fas fa-clock mr-2 text-gray-400"></i>
+                    {appointment.timeSlot}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    <strong>Reason:</strong> {appointment.reason}
+                  </p>
+                </div>
+
+                <div className="flex space-x-2 pt-4 border-t border-neutral-200">
+                  {appointment.status !== 'completed' && (
+                    <button className="btn text-neutral btn-sm flex-1">
+                      Cancel
+                    </button>
+                  )}
+                  <button 
+                    onClick={() => handleViewDetails(appointment)}
+                    className="btn bg-neutral text-neutral-content border-0 btn-sm flex-1"
+                  >
+                    View Details
+                  </button>
+                </div>
+              </div>
+            ))}
+          </section>
+
+          {/* Pagination */}
+          <footer className="flex justify-end mt-8">
+            <Pagination data={paginationData} setPage={setPaginationPage} />
+          </footer>
+        </div>
+      </main>
+
+      {/* Book Appointment Modal */}
+      {isBookModalOpen && (
+        <div className="modal modal-open">
+          <div className="modal-box">
+            <button 
+              onClick={() => setIsBookModalOpen(false)}
+              className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            >
+              ✕
+            </button>
+            <h3 className="font-bold text-lg mb-4">Book New Appointment</h3>
+            
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              const formData = new FormData(e.target);
+              handleBookAppointment(Object.fromEntries(formData.entries()));
+            }}>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Select Doctor</label>
+                  <select name="doctor" className="select select-bordered w-full" required>
+                    <option disabled selected>Choose a doctor</option>
+                    <option value="dr_carter">Dr. Emily Carter (Cardiology)</option>
+                    <option value="dr_smith">Dr. John Smith (General Practice)</option>
+                    <option value="dr_miller">Dr. Sarah Miller (Dermatology)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                  <input type="date" name="date" className="input input-bordered w-full" required />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Preferred Time Slot</label>
+                  <select name="timeSlot" className="select select-bordered w-full" required>
+                    <option disabled selected>Select a time</option>
+                    <option>09:00 AM - 09:30 AM</option>
+                    <option>10:00 AM - 10:30 AM</option>
+                    <option>11:00 AM - 11:30 AM</option>
+                    <option>02:00 PM - 02:30 PM</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Reason for Visit</label>
+                  <input 
+                    type="text" 
+                    name="reason" 
+                    className="input input-bordered w-full" 
+                    placeholder="e.g., Annual Checkup, Consultation" 
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Additional Notes (Optional)</label>
+                  <textarea 
+                    name="notes" 
+                    className="textarea textarea-bordered w-full" 
+                    placeholder="Any other information..."
+                  ></textarea>
+                </div>
+              </div>
+
+              <div className="modal-action">
+                <button 
+                  type="button" 
+                  onClick={() => setIsBookModalOpen(false)}
+                  className="btn btn-ghost text-neutral/80"
+                >
+                  Cancel
+                </button>
+                <button type="submit" className="btn bg-neutral text-neutral-content border-0">
+                  Request Appointment
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Appointment Details Modal */}
+      {isDetailsModalOpen && selectedAppointment && (
+        <div className="modal modal-open">
+          <div className="modal-box">
+            <button 
+              onClick={() => setIsDetailsModalOpen(false)}
+              className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            >
+              ✕
+            </button>
+            <h3 className="font-bold text-lg mb-4">Appointment Details</h3>
+            
+            <div className="space-y-3">
+              <p><strong>Doctor:</strong> {selectedAppointment.doctorName} ({selectedAppointment.doctorSpecialty})</p>
+              <p><strong>Patient:</strong> {selectedAppointment.patientName} (You)</p>
+              <p><strong>Date:</strong> {selectedAppointment.date}</p>
+              <p><strong>Time:</strong> {selectedAppointment.timeSlot}</p>
+              <p>
+                <strong>Status:</strong> 
+                <span className={`ml-2 px-2 py-1 rounded-full text-xs font-semibold ${getStatusColor(selectedAppointment.status)}`}>
+                  {selectedAppointment.status.charAt(0).toUpperCase() + selectedAppointment.status.slice(1)}
+                </span>
+              </p>
+              <p><strong>Reason:</strong> {selectedAppointment.reason}</p>
+              <div>
+                <strong>Notes:</strong>
+                <p className="mt-1 p-2 bg-gray-50 rounded text-sm text-gray-700">
+                  {selectedAppointment.notes || 'No additional notes.'}
+                </p>
+              </div>
+              <p><strong>Booked By:</strong> {selectedAppointment.createdBy}</p>
+            </div>
+
+            <div className="modal-action">
+              <button 
+                onClick={() => setIsDetailsModalOpen(false)}
+                className="btn bg-neutral text-neutral-content border-0"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   )
 }
