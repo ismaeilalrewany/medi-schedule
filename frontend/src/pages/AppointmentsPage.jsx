@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import Pagination from '../components/table/Pagination.jsx'
 import Modal from '../components/modal/Modal.jsx'
 
-const AppointmentsPage = ({ endpoint, isViewerAdmin = false }) => {
+const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
   const [appointments, setAppointments] = useState([])
   const [filters, setFilters] = useState({ status: 'all', date: '', search: '' })
   const [selectedAppointment, setSelectedAppointment] = useState(null)

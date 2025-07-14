@@ -6,7 +6,7 @@ import PatientRegisterPage from "../pages/PatientRegisterPage.jsx"
 import DoctorRegisterPage from "../pages/DoctorRegisterPage.jsx"
 import DashboardPage from "../pages/DashboardPage.jsx"
 import ProfilePage from "../pages/ProfilePage.jsx"
-import AppointmentsPage from "../pages/appointmentsPage.jsx"
+import AppointmentsPage from "../pages/AppointmentsPage.jsx"
 
 const routes = createBrowserRouter([
   {
@@ -18,7 +18,7 @@ const routes = createBrowserRouter([
         children: [
           {
             path: "patients/appointments", 
-            element: <AppointmentsPage endpoint={'patients/appointments'} />,
+            element: <AppointmentsPage endpoint={'patients/appointments'} role={'patient'} />,
           },
           {
             path: "patients/profile",
@@ -31,7 +31,7 @@ const routes = createBrowserRouter([
         children: [
           {
             path: "doctors/appointments",
-            element: <AppointmentsPage endpoint={'doctors/appointments'} />,
+            element: <AppointmentsPage endpoint={'doctors/appointments'} role={'doctor'} />,
           },
           {
             path: "doctors/profile",
@@ -64,11 +64,11 @@ const routes = createBrowserRouter([
           },
           {
             path: "admins/patients/:id/appointments",
-            element: <AppointmentsPage endpoint={'admins/patients/:id/appointments'} isViewerAdmin={true} />,
+            element: <AppointmentsPage endpoint={'admins/patients/:id/appointments'} isViewerAdmin={true} role={'patient'} />,
           },
           {
             path: "admins/doctors/:id/appointments",
-            element: <AppointmentsPage endpoint={'admins/doctors/:id/appointments'} isViewerAdmin={true} />,
+            element: <AppointmentsPage endpoint={'admins/doctors/:id/appointments'} isViewerAdmin={true} role={'doctor'} />,
           }
         ]
       },
