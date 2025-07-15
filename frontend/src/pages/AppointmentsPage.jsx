@@ -37,6 +37,31 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
     setFilters(prev => ({ ...prev, [filterType]: value }))
   }
 
+  const handleSubmitFilters = async (e) => {
+    e.preventDefault()
+    const resolvedEndpoint = `${baseURL}/api/${isViewerAdmin ? endpoint.replace(':id', params.id) : endpoint}`
+    try {
+      const response = await axios.get(resolvedEndpoint, {
+        params: {
+          status: filters.status || undefined,
+          date: filters.date ? new Date(filters.date).toISOString() : undefined,
+          search: filters.search.trim() || undefined
+        },
+        withCredentials: true
+      })
+      if (response.status >= 200 && response.status < 300) {
+        setAppointments(response.data.appointments)
+        setPaginationData(response.data.pagination)
+      } else {
+        alert('Failed to fetch appointments. Please try again.')
+      }
+    } catch (error) {
+      console.error('Error fetching appointments:', error)
+      alert('An error occurred while fetching appointments. Please try again.')
+      setAppointments([])
+    }
+  }
+
   const handleViewDetails = (appointment) => {
     setSelectedAppointment(appointment)
     setIsDetailsModalOpen(true)
@@ -200,7 +225,7 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
                 <input type="text" className="input input-bordered w-full" placeholder={`${role === 'patient' ? 'Doctor' : 'Patient'} Name`} value={filters.search} onChange={(e) => handleFilterChange('search', e.target.value)} />
               </div>
               <div className="self-end">
-                <button type="submit" className="btn text-neutral/80" >Apply Filters</button>
+                <button type="button" className="btn text-neutral/80" onClick={handleSubmitFilters} >Apply Filters</button>
               </div>
             </div>
           </section>
