@@ -23,15 +23,37 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
   const  baseURL = import.meta.env.VITE_API_URL
   const params = useParams()
 
-  const getAppointments = async () => {
+  // Unified function to handle all appointment fetching (filtering, pagination, initial load)
+  const fetchAppointments = useCallback(async (page = 1, customFilters = null) => {
     const resolvedEndpoint = `${baseURL}/api/${isViewerAdmin ? endpoint.replace(':id', params.id) : endpoint}`
-    const response = await axios.get(resolvedEndpoint, { withCredentials: true })
+    const filtersToUse = customFilters || filters
 
-    if (!response.data) {
-      throw new Error('No data returned from API')
+    try {
+      const response = await axios.get(resolvedEndpoint, {
+        params: {
+          page,
+          limit: 6,
+          status: filtersToUse.status === 'all' ? undefined : filtersToUse.status || undefined,
+          date: filtersToUse.date ? new Date(filtersToUse.date).toISOString() : undefined,
+          search: filtersToUse.search?.trim() || undefined,
+        },
+        withCredentials: true
+      })
+
+      if (response.status >= 200 && response.status < 300) {
+        setAppointments(response.data.appointments)
+        setPaginationData(response.data.pagination)
+        return response.data
+      } else {
+        throw new Error('Failed to fetch appointments')
+      }
+    } catch (error) {
+      console.error('Error fetching appointments:', error)
+      setAppointments([])
+      setPaginationData({ currentPage: 1, totalPages: 1, totalItems: 0 })
+      throw error
     }
-    return response.data
-  }
+  }, [baseURL, endpoint, isViewerAdmin, params.id])
 
   const handleFilterChange = (filterType, value) => {
     setFilters(prev => ({ ...prev, [filterType]: value }))
@@ -39,26 +61,13 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
 
   const handleSubmitFilters = async (e) => {
     e.preventDefault()
-    const resolvedEndpoint = `${baseURL}/api/${isViewerAdmin ? endpoint.replace(':id', params.id) : endpoint}`
+
     try {
-      const response = await axios.get(resolvedEndpoint, {
-        params: {
-          status: filters.status || undefined,
-          date: filters.date ? new Date(filters.date).toISOString() : undefined,
-          search: filters.search.trim() || undefined
-        },
-        withCredentials: true
-      })
-      if (response.status >= 200 && response.status < 300) {
-        setAppointments(response.data.appointments)
-        setPaginationData(response.data.pagination)
-      } else {
-        alert('Failed to fetch appointments. Please try again.')
-      }
+      setPaginationPage(1)
+      await fetchAppointments(1, filters)
     } catch (error) {
       console.error('Error fetching appointments:', error)
       alert('An error occurred while fetching appointments. Please try again.')
-      setAppointments([])
     }
   }
 
@@ -67,10 +76,20 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
     setIsDetailsModalOpen(true)
   }
 
+  const handlePageChange = async (page) => {
+    try {
+      setPaginationPage(page)
+      await fetchAppointments(page)
+    } catch (error) {
+      console.error('Error fetching appointments:', error)
+      alert('An error occurred while fetching appointments. Please try again.')
+    }
+  }
+
   const handleBookModalSubmit = async (e) => {
     e.preventDefault()
     if (!selectedDoctor || !selectedDate || !startTime || !endTime || !reason) {
-      // alert('Please fill in all required fields.')
+      console.error('Please fill in all required fields.')
       return
     }
 
@@ -89,11 +108,10 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
         setIsBookModalOpen(false)
         // alert('Appointment booked successfully!')
 
-        const data = await getAppointments()
-        setAppointments(data.appointments)
-        setPaginationData(data.pagination)
+        // Refresh appointments after booking
+        await fetchAppointments(paginationPage)
       } else {
-        alert('Failed to book appointment. Please try again.')
+        console.error('Failed to book appointment:', response.data)
       }
     } catch (error) {
       console.error('Error booking appointment:', error)
@@ -132,19 +150,15 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
   }, [doctors])
 
   useEffect(() => {
-    const fetchAppointments = async () => {
-      try {
-        const data = await getAppointments()
-        setAppointments(data.appointments)
-        setPaginationData(data.pagination)
-      } catch (error) {
-        console.error('Error fetching appointments:', error)
-        setAppointments([])
-        setPaginationData({ currentPage: 1, totalPages: 1, totalItems: 0 })
-      }
+    const loadInitialAppointments = async () => {
+    try {
+      await fetchAppointments(1)
+    } catch (error) {
+      console.error('Error loading initial appointments:', error)
     }
-
-    fetchAppointments()
+  }
+  
+  loadInitialAppointments()
   }, [])
 
   useEffect(() => {
@@ -269,7 +283,7 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
 
               {/* Pagination */}
               <footer className="flex justify-end mt-8">
-                <Pagination data={paginationData} setPage={setPaginationPage} />
+                <Pagination data={paginationData} setPage={handlePageChange} />
               </footer>
             </>
             ) : (
