@@ -42,17 +42,38 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
     setIsDetailsModalOpen(true)
   }
 
-  const handleBookAppointment = (formData) => {
-    // Handle booking logic here
-    console.log('Booking appointment:', formData)
-    setIsBookModalOpen(false);
-    // Add to appointments or refresh from API
-  }
+  const handleBookModalSubmit = async (e) => {
+    e.preventDefault()
+    if (!selectedDoctor || !selectedDate || !startTime || !endTime || !reason) {
+      // alert('Please fill in all required fields.')
+      return
+    }
 
-  const handleBookModalSubmit = (e) => {
-    const formData = new FormData(e.target);
-    const data = Object.fromEntries(formData.entries());
-    handleBookAppointment(data);
+    const resolvedEndpoint = `${baseURL}/api/${isViewerAdmin ? endpoint.replace(':id', params.id) : endpoint}`
+    try {
+      const response = await axios.post(resolvedEndpoint, {
+        doctorId: selectedDoctor,
+        date: selectedDate,
+        startTime,
+        endTime,
+        reason,
+        notes,
+      }, { withCredentials: true })
+
+      if (response.status >= 200 && response.status < 300) {
+        setIsBookModalOpen(false)
+        // alert('Appointment booked successfully!')
+
+        const data = await getAppointments()
+        setAppointments(data.appointments)
+        setPaginationData(data.pagination)
+      } else {
+        alert('Failed to book appointment. Please try again.')
+      }
+    } catch (error) {
+      console.error('Error booking appointment:', error)
+      // alert('An error occurred while booking the appointment. Please try again.')
+    }
   }
 
   const getStatusColor = (status) => {
