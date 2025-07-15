@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 import Pagination from '../components/table/Pagination.jsx'
 import Modal from '../components/modal/Modal.jsx'
+import axios from 'axios'
 
 const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
   const [appointments, setAppointments] = useState([])
@@ -11,12 +13,33 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
   const [paginationData, setPaginationData] = useState({})
   const [paginationPage, setPaginationPage] = useState(paginationData.currentPage || 1)
 
+  const  baseURL = import.meta.env.VITE_API_URL
+  const params = useParams()
 
+  const getAppointments = async () => {
+    const resolvedEndpoint = `${baseURL}/api/${isViewerAdmin ? endpoint.replace(':id', params.id) : endpoint}`
+    const response = await axios.get(resolvedEndpoint, { withCredentials: true })
+
+    if (!response.data) {
+      throw new Error('No data returned from API')
+    }
+    return response.data
+  }
 
   useEffect(() => {
-    // Load appointments
-    // setAppointments(mockAppointments)
-    setPaginationPage(1)
+    const fetchAppointments = async () => {
+      try {
+        const data = await getAppointments()
+        setAppointments(data.appointments)
+        setPaginationData(data.pagination)
+      } catch (error) {
+        console.error('Error fetching appointments:', error)
+        setAppointments([])
+        setPaginationData({ currentPage: 1, totalPages: 1, totalItems: 0 })
+      }
+    }
+
+    fetchAppointments()
   }, [])
 
   const handleFilterChange = (filterType, value) => {
@@ -34,7 +57,6 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
     setIsBookModalOpen(false);
     // Add to appointments or refresh from API
   }
-
 
   const handleOpenDetailsModal = (appointment) => {
     setSelectedAppointment(appointment);
@@ -115,7 +137,7 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
                 <input 
                   type="text"
                   className="input input-bordered w-full"
-                  placeholder="Patient/Doctor name"
+                  placeholder={`${role === 'patient' ? 'Doctor' : 'Patient'} Name`}
                   value={filters.search}
                   onChange={(e) => handleFilterChange('search', e.target.value)}
                 />
@@ -131,47 +153,33 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
               {/* Appointments Grid */}
               <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {appointments.map((appointment) => (
-                  <div 
-                    key={appointment.id} 
-                    className={`bg-white rounded-lg p-5 ring-1 ring-neutral-300 shadow hover:shadow-lg hover:-translate-y-1 transition-all duration-200`}
-                  >
+                  <div key={appointment._id} className={`bg-white rounded-lg p-5 ring-1 ring-neutral-300 shadow hover:shadow-lg hover:-translate-y-1 transition-all duration-200`}>
                     <div className="flex justify-between items-start mb-3">
-                      <h3 className="text-lg font-semibold text-neutral">{appointment.doctorName}</h3>
-                      <span className={`px-2 py-1 rounded-full text-sm font-semibold ${getStatusColor(appointment.status)}`}>
-                        {appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1)}
-                      </span>
+                      <h3 className="text-lg font-semibold text-neutral capitalize">Dr.{appointment.doctor.fullName}</h3>
+                      <span className={`px-2 py-1 rounded-full text-sm font-semibold capitalize ${getStatusColor(appointment.status)}`}>{appointment.status}</span>
                     </div>
 
                     <div className="space-y-1 mb-4">
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-gray-600 capitalize">
                         <i className="fas fa-user-md mr-2 text-gray-400"></i>
-                        {appointment.doctorSpecialty}
+                        {appointment.doctor.specialization}
                       </p>
                       <p className="text-sm text-gray-600">
                         <i className="fas fa-calendar-alt mr-2 text-gray-400"></i>
-                        {appointment.date}
+                        {new Date(appointment.date).toDateString()}
                       </p>
                       <p className="text-sm text-gray-600">
                         <i className="fas fa-clock mr-2 text-gray-400"></i>
-                        {appointment.timeSlot}
+                        {appointment.startTime} - {appointment.endTime}
                       </p>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-gray-600 capitalize">
                         <strong>Reason:</strong> {appointment.reason}
                       </p>
                     </div>
 
                     <div className="flex space-x-2 pt-4 border-t border-neutral-200">
-                      {appointment.status !== 'completed' && (
-                        <button className="btn text-neutral btn-sm flex-1">
-                          Cancel
-                        </button>
-                      )}
-                      <button 
-                        onClick={() => handleViewDetails(appointment)}
-                        className="btn bg-neutral text-neutral-content border-0 btn-sm flex-1"
-                      >
-                        View Details
-                      </button>
+                      {appointment.status !== 'completed' && (<button className="btn text-neutral btn-sm flex-1">Cancel</button>)}
+                      <button onClick={() => handleViewDetails(appointment)} className="btn bg-neutral text-neutral-content border-0 btn-sm flex-1" >View Details</button>
                     </div>
                   </div>
                 ))}
@@ -192,14 +200,8 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
       </main>
 
       {/* Book Appointment Modal */}
-      <Modal
-        isOpen={isBookModalOpen}
-        onClose={() => setIsBookModalOpen(false)}
-        title="Book New Appointment"
-        onSubmit={handleBookModalSubmit} // Pass the onSubmit handler
-        submitButtonText="Request Appointment"
-      >
-        <form id="book-appointment-form"> {/* Add an ID to the form if needed for onSubmit */}
+      <Modal isOpen={isBookModalOpen} onClose={() => setIsBookModalOpen(false)} title="Book New Appointment" onSubmit={handleBookModalSubmit} submitButtonText="Request Appointment" >
+        <form id="book-appointment-form">
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Select Doctor</label>
@@ -229,54 +231,35 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Reason for Visit</label>
-              <input
-                type="text"
-                name="reason"
-                className="input input-bordered w-full"
-                placeholder="e.g., Annual Checkup, Consultation"
-                required
-              />
+              <input type="text" name="reason" className="input input-bordered w-full" placeholder="e.g., Annual Checkup, Consultation" required />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Additional Notes (Optional)</label>
-              <textarea
-                name="notes"
-                className="textarea textarea-bordered w-full"
-                placeholder="Any other information..."
-              ></textarea>
+              <textarea name="notes" className="textarea textarea-bordered w-full" placeholder="Any other information..." ></textarea>
             </div>
           </div>
         </form>
       </Modal>
 
       {/* Appointment Details Modal */}
-      <Modal
-        isOpen={isDetailsModalOpen && selectedAppointment !== null}
-        onClose={() => setIsDetailsModalOpen(false)}
-        title="Appointment Details"
-        showSubmitButton={false} // This modal doesn't need a submit button
-      >
+      <Modal isOpen={isDetailsModalOpen && selectedAppointment !== null} onClose={() => setIsDetailsModalOpen(false)} title="Appointment Details" showSubmitButton={false} >
         {selectedAppointment && (
           <div className="space-y-3">
-            <p><strong>Doctor:</strong> {selectedAppointment.doctorName} ({selectedAppointment.doctorSpecialty})</p>
-            <p><strong>Patient:</strong> {selectedAppointment.patientName} (You)</p>
-            <p><strong>Date:</strong> {selectedAppointment.date}</p>
-            <p><strong>Time:</strong> {selectedAppointment.timeSlot}</p>
+            <p className="capitalize"><strong>Doctor:</strong> {selectedAppointment.doctor.fullName} ({selectedAppointment.doctor.specialization}) {role === 'doctor' && '(You)'}</p>
+            <p className="capitalize"><strong>Patient:</strong> {selectedAppointment.patient.fullName} {role === 'patient' && '(You)'}</p>
+            <p><strong>Date:</strong> {new Date(selectedAppointment.date).toDateString()}</p>
+            <p><strong>Time:</strong> {selectedAppointment.startTime} - {selectedAppointment.endTime}</p>
             <p>
               <strong>Status:</strong>
-              <span className={`ml-2 px-2 py-1 rounded-full text-xs font-semibold ${getStatusColor(selectedAppointment.status)}`}>
-                {selectedAppointment.status.charAt(0).toUpperCase() + selectedAppointment.status.slice(1)}
-              </span>
+              <span className={`ml-2 px-2 py-1 rounded-full text-xs font-semibold capitalize ${getStatusColor(selectedAppointment.status)}`}>{selectedAppointment.status}</span>
             </p>
-            <p><strong>Reason:</strong> {selectedAppointment.reason}</p>
+            <p className="capitalize"><strong>Reason:</strong> {selectedAppointment.reason}</p>
             <div>
               <strong>Notes:</strong>
-              <p className="mt-1 p-2 bg-gray-50 rounded text-sm text-gray-700">
-                {selectedAppointment.notes || 'No additional notes.'}
-              </p>
+              <p className="mt-1 p-2 bg-gray-50 rounded text-sm text-gray-700">{selectedAppointment.notes || 'No additional notes.'}</p>
             </div>
-            <p><strong>Booked By:</strong> {selectedAppointment.createdBy}</p>
+            <p className="capitalize"><strong>Booked By:</strong> {selectedAppointment.createdBy}</p>
           </div>
         )}
       </Modal>
