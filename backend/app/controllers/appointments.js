@@ -1,6 +1,7 @@
 import AppointmentModel from '../database/models/Appointment.js'
 import PatientModel from '../database/models/Patient.js'
 import DoctorModel from '../database/models/Doctor.js'
+import { ObjectId } from 'mongodb'
 
 class AppointmentsController {
   static #dayNamesToNumbers = {
@@ -16,7 +17,9 @@ class AppointmentsController {
   static #pagination = {
     limit : 6,
     page : 1,
-    skip : (this.page - 1) * this.limit
+    get skip() {
+      return (this.page - 1) * this.limit
+    }
   }
 
   static #setPagination(req) {
@@ -69,26 +72,113 @@ class AppointmentsController {
     return isAvailable && isAvailableDate && isAvailableTime
   }
 
-  static #createFilterQuery(req, userId, role) {
-    const filterQuery = {[role]: userId}
+  static #createAggregationPipeline(req, userId, role) {
+    const pipeline = []
+
+    // Convert userId to ObjectId if it's a string
+    const objectId = typeof userId === 'string' ? new ObjectId(userId) : userId
+
+    // Match by role (patient or doctor)
+    const matchStage = {[role]: objectId}
 
     // Filter by status
     if (req.query.status && req.query.status !== 'all') {
-      filterQuery.status = req.query.status.toLowerCase()
+      matchStage.status = req.query.status.toLowerCase()
     }
 
     // Filter by date
     if (req.query.date) {
-      filterQuery.date = new Date(req.query.date)
+      matchStage.date = new Date(req.query.date)
     }
 
-    // Search by name
-    const searchRegex = new RegExp((req.query.search || '').trim(), 'i')
+    pipeline.push({ $match: matchStage })
+
+    // Populate patient and doctor
+    pipeline.push(
+      {
+        $lookup: {
+          from: 'patients',
+          localField: 'patient',
+          foreignField: '_id',
+          as: 'patient'
+        }
+      },
+      {
+        $lookup: {
+          from: 'doctors',
+          localField: 'doctor',
+          foreignField: '_id',
+          as: 'doctor'
+        }
+      },
+      {
+        $unwind: '$patient'
+      },
+      {
+        $unwind: '$doctor'
+      }
+    )
+
+    // Search by name (works after population)
     if (req.query.search) {
-      filterQuery[`${role}.fullName`] = searchRegex
+      const searchRegex = new RegExp((req.query.search || '').trim(), 'i')
+      const searchField = role === 'patient' ? 'doctor.fullName' : 'patient.fullName'
+      pipeline.push({
+        $match: {
+          [searchField]: searchRegex
+        }
+      })
     }
 
-    return filterQuery
+    // Project fields (exclude __v, createdAt, updatedAt)
+    pipeline.push({
+      $project: {
+        _id: 1,
+        patient: {
+          fullName: 1
+        },
+        doctor: {
+          fullName: 1,
+          specialization: 1
+        },
+        date: 1,
+        startTime: 1,
+        endTime: 1,
+        reason: 1,
+        notes: 1,
+        status: 1,
+        createdBy: 1
+      }
+    })
+
+    // Sort logic
+    // Add status order field for custom status sorting
+    pipeline.push({
+      $addFields: {
+        statusOrder: {
+          $switch: {
+            branches: [
+              { case: { $eq: ['$status', 'pending'] }, then: 0 },
+              { case: { $eq: ['$status', 'confirmed'] }, then: 1 },
+              { case: { $eq: ['$status', 'completed'] }, then: 2 },
+              { case: { $eq: ['$status', 'canceled'] }, then: 3 }
+            ],
+            default: 4
+          }
+        }
+      }
+    })
+
+    // Apply automatic sorting: status first, then date, then startTime
+    pipeline.push({ 
+      $sort: {
+        statusOrder: 1,    // Sort by status priority (pending -> confirmed -> completed -> canceled)
+        date: 1,           // Then by date (earliest first)
+        startTime: 1       // Finally by start time (earliest first)
+      }
+    })
+
+    return pipeline
   }
 
   static async createAppointment(req, res) {
@@ -175,25 +265,39 @@ class AppointmentsController {
       AppointmentsController.#setPagination(req)
       const { limit, page, skip } = AppointmentsController.#pagination
 
-      const filterQuery = AppointmentsController.#createFilterQuery(req, patientId, 'patient')
-      const appointments = await AppointmentModel.find(filterQuery)
-        .populate('patient doctor', 'fullName specialization -_id')
-        .select('-__v -createdAt -updatedAt')
-        .sort({ date: 1, startTime: 1 })
-        .skip(skip)
-        .limit(limit)
+      // Get aggregation pipeline
+      const pipeline = AppointmentsController.#createAggregationPipeline(req, patientId, 'patient')
+      
+      // Add pagination stages
+      const paginationPipeline = [
+        ...pipeline,
+        { $skip: skip },
+        { $limit: limit }
+      ]
+
+      // Execute aggregation
+      const appointments = await AppointmentModel.aggregate(paginationPipeline)
 
       if (!appointments || appointments.length === 0) {
         return res.status(404).json({ message: 'No appointments found for this patient' })
       }
 
-      return res.status(200).json({ message: 'Patient appointments retrieved successfully',
+      // Get total count for pagination
+      const countPipeline = [
+        ...pipeline,
+        { $count: 'total' }
+      ]
+      const totalResult = await AppointmentModel.aggregate(countPipeline)
+      const totalItems = totalResult.length > 0 ? totalResult[0].total : 0
+
+      return res.status(200).json({ 
+        message: 'Patient appointments retrieved successfully',
         appointments,
         pagination: {
           currentPage: page,
           itemsPerPage: limit,
-          totalItems: await AppointmentModel.countDocuments(filterQuery),
-          totalPages: Math.ceil(appointments.length / limit)
+          totalItems: totalItems,
+          totalPages: Math.ceil(totalItems / limit)
         }
       })
     } catch (error) {
@@ -214,25 +318,39 @@ class AppointmentsController {
       AppointmentsController.#setPagination(req)
       const { limit, page, skip } = AppointmentsController.#pagination
 
-      const filterQuery = AppointmentsController.#createFilterQuery(req, doctorId, 'doctor')
-      const appointments = await AppointmentModel.find(filterQuery)
-        .populate('patient doctor', 'fullName specialization -_id')
-        .select('-__v -createdAt -updatedAt')
-        .sort({ date: 1, startTime: 1 })
-        .skip(skip)
-        .limit(limit)
+      // Get aggregation pipeline
+      const pipeline = AppointmentsController.#createAggregationPipeline(req, doctorId, 'doctor')
+      
+      // Add pagination stages
+      const paginationPipeline = [
+        ...pipeline,
+        { $skip: skip },
+        { $limit: limit }
+      ]
+
+      // Execute aggregation
+      const appointments = await AppointmentModel.aggregate(paginationPipeline)
 
       if (!appointments || appointments.length === 0) {
         return res.status(404).json({ message: 'No appointments found for this doctor' })
       }
 
-      return res.status(200).json({ message: 'Doctor appointments retrieved successfully',
+      // Get total count for pagination
+      const countPipeline = [
+        ...pipeline,
+        { $count: 'total' }
+      ]
+      const totalResult = await AppointmentModel.aggregate(countPipeline)
+      const totalItems = totalResult.length > 0 ? totalResult[0].total : 0
+
+      return res.status(200).json({ 
+        message: 'Doctor appointments retrieved successfully',
         appointments,
         pagination: {
           currentPage: page,
           itemsPerPage: limit,
-          totalItems: await AppointmentModel.countDocuments(filterQuery),
-          totalPages: Math.ceil(appointments.length / limit)
+          totalItems: totalItems,
+          totalPages: Math.ceil(totalItems / limit)
         }
       })
     } catch (error) {
