@@ -96,10 +96,7 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
           {/* Page Header */}
           <header className="flex justify-between flex-wrap items-center mb-6 gap-4">
             <h1 className="text-2xl font-semibold text-neutral">My Appointments</h1>
-            <button 
-              onClick={() => setIsBookModalOpen(true)}
-              className="btn bg-neutral text-neutral-content border-0 btn-sm"
-            >
+            <button onClick={() => setIsBookModalOpen(true)} className="btn bg-neutral text-neutral-content border-0 btn-sm" >
               <i className="fas fa-plus mr-2"></i>
               Book New Appointment
             </button>
@@ -111,11 +108,7 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                <select 
-                  className="select select-bordered w-full"
-                  value={filters.status}
-                  onChange={(e) => handleFilterChange('status', e.target.value)}
-                >
+                <select className="select select-bordered w-full" value={filters.status} onChange={(e) => handleFilterChange('status', e.target.value)} >
                   <option value="">All</option>
                   <option value="pending">Pending</option>
                   <option value="confirmed">Confirmed</option>
@@ -125,22 +118,11 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
-                <input 
-                  type="date" 
-                  className="input input-bordered w-full"
-                  value={filters.date}
-                  onChange={(e) => handleFilterChange('date', e.target.value)}
-                />
+                <input type="date" className="input input-bordered w-full" value={filters.date} onChange={(e) => handleFilterChange('date', e.target.value)} />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Search</label>
-                <input 
-                  type="text"
-                  className="input input-bordered w-full"
-                  placeholder={`${role === 'patient' ? 'Doctor' : 'Patient'} Name`}
-                  value={filters.search}
-                  onChange={(e) => handleFilterChange('search', e.target.value)}
-                />
+                <input type="text" className="input input-bordered w-full" placeholder={`${role === 'patient' ? 'Doctor' : 'Patient'} Name`} value={filters.search} onChange={(e) => handleFilterChange('search', e.target.value)} />
               </div>
               <div className="self-end">
                 <button type="submit" className="btn text-neutral/80" >Apply Filters</button>
