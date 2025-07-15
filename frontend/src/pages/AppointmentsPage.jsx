@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import Pagination from '../components/table/Pagination.jsx'
 import Modal from '../components/modal/Modal.jsx'
@@ -8,10 +8,11 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
   const [appointments, setAppointments] = useState([])
   const [doctors, setDoctors] = useState([])
   const [selectedAppointment, setSelectedAppointment] = useState(null)
-  const [filters, setFilters] = useState({ status: 'all', date: '', search: '' })
   const [selectedDoctor, setSelectedDoctor] = useState('')
+  const [filters, setFilters] = useState({ status: 'all', date: '', search: '' })
   const [selectedDate, setSelectedDate] = useState('')
-  const [selectedTimeSlot, setSelectedTimeSlot] = useState('')
+  const [startTime, setStartTime] = useState('')
+  const [endTime, setEndTime] = useState('')
   const [reason, setReason] = useState('')
   const [notes, setNotes] = useState('')
   const [isBookModalOpen, setIsBookModalOpen] = useState(false)
@@ -69,23 +70,78 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
     return days[day]
   }
 
+  const availableTime = useCallback((selectedDoctor, selectedDate) => {
+    if (selectedDoctor && selectedDate && doctors.length > 0) {
+      const doctor = doctors.find(doctor => doctor.id === selectedDoctor)
+      if (doctor && doctor.availableTimeSlots) {
+        const slot = doctor.availableTimeSlots.find(slot => 
+          new Date(selectedDate).getDay() === getDayIndex(slot.day) && slot.isAvailable
+        )
+        if (slot) {
+          return { startTime: slot.startTime, endTime: slot.endTime }
+        }
+      }
+    }
+    return { startTime: '', endTime: '' }
+  }, [doctors])
+
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
         const data = await getAppointments()
         setAppointments(data.appointments)
         setPaginationData(data.pagination)
-        setDoctors(data.doctors)
       } catch (error) {
         console.error('Error fetching appointments:', error)
         setAppointments([])
         setPaginationData({ currentPage: 1, totalPages: 1, totalItems: 0 })
-        setDoctors([])
       }
     }
 
     fetchAppointments()
   }, [])
+
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        const response = await axios.get(`${baseURL}/api/doctors`, { withCredentials: true })
+
+        if (!response.data) {
+          throw new Error('No data returned from API')
+        }
+
+        setDoctors(response.data.doctors)
+      } catch (error) {
+        console.error('Error fetching doctors:', error)
+        setDoctors([])
+      }
+    }
+
+    fetchDoctors()
+
+    if (!isBookModalOpen) {
+    // Reset all form states when modal closes
+    setSelectedDoctor('')
+    setSelectedDate('')
+    setStartTime('')
+    setEndTime('')
+    setReason('')
+    setNotes('')
+  }
+  }, [baseURL, isBookModalOpen])
+
+  useEffect(() => {
+    if (selectedDoctor && selectedDate) {
+      const timeSlot = availableTime(selectedDoctor, selectedDate)
+      if (timeSlot.startTime && timeSlot.endTime) {
+        setStartTime(timeSlot.startTime)
+        setEndTime(timeSlot.endTime)
+      } else {
+        setStartTime('')
+        setEndTime('')
+      }
+    }
+  }, [selectedDoctor, selectedDate, doctors, availableTime])
 
   return (
     <>
@@ -189,14 +245,14 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
                 <option disabled value="">Choose a doctor</option>
                 {doctors.length > 0 ? (
                   doctors.map(doctor => (
-                    <option className="capitalize" key={doctor._id} value={doctor._id} >{doctor._id}</option>
+                    <option className="capitalize" key={doctor.id} value={doctor.id} >{doctor.fullName} ({doctor.specialization})</option>
                   ))
                 ) : (
                   <option disabled>No doctors available</option>
                 )}
               </select>
             </div>
-                {selectedDoctor}
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
               <input type="date" name="date" className="input input-bordered w-full" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} required />
@@ -204,14 +260,10 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Preferred Time Slot</label>
-              <select name="timeSlot" className="select select-bordered w-full" required>
-                <option disabled selected>Select a time</option>
-                {/* {selectedDoctor.availableTimeSlots && selectedDoctor.availableTimeSlots.map((_id, day, startTime, endTime, isAvailable) => {
-                  new Date(selectedDate).getDay() === getDayIndex(day) && isAvailable ?
-                  <option key={_id} value={`${startTime} - ${endTime}`}>{startTime} - {endTime}</option> :
-                  <option key={_id} disabled>Unavailable</option>
-                })} */}
-              </select>
+              <div className="flex gap-4">
+                <input type="time" name="startTime" className="input input-bordered w-full" disabled={!availableTime(selectedDoctor, selectedDate).startTime} value={startTime} onChange={(e) => setStartTime(e.target.value)} min={availableTime(selectedDoctor, selectedDate).startTime} max={availableTime(selectedDoctor, selectedDate).endTime} required />
+                <input type="time" name="endTime" className="input input-bordered w-full" disabled={!availableTime(selectedDoctor, selectedDate).endTime} value={endTime} onChange={(e) => setEndTime(e.target.value)} min={availableTime(selectedDoctor, selectedDate).startTime} max={availableTime(selectedDoctor, selectedDate).endTime} required />
+              </div>
             </div>
 
             <div>

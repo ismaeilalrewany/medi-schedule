@@ -189,7 +189,6 @@ class AppointmentsController {
 
       return res.status(200).json({ message: 'Patient appointments retrieved successfully',
         appointments,
-        doctors: await DoctorModel.find({}),
         pagination: {
           currentPage: page,
           itemsPerPage: limit,
