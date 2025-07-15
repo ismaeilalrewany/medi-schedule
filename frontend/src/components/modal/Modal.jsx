@@ -2,13 +2,7 @@ import { createPortal } from 'react-dom'
 import { useEffect } from 'react'
 
 const Modal = ({ isOpen, onClose, title, children, onSubmit, submitButtonText = 'Save Changes', showSubmitButton = true }) => {
-  if (!isOpen) return null
-
   const portalRoot = document.getElementById('modal-root')
-  if (!portalRoot) {
-    console.error("The 'modal-root' element was not found in the DOM.")
-    return null
-  }
 
   useEffect(() => {
     if (isOpen) {
@@ -16,10 +10,14 @@ const Modal = ({ isOpen, onClose, title, children, onSubmit, submitButtonText = 
     } else {
       document.body.classList.remove('modal-open')
     }
-    return () => {
-      document.body.classList.remove('modal-open')
-    }
-  }, [isOpen]);
+  }, [isOpen])
+
+  if (!isOpen) return null
+
+  if (!portalRoot) {
+    console.error("The 'modal-root' element was not found in the DOM.")
+    return null
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault()

@@ -58,11 +58,6 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
     // Add to appointments or refresh from API
   }
 
-  const handleOpenDetailsModal = (appointment) => {
-    setSelectedAppointment(appointment);
-    setIsDetailsModalOpen(true);
-  }
-
   const handleBookModalSubmit = (e) => {
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
