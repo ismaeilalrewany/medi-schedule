@@ -260,7 +260,7 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
                     </div>
 
                     <div className="flex space-x-2 pt-4 border-t border-neutral-200">
-                      {appointment.status !== 'completed' && (<button className="btn text-neutral btn-sm flex-1">Cancel</button>)}
+                      {(appointment.status === 'pending' || appointment.status === 'confirmed') && (<button className="btn text-neutral btn-sm flex-1">Cancel</button>)}
                       <button onClick={() => handleViewDetails(appointment)} className="btn bg-neutral text-neutral-content border-0 btn-sm flex-1" >View Details</button>
                     </div>
                   </div>
