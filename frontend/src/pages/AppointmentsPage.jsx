@@ -6,8 +6,14 @@ import axios from 'axios'
 
 const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
   const [appointments, setAppointments] = useState([])
-  const [filters, setFilters] = useState({ status: 'all', date: '', search: '' })
+  const [doctors, setDoctors] = useState([])
   const [selectedAppointment, setSelectedAppointment] = useState(null)
+  const [filters, setFilters] = useState({ status: 'all', date: '', search: '' })
+  const [selectedDoctor, setSelectedDoctor] = useState('')
+  const [selectedDate, setSelectedDate] = useState('')
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState('')
+  const [reason, setReason] = useState('')
+  const [notes, setNotes] = useState('')
   const [isBookModalOpen, setIsBookModalOpen] = useState(false)
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false)
   const [paginationData, setPaginationData] = useState({})
@@ -25,22 +31,6 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
     }
     return response.data
   }
-
-  useEffect(() => {
-    const fetchAppointments = async () => {
-      try {
-        const data = await getAppointments()
-        setAppointments(data.appointments)
-        setPaginationData(data.pagination)
-      } catch (error) {
-        console.error('Error fetching appointments:', error)
-        setAppointments([])
-        setPaginationData({ currentPage: 1, totalPages: 1, totalItems: 0 })
-      }
-    }
-
-    fetchAppointments()
-  }, [])
 
   const handleFilterChange = (filterType, value) => {
     setFilters(prev => ({ ...prev, [filterType]: value }))
@@ -64,16 +54,6 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
     handleBookAppointment(data);
   }
 
-  const getStatusBadge = (status) => {
-    const statusClasses = {
-      confirmed: 'badge-success',
-      pending: 'badge-warning',
-      completed: 'badge-info',
-      canceled: 'badge-error'
-    }
-    return `badge ${statusClasses[status] || 'badge-neutral'}`
-  }
-
   const getStatusColor = (status) => {
     const colors = {
       confirmed: 'text-green-700 bg-green-100',
@@ -83,6 +63,29 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
     }
     return colors[status] || 'text-gray-700 bg-gray-100'
   }
+
+  const getDayIndex = (day) => {
+    const days = {sunday: 0, monday: 1, tuesday: 2, wednesday: 3, thursday: 4, friday: 5, saturday: 6}
+    return days[day]
+  }
+
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      try {
+        const data = await getAppointments()
+        setAppointments(data.appointments)
+        setPaginationData(data.pagination)
+        setDoctors(data.doctors)
+      } catch (error) {
+        console.error('Error fetching appointments:', error)
+        setAppointments([])
+        setPaginationData({ currentPage: 1, totalPages: 1, totalItems: 0 })
+        setDoctors([])
+      }
+    }
+
+    fetchAppointments()
+  }, [])
 
   return (
     <>
@@ -182,38 +185,43 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Select Doctor</label>
-              <select name="doctor" className="select select-bordered w-full" required>
-                <option disabled selected>Choose a doctor</option>
-                <option value="dr_carter">Dr. Emily Carter (Cardiology)</option>
-                <option value="dr_smith">Dr. John Smith (General Practice)</option>
-                <option value="dr_miller">Dr. Sarah Miller (Dermatology)</option>
+              <select name="doctor" className="select select-bordered w-full" value={selectedDoctor} onChange={(e) => setSelectedDoctor(e.target.value)} required>
+                <option disabled value="">Choose a doctor</option>
+                {doctors.length > 0 ? (
+                  doctors.map(doctor => (
+                    <option className="capitalize" key={doctor._id} value={doctor._id} >{doctor._id}</option>
+                  ))
+                ) : (
+                  <option disabled>No doctors available</option>
+                )}
               </select>
             </div>
-
+                {selectedDoctor}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
-              <input type="date" name="date" className="input input-bordered w-full" required />
+              <input type="date" name="date" className="input input-bordered w-full" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} required />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Preferred Time Slot</label>
               <select name="timeSlot" className="select select-bordered w-full" required>
                 <option disabled selected>Select a time</option>
-                <option>09:00 AM - 09:30 AM</option>
-                <option>10:00 AM - 10:30 AM</option>
-                <option>11:00 AM - 11:30 AM</option>
-                <option>02:00 PM - 02:30 PM</option>
+                {/* {selectedDoctor.availableTimeSlots && selectedDoctor.availableTimeSlots.map((_id, day, startTime, endTime, isAvailable) => {
+                  new Date(selectedDate).getDay() === getDayIndex(day) && isAvailable ?
+                  <option key={_id} value={`${startTime} - ${endTime}`}>{startTime} - {endTime}</option> :
+                  <option key={_id} disabled>Unavailable</option>
+                })} */}
               </select>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Reason for Visit</label>
-              <input type="text" name="reason" className="input input-bordered w-full" placeholder="e.g., Annual Checkup, Consultation" required />
+              <input type="text" name="reason" className="input input-bordered w-full" placeholder="e.g., Annual Checkup, Consultation" value={reason} onChange={(e) => setReason(e.target.value)}  required />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Additional Notes (Optional)</label>
-              <textarea name="notes" className="textarea textarea-bordered w-full" placeholder="Any other information..." ></textarea>
+              <textarea name="notes" className="textarea textarea-bordered w-full" placeholder="Any other information..." value={notes} onChange={(e) => setNotes(e.target.value)} ></textarea>
             </div>
           </div>
         </form>
