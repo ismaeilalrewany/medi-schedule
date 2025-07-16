@@ -210,10 +210,10 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
           {/* Page Header */}
           <header className="flex justify-between flex-wrap items-center mb-6 gap-4">
             <h1 className="text-2xl font-semibold text-neutral">My Appointments</h1>
-            <button onClick={() => setIsBookModalOpen(true)} className="btn bg-neutral text-neutral-content border-0 btn-sm" >
+            {role === 'patient' && <button onClick={() => setIsBookModalOpen(true)} className="btn bg-neutral text-neutral-content border-0 btn-sm" >
               <i className="fas fa-plus mr-2"></i>
               Book New Appointment
-            </button>
+            </button>}
           </header>
 
           {/* Filters */}
@@ -251,7 +251,7 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
                 {appointments.map((appointment) => (
                   <div key={appointment._id} className={`bg-white rounded-lg p-5 ring-1 ring-neutral-300 shadow hover:shadow-lg hover:-translate-y-1 transition-all duration-200`}>
                     <div className="flex justify-between items-start mb-3">
-                      <h3 className="text-lg font-semibold text-neutral capitalize">Dr.{appointment.doctor.fullName}</h3>
+                      <h3 className="text-lg font-semibold text-neutral capitalize">{role === 'doctor' ? `${appointment.patient.fullName}` : `Dr.${appointment.doctor.fullName}`}</h3>
                       <span className={`px-2 py-1 rounded-full text-sm font-semibold capitalize ${getStatusColor(appointment.status)}`}>{appointment.status}</span>
                     </div>
 
