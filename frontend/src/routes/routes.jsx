@@ -7,6 +7,7 @@ import DoctorRegisterPage from "../pages/DoctorRegisterPage.jsx"
 import DashboardPage from "../pages/DashboardPage.jsx"
 import ProfilePage from "../pages/ProfilePage.jsx"
 import AppointmentsPage from "../pages/AppointmentsPage.jsx"
+import NotFoundPage from "../pages/NotFoundPage.jsx"
 
 const routes = createBrowserRouter([
   {
@@ -88,7 +89,7 @@ const routes = createBrowserRouter([
   },
   {
     path: "*",
-    element: <h1>404 Not Found</h1>, 
+    element: <NotFoundPage />,
   },
 ])
 
