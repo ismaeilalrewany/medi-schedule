@@ -119,6 +119,11 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
     }
   }
 
+  const handleSubmitChanges = async (e) => {
+    e.preventDefault()
+    console.log('Submitting changes for appointment:', selectedAppointment)
+  }
+
   const getStatusColor = (status) => {
     const colors = {
       confirmed: 'text-green-700 bg-green-100',
@@ -340,7 +345,7 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
       </Modal>
 
       {/* Appointment Details Modal */}
-      <Modal isOpen={isDetailsModalOpen && selectedAppointment !== null} onClose={() => setIsDetailsModalOpen(false)} title="Appointment Details" showSubmitButton={false} >
+      <Modal isOpen={isDetailsModalOpen && selectedAppointment !== null} onClose={() => setIsDetailsModalOpen(false)} title="Appointment Details" onSubmit={handleSubmitChanges} submitButtonText='Save Changes' showSubmitButton={role === 'doctor'} >
         {selectedAppointment && (
           <div className="space-y-3">
             <p className="capitalize"><strong>Doctor:</strong> {selectedAppointment.doctor.fullName} ({selectedAppointment.doctor.specialization}) {role === 'doctor' && '(You)'}</p>
@@ -349,12 +354,26 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
             <p><strong>Time:</strong> {selectedAppointment.startTime} - {selectedAppointment.endTime}</p>
             <p>
               <strong>Status:</strong>
-              <span className={`ml-2 px-2 py-1 rounded-full text-xs font-semibold capitalize ${getStatusColor(selectedAppointment.status)}`}>{selectedAppointment.status}</span>
+              {role === 'doctor' ? (
+                <select className="select select-sm w-fit ms-2" name="status" readOnly>
+                  <option value="all" disabled>{selectedAppointment.status}</option>
+                  <option value="pending">Pending</option>
+                  <option value="confirmed">Confirmed</option>
+                  <option value="completed">Completed</option>
+                  <option value="canceled">Canceled</option>
+                </select>
+              ) : (
+                <span className={`ml-2 px-2 py-1 rounded-full text-xs font-semibold capitalize ${getStatusColor(selectedAppointment.status)}`}>{selectedAppointment.status}</span>
+              )}
             </p>
             <p className="capitalize"><strong>Reason:</strong> {selectedAppointment.reason}</p>
             <div>
               <strong>Notes:</strong>
-              <p className="mt-1 p-2 bg-gray-50 rounded text-sm text-gray-700">{selectedAppointment.notes || 'No additional notes.'}</p>
+              {role === 'doctor' ? (
+                <textarea className="textarea textarea-bordered w-full mt-2" value={selectedAppointment.notes || ''} readOnly />
+              ) : (
+                <p className="mt-1 p-2 bg-gray-50 rounded text-sm text-gray-700">{selectedAppointment.notes || 'No additional notes.'}</p>
+              )}
             </div>
             <p className="capitalize"><strong>Booked By:</strong> {selectedAppointment.createdBy}</p>
           </div>
