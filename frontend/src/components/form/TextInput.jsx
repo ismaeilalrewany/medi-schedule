@@ -33,7 +33,7 @@ const TextInput = ({ label, value, setValue, placeholder }) => {
         required
       />
       {error && (
-        <div className="validator-hint mt-1 text-sm text-error">
+        <div className="mt-1 text-sm text-error">
           {error}
         </div>
       )}
