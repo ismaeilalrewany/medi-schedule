@@ -6,5 +6,6 @@ const router = express.Router()
 
 router.get('/check-auth', auth, CommonsController.checkAuth)
 router.get('/check-server', CommonsController.checkServer)
+router.all('/*', CommonsController.catchNotFound)
 
 export default router
