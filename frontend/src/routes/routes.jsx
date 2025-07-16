@@ -8,6 +8,7 @@ import DashboardPage from "../pages/DashboardPage.jsx"
 import ProfilePage from "../pages/ProfilePage.jsx"
 import AppointmentsPage from "../pages/AppointmentsPage.jsx"
 import NotFoundPage from "../pages/NotFoundPage.jsx"
+import HomePage from "../pages/HomePage.jsx"
 
 const routes = createBrowserRouter([
   {
@@ -75,7 +76,7 @@ const routes = createBrowserRouter([
       },
       {
         index: true, 
-        element: <h1>Home Page</h1>,
+        element: <HomePage />,
       },
       {
         path: "login",
