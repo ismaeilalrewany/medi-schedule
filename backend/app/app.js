@@ -44,6 +44,20 @@ export const startApp = async () => {
       next();
     })
 
+    // Global error handler
+    app.use((err, req, res, next) => {
+      console.error('Global error:', err)
+      
+      // Don't expose error details in production
+      const isDevelopment = process.env.NODE_ENV === 'development'
+      
+      res.status(err.status || 500).json({
+        message: err.message || 'Internal Server Error',
+        ...(isDevelopment && { stack: err.stack }),
+        timestamp: new Date().toISOString()
+      })
+    })
+
     console.log('App initialized successfully')
   } catch (error) {
     console.error('Error initializing app:', error)
