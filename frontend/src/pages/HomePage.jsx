@@ -16,21 +16,21 @@ const HomePage = () => {
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8">
             <div className="card bg-base-100 shadow-md">
               <div className="card-body items-center text-center p-4">
-                <i class="fa-solid fa-clock text-neutral text-2xl md:text-3xl"></i>
+                <i className="fa-solid fa-clock text-neutral text-2xl md:text-3xl"></i>
                 <h2 className="card-title text-lg md:text-2xl mt-2">Easy Scheduling</h2>
                 <p className="text-sm sm:text-[16px] text-neutral/80">Find available doctors and book appointments at your convenience, 24/7.</p>
               </div>
             </div>
             <div className="card bg-base-100 shadow-md">
               <div className="card-body items-center text-center p-4">
-                <i class="fa-solid fa-briefcase-medical text-neutral text-2xl md:text-3xl"></i>
+                <i className="fa-solid fa-briefcase-medical text-neutral text-2xl md:text-3xl"></i>
                 <h2 className="card-title text-lg md:text-2xl mt-2">Expert Doctors</h2>
                 <p className="text-sm sm:text-[16px] text-neutral/80">Access a network of highly qualified and experienced healthcare professionals.</p>
               </div>
             </div>
             <div className="card bg-base-100 shadow-md">
               <div className="card-body items-center text-center p-4">
-                <i class="fa-solid fa-user-shield text-neutral text-2xl md:text-3xl"></i>
+                <i className="fa-solid fa-user-shield text-neutral text-2xl md:text-3xl"></i>
                 <h2 className="card-title text-lg md:text-2xl mt-2">Secure & Private</h2>
                 <p className="text-sm sm:text-[16px] text-neutral/80">Your health data is protected with enterprise-grade security and privacy.</p>
               </div>
@@ -67,12 +67,12 @@ const HomePage = () => {
             </div>
             <div className="flex items-center justify-center h-80 md:h-96 bg-gradient-to-br from-[#e2e8e800] to-[#111111] rounded-lg p-8">
               <div className="text-center text-white/70">
-                  <i class="fa-solid fa-chevron-up text-white/70 text-lg sm:text-xl"></i>
+                  <i className="fa-solid fa-chevron-up text-white/70 text-lg sm:text-xl"></i>
                   <div className="font-mono text-lg sm:text-xl my-8 space-y-4 tracking-widest">
                       <p>APPOINTMENTS</p>
                       <p>CALENDAR</p>
                   </div>
-                  <i class="fa-solid fa-chevron-down text-white/70 text-lg sm:text-xl"></i>
+                  <i className="fa-solid fa-chevron-down text-white/70 text-lg sm:text-xl"></i>
               </div>
             </div>
           </div>

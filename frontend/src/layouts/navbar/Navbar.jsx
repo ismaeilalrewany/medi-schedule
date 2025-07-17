@@ -1,28 +1,53 @@
+import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import NavButton from './components/NavButton.jsx'
+import checkAuth from '../../services/checkAuth.js'
 
 const Navbar = () => {
   const location = useLocation()
   const { pathname } = location
   const route = pathname?.split('/')[1]
+  const [userRole, setUserRole] = useState('')
 
   const authButtonController = () => {
     switch (pathname) {
+      case '/':
+        if (userRole) return {pathname: `/${userRole}s/logout`, linkText: 'Logout'}
+        else return {pathname: '/login', linkText: 'Login'}
       case '/login':
         return { pathname: '/patients/register', linkText: 'Register' }
       case '/patients/register':
         return { pathname: '/login', linkText: 'Login' }
-        case '/patients/appointments':
-        case '/doctors/register':
+      case '/patients/appointments':
+      case '/patients/profile':
       case '/doctors/appointments':
+      case '/doctors/profile':
+      case '/doctors/register':
+      case '/admins/profile':
       case '/admins/dashboard':
-        return { pathname: '/logout', linkText: 'Logout' }
+      case '/admins/patients/:id':
+      case '/admins/doctors/:id':
+      case '/admins/patients/:id/appointments':
+      case '/admins/doctors/:id/appointments':
+        return { pathname: `/${userRole}s/logout`, linkText: 'Logout' }
       default:
-        return '/login'
+        return {pathname: '/login', linkText: 'Login'}
     }
   }
 
   const authButton = authButtonController()
+
+  useEffect(() => {
+    const fetchAuthStatus = async () => {
+      const role = await checkAuth()
+
+      if (role) {
+        setUserRole(role)
+      }
+    }
+
+    fetchAuthStatus()
+  }, [location])
 
   return (
     <header className="bg-base-100 shadow-sm">
@@ -48,14 +73,17 @@ const Navbar = () => {
               <li>
                 <Link to="/" className="btn btn-ghost">Home</Link>
               </li>
+              {userRole === 'admin' ? (
+                <li>
+                  <Link to="/admins/dashboard" className="btn btn-ghost">Dashboard</Link>
+                </li>
+              ) : (
+                <li>
+                  <Link to={`/${userRole || 'patient'}s/appointments`} className="btn btn-ghost">Appointments</Link>
+                </li>
+              )}
               <li>
-                <Link to={`/${route}/appointments`} className="btn btn-ghost">Appointments</Link>
-              </li>
-              <li>
-                <Link to="/admins/dashboard" className="btn btn-ghost">Dashboard</Link>
-              </li>
-              <li>
-                <Link to={`/${route}/profile`} className="btn btn-ghost">Profile</Link>
+                <Link to={`/${userRole || 'patient'}s/profile`} className="btn btn-ghost">Profile</Link>
               </li>
             </ul>
             <div className="">
