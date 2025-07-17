@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import EmailInput from '../components/form/EmailInput.jsx'
@@ -8,12 +8,13 @@ import Recaptcha from '../components/form/Recaptcha.jsx'
 import SubmitButton from '../components/form/SubmitButton.jsx'
 import RedirectLink from '../components/form/RedirectLink.jsx'
 
-const AllLoginPage = () => {
+const LoginPage = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [role, setRole] = useState('patient')
   const [recaptchaToken, setRecaptchaToken] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const recaptchaRef = useRef(null)
   const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
@@ -37,6 +38,11 @@ const AllLoginPage = () => {
       }
     } catch (error) {
       console.error('Login error:', error.response?.data || error.message)
+      // Reset reCAPTCHA on error
+      setRecaptchaToken(null)
+      if (recaptchaRef.current) {
+        recaptchaRef.current.reset()
+      }
     } finally {
       setIsSubmitting(false)
     }
@@ -54,7 +60,7 @@ const AllLoginPage = () => {
             <EmailInput email={email} setEmail={setEmail} />
             <PasswordInput password={password} setPassword={setPassword} />
             <RadioInput name="Role" options={['Admin', 'Doctor', 'Patient']} checked={role} setChecked={setRole} />
-            <Recaptcha setRecaptchaToken={setRecaptchaToken} />
+            <Recaptcha setRecaptchaToken={setRecaptchaToken} recaptchaRef={recaptchaRef} />
             <SubmitButton name="Login" isSubmitting={isSubmitting} recaptchaToken={recaptchaToken} />
             <RedirectLink text="Don't have an account? " linkText="Register" path="/patients/register" />
           </form>
@@ -64,4 +70,4 @@ const AllLoginPage = () => {
   )
 }
 
-export default AllLoginPage
+export default LoginPage

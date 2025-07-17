@@ -1,8 +1,8 @@
 import AdminModel from '../database/models/Admin.js'
 import PatientModal from '../database/models/Patient.js'
 import DoctorModel from '../database/models/Doctor.js'
-import verifyRecaptcha from '../database/models/utils/verifyRecaptcha.js'
-import comparePassword from '../database/models/utils/comparePassword.js'
+import verifyRecaptcha from '../services/verifyRecaptcha.js'
+import comparePassword from '../utils/comparePassword.js'
 
 class AdminsController {
   static #createCookie(res, key, value) {

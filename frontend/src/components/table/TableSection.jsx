@@ -48,7 +48,7 @@ const TableSection = ({ title }) => {
   }, [title, paginationPage, searchUser])
 
   return (
-    <section className="overflow-hidden rounded-lg ring-1 ring-neutral-300 bg-base-100 p-8 w-[800px] shadow">
+    <section className="overflow-hidden rounded-lg ring-1 ring-neutral-300 bg-base-100 p-8 w-[900px] shadow">
       <header className="mb-6 text-neutral">
         <div className="flex items-center justify-between mb-4">
           <h1 className="text-2xl font-bold text-base-content">{title.charAt(0).toUpperCase() + title.slice(1)}s</h1>

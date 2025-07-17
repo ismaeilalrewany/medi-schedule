@@ -7,12 +7,12 @@ const NavButton = ({ authButton, path }) => {
   const baseURL = import.meta.env.VITE_API_URL
 
   const handleLogout = async () => {
-    await logout(baseURL, route, navigate)
+    await logout(baseURL, authButton.pathname, navigate)
   }
 
   return (
     <>
-      {authButton?.pathname !== '/logout' ? (
+      {!authButton.pathname.includes('logout') ? (
         <Link to={authButton?.pathname || '/'} className="btn">
           {authButton?.linkText || 'Button'}
         </Link>
@@ -26,9 +26,9 @@ const NavButton = ({ authButton, path }) => {
   )
 }
 
-const logout = async (baseURL, route, navigate) => {
+const logout = async (baseURL, endpoint, navigate) => {
   try {
-    await axios.post(`${baseURL}/api/${route}/logout`, {}, {
+    await axios.post(`${baseURL}/api${endpoint}`, {}, {
       withCredentials: true
     })
 

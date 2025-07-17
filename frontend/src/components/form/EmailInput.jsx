@@ -34,7 +34,7 @@ const EmailInput = ({ email, setEmail }) => {
         required
       />
       {error && (
-        <div className="validator-hint mt-1 text-sm text-error">
+        <div className="mt-1 text-sm text-error">
           {error}
         </div>
       )}

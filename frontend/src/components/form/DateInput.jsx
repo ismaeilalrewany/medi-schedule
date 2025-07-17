@@ -34,7 +34,7 @@ const DateInput = ({ label, value, setValue }) => {
         required
       />
       {error && (
-        <div className="validator-hint mt-1 text-sm text-error">
+        <div className="mt-1 text-sm text-error">
           {error}
         </div>
       )}

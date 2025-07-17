@@ -1,9 +1,9 @@
 import mongoose from 'mongoose'
 import validator from 'validator'
-import { validatePasswordComplexity, mongoosePasswordValidator } from './utils/passwordComplexity.js'
-import preSaveHashHook from './utils/preSaveHashHook.js'
-import generateAuthToken from './utils/generateAuthToken.js'
-import applyToJSON from './utils/applyToJSON.js'
+import { validatePasswordComplexity, mongoosePasswordValidator } from '../../utils/passwordComplexity.js'
+import preSaveHashHook from '../../utils/preSaveHashHook.js'
+import generateAuthToken from '../../utils/generateAuthToken.js'
+import applyToJSON from '../../utils/applyToJSON.js'
 
 const DoctorSchema = new mongoose.Schema({
   fullName: { 
@@ -48,7 +48,7 @@ const DoctorSchema = new mongoose.Schema({
   availableTimeSlots: [{
     day: { 
       type: String, 
-      enum: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'], 
+      enum: ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'], 
       lowercase: true 
     },
     startTime: { type: String },

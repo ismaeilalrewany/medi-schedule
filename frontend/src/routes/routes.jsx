@@ -1,11 +1,14 @@
 import { createBrowserRouter } from "react-router-dom"
 import App from "../App.jsx"
 import ProtectedRoute from "./ProtectedRoute.jsx"
-import AllLoginPage from "../pages/AllLoginPage.jsx"
+import LoginPage from "../pages/LoginPage.jsx"
 import PatientRegisterPage from "../pages/PatientRegisterPage.jsx"
 import DoctorRegisterPage from "../pages/DoctorRegisterPage.jsx"
 import DashboardPage from "../pages/DashboardPage.jsx"
 import ProfilePage from "../pages/ProfilePage.jsx"
+import AppointmentsPage from "../pages/AppointmentsPage.jsx"
+import NotFoundPage from "../pages/NotFoundPage.jsx"
+import HomePage from "../pages/HomePage.jsx"
 
 const routes = createBrowserRouter([
   {
@@ -17,7 +20,7 @@ const routes = createBrowserRouter([
         children: [
           {
             path: "patients/appointments", 
-            element: <h1>Patients Appointments</h1>,
+            element: <AppointmentsPage endpoint={'patients/appointments'} role={'patient'} />,
           },
           {
             path: "patients/profile",
@@ -30,7 +33,7 @@ const routes = createBrowserRouter([
         children: [
           {
             path: "doctors/appointments",
-            element: <h1>Doctors Appointments</h1>,
+            element: <AppointmentsPage endpoint={'doctors/appointments'} role={'doctor'} />,
           },
           {
             path: "doctors/profile",
@@ -60,16 +63,24 @@ const routes = createBrowserRouter([
           {
             path: "admins/doctors/:id",
             element: <ProfilePage endpoint={'admins/doctors/:id'}  isViewerAdmin={true} />,
+          },
+          {
+            path: "admins/patients/:id/appointments",
+            element: <AppointmentsPage endpoint={'admins/patients/:id/appointments'} isViewerAdmin={true} role={'patient'} />,
+          },
+          {
+            path: "admins/doctors/:id/appointments",
+            element: <AppointmentsPage endpoint={'admins/doctors/:id/appointments'} isViewerAdmin={true} role={'doctor'} />,
           }
         ]
       },
       {
         index: true, 
-        element: <h1>Home Page</h1>,
+        element: <HomePage />,
       },
       {
         path: "login",
-        element: <AllLoginPage />,
+        element: <LoginPage />,
       },
       {
         path: "patients/register",
@@ -79,7 +90,7 @@ const routes = createBrowserRouter([
   },
   {
     path: "*",
-    element: <h1>404 Not Found</h1>, 
+    element: <NotFoundPage />,
   },
 ])
 

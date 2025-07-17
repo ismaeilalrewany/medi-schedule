@@ -6,7 +6,7 @@ import cookieParser from 'cookie-parser'
 import patientsRouter from './routes/patients.js'
 import doctorsRouter from './routes/doctors.js'
 import adminsRouter from './routes/admins.js'
-import commonRouter from './routes/common.js'
+import commonsRouter from './routes/commons.js'
 import 'dotenv/config'
 
 export const app = express()
@@ -36,12 +36,26 @@ export const startApp = async () => {
     app.use('/api/patients', patientsRouter)
     app.use('/api/doctors', doctorsRouter)
     app.use('/api/admins', adminsRouter)
-    app.use('/api', commonRouter)
+    app.use('/api', commonsRouter)
 
     // Normalize URL
     app.use((req, res, next) => {
       req.url = req.url.replace(/\/+/g, '/');
       next();
+    })
+
+    // Global error handler
+    app.use((err, req, res, next) => {
+      console.error('Global error:', err)
+      
+      // Don't expose error details in production
+      const isDevelopment = process.env.NODE_ENV === 'development'
+      
+      res.status(err.status || 500).json({
+        message: err.message || 'Internal Server Error',
+        ...(isDevelopment && { stack: err.stack }),
+        timestamp: new Date().toISOString()
+      })
     })
 
     console.log('App initialized successfully')

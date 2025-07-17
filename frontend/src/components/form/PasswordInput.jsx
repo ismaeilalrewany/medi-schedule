@@ -53,7 +53,7 @@ const PasswordInput = ({ password, setPassword }) => {
         required
       />
       {error && (
-        <div className="validator-hint mt-1 text-sm text-error max-w-76">
+        <div className="mt-1 text-sm text-error max-w-76">
           {error}
         </div>
       )}

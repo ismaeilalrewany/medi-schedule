@@ -1,13 +1,16 @@
 import express from 'express'
-import Controller from '../controllers/patients.js'
+import PatientsController from '../controllers/patients.js'
+import AppointmentsController from '../controllers/appointments.js'
 import auth from '../middleware/auth.js'
 
 const router = express.Router()
 
-router.post('/register', Controller.register)
-router.post('/logout', auth, Controller.logout)
-router.post('/login', Controller.login)
-router.get('/', auth, Controller.getAllPatients)
-router.get('/profile', auth, Controller.getProfile)
+router.post('/register', PatientsController.register)
+router.post('/logout', auth, PatientsController.logout)
+router.post('/login', PatientsController.login)
+router.get('/', auth, PatientsController.getAllPatients)
+router.get('/profile', auth, PatientsController.getProfile)
+router.post('/appointments', auth, AppointmentsController.createAppointment)
+router.get('/appointments', auth, AppointmentsController.getPatientAppointments)
 
 export default router
