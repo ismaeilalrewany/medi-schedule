@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import TextInput from '../components/form/TextInput.jsx'
@@ -22,6 +22,7 @@ const PatientRegisterPage = () => {
   const [medicalHistory, setMedicalHistory] = useState('')
   const [recaptchaToken, setRecaptchaToken] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const recaptchaRef = useRef(null)
   const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
@@ -47,6 +48,11 @@ const PatientRegisterPage = () => {
       navigate('/patients/appointments')
     } catch (error) {
       console.error('Registration error:', error.response?.data || error.message)
+      // Reset reCAPTCHA on error
+      setRecaptchaToken(null)
+      if (recaptchaRef.current) {
+        recaptchaRef.current.reset()
+      }
     } finally {
       setIsSubmitting(false)
     }
@@ -68,7 +74,7 @@ const PatientRegisterPage = () => {
             <DateInput label="Date of Birth" value={dateOfBirth} setValue={setDateOfBirth} />
             <RadioInput name="Gender" options={['Male', 'Female']} checked={gender} setChecked={setGender} />
             <TextareaInput label="Medical History" value={medicalHistory} setValue={setMedicalHistory} placeholder="Any past medical conditions..." />
-            <Recaptcha setRecaptchaToken={setRecaptchaToken} />
+            <Recaptcha setRecaptchaToken={setRecaptchaToken} recaptchaRef={recaptchaRef} />
             <SubmitButton name="Register" isSubmitting={isSubmitting} recaptchaToken={recaptchaToken} />
             <RedirectLink text="Already have an account? " path="/login" linkText="Login" />
           </form>
