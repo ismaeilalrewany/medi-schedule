@@ -7,6 +7,7 @@ const Navbar = () => {
   const location = useLocation()
   const { pathname } = location
   const route = pathname?.split('/')[1]
+  const [userId, setUserId] = useState('')
   const [userRole, setUserRole] = useState('')
 
   const authButtonController = () => {
@@ -25,10 +26,10 @@ const Navbar = () => {
       case '/doctors/register':
       case '/admins/profile':
       case '/admins/dashboard':
-      case '/admins/patients/:id':
-      case '/admins/doctors/:id':
-      case '/admins/patients/:id/appointments':
-      case '/admins/doctors/:id/appointments':
+      case `/admins/patients/${userId}`:
+      case `/admins/doctors/${userId}`:
+      case `/admins/patients/${userId}/appointments`:
+      case `/admins/doctors/${userId}/appointments`:
         return { pathname: `/${userRole}s/logout`, linkText: 'Logout' }
       default:
         return {pathname: '/login', linkText: 'Login'}
@@ -47,6 +48,8 @@ const Navbar = () => {
     }
 
     fetchAuthStatus()
+
+    setUserId(location.pathname.split('/')[3] || '')
   }, [location])
 
   return (
