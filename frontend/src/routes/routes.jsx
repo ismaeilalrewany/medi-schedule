@@ -2,8 +2,7 @@ import { createBrowserRouter } from "react-router-dom"
 import App from "../App.jsx"
 import ProtectedRoute from "./ProtectedRoute.jsx"
 import LoginPage from "../pages/LoginPage.jsx"
-import PatientRegisterPage from "../pages/PatientRegisterPage.jsx"
-import DoctorRegisterPage from "../pages/DoctorRegisterPage.jsx"
+import RegisterPage from "../pages/RegisterPage.jsx"
 import DashboardPage from "../pages/DashboardPage.jsx"
 import ProfilePage from "../pages/ProfilePage.jsx"
 import AppointmentsPage from "../pages/AppointmentsPage.jsx"
@@ -46,7 +45,7 @@ const routes = createBrowserRouter([
         children: [
           {
             path: "doctors/register",
-            element: <DoctorRegisterPage />,
+            element: <RegisterPage role={'doctor'} />,
           },
           {
             path: "admins/dashboard",
@@ -84,7 +83,7 @@ const routes = createBrowserRouter([
       },
       {
         path: "patients/register",
-        element: <PatientRegisterPage />,
+        element: <RegisterPage role={'patient'} />,
       }
     ],
   },
