@@ -115,7 +115,7 @@ VITE_RECAPTCHA_SITE_KEY=your-recaptcha-site-key-here
 
 # Application Configuration
 VITE_APP_NAME=MediSchedule
-VITE_APP_VERSION=1.0.0
+VITE_APP_VERSION=1.2.0
 ```
 
 ### 4. Database Setup
