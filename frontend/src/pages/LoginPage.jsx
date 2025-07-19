@@ -53,7 +53,7 @@ const LoginPage = () => {
       <div className="card min-w-88 max-w-96 shadow ring-1 ring-neutral-300 bg-base-100">
         <div className="card-body p-8">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-neutral" style={{ fontFamily: 'Cursive, sans-serif' }}>Welcome Back!</h1>
+            <h1 className="text-3xl font-semibold text-neutral">Welcome Back!</h1>
             <p className="text-neutral mt-2">Please login to continue</p>
           </div>
           <form className="space-y-4" onSubmit={handleSubmit}>
