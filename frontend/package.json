@@ -1,7 +1,7 @@
 {
   "name": "medi-schedule",
   "private": true,
-  "version": "1.2.0",
+  "description": "frontend for the medi schedule application",
   "type": "module",
   "scripts": {
     "dev": "vite",
