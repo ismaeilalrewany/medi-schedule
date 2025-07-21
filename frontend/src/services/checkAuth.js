@@ -8,7 +8,7 @@ const isAuthenticated = async () => {
       return response.data.role
     }
   } catch (error) {
-    // console.error('Error checking authentication:', error.message)
+    console.error('Error checking authentication:', error.message)
     return null
   }
 }

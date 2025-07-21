@@ -6,7 +6,6 @@ import checkAuth from '../../services/checkAuth.js'
 const Navbar = () => {
   const location = useLocation()
   const { pathname } = location
-  const route = pathname?.split('/')[1]
   const [userId, setUserId] = useState('')
   const [userRole, setUserRole] = useState('')
 
@@ -90,11 +89,11 @@ const Navbar = () => {
               </li>
             </ul>
             <div className="">
-              <NavButton authButton={authButton} path={pathname} />
+              <NavButton authButton={authButton} />
             </div>
           </div>
           <div className="navbar-end lg:hidden">
-            <NavButton authButton={authButton} path={pathname} />
+            <NavButton authButton={authButton} />
           </div>
         </nav>
       </div>

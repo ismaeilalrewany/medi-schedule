@@ -53,6 +53,8 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
       setPaginationData({ currentPage: 1, totalPages: 1, totalItems: 0 })
       throw error
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [baseURL, endpoint, isViewerAdmin, params.id])
 
   const handleFilterChange = (filterType, value) => {
@@ -164,6 +166,7 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
   }
   
   loadInitialAppointments()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {

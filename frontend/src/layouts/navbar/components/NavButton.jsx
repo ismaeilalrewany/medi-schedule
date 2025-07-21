@@ -1,9 +1,8 @@
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 
-const NavButton = ({ authButton, path }) => {
+const NavButton = ({ authButton }) => {
   const navigate = useNavigate()
-  const route = path?.split('/')[1]
   const baseURL = import.meta.env.VITE_API_URL
 
   const handleLogout = async () => {
