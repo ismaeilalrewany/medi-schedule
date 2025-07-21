@@ -51,10 +51,10 @@ fi
 
 # Check for TODO or FIXME comments in code
 echo "🔍 Checking for unresolved TODOs/FIXMEs..."
-TODO_COUNT=$(find frontend/src backend -name "*.js" -o -name "*.jsx" | xargs grep -l "TODO\|FIXME" | wc -l)
+TODO_COUNT=$(find frontend/src backend -path "*/node_modules" -prune -o \( -name "*.js" -o -name "*.jsx" \) -print | xargs grep -l "TODO\|FIXME" 2>/dev/null | wc -l)
 if [ $TODO_COUNT -gt 0 ]; then
   echo "⚠️ Warning: Found $TODO_COUNT files with TODO/FIXME comments"
-  find frontend/src backend -name "*.js" -o -name "*.jsx" | xargs grep -n "TODO\|FIXME" | head -5
+  find frontend/src backend -path "*/node_modules" -prune -o \( -name "*.js" -o -name "*.jsx" \) -print | xargs grep -n "TODO\|FIXME" 2>/dev/null | head -5
   echo "Consider resolving these before committing to main/production"
 fi
 
