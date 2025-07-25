@@ -336,6 +336,7 @@ This will create:
 # Backend
 npm run dev      # Development server
 npm start        # Production server
+npm run lint     # Run linting
 npm test         # Run tests (if available)
 
 # Frontend
