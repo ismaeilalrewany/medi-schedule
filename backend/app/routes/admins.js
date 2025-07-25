@@ -1,4 +1,5 @@
 import express from 'express'
+
 import AdminsController from '../controllers/admins.js'
 import AppointmentsController from '../controllers/appointments.js'
 import auth from '../middleware/auth.js'

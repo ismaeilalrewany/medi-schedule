@@ -2,14 +2,14 @@ export const validatePasswordComplexity = (password) => {
   const errors = getValidationErrors(password)
   return {
     isValid: errors.length === 0,
-    message: errors.length > 0 
+    message: errors.length > 0
       ? `Password must ${errors.join(', ')}`
       : 'Password is valid'
   }
 }
 
 const getValidationErrors = (password) => {
-  const errors = [];
+  const errors = []
   if (!meetsLength(password)) errors.push('be at least 8 characters long')
   if (!hasUppercase(password)) errors.push('contain at least one uppercase letter')
   if (!hasLowercase(password)) errors.push('contain at least one lowercase letter')

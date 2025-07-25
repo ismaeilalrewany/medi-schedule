@@ -1,7 +1,8 @@
 import express from 'express'
-import connect from './database/connect.js'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
+
+import connect from './database/connect.js'
 // import AdminModel from './database/models/Admin.js'
 import patientsRouter from './routes/patients.js'
 import doctorsRouter from './routes/doctors.js'
@@ -18,12 +19,12 @@ export const startApp = async () => {
 
     app.use(cors({
       origin: (origin, callback) => {
-          const allowedOrigins = [process.env.FRONTEND_URL]
-          if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-              callback(null, origin)
-          } else {
-              callback(new Error('Not allowed by CORS'))
-          }
+        const allowedOrigins = [process.env.FRONTEND_URL]
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+          callback(null, origin)
+        } else {
+          callback(new Error('Not allowed by CORS'))
+        }
       },
       credentials: true,
     }))
@@ -40,17 +41,17 @@ export const startApp = async () => {
 
     // Normalize URL
     app.use((req, res, next) => {
-      req.url = req.url.replace(/\/+/g, '/');
-      next();
+      req.url = req.url.replace(/\/+/g, '/')
+      next()
     })
 
     // Global error handler
     app.use((err, req, res, next) => {
       console.error('Global error:', err)
-      
+
       // Don't expose error details in production
       const isDevelopment = process.env.NODE_ENV === 'development'
-      
+
       res.status(err.status || 500).json({
         message: err.message || 'Internal Server Error',
         ...(isDevelopment && { stack: err.stack }),

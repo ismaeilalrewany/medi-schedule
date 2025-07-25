@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
 import validator from 'validator'
+
 import { mongoosePasswordValidator, validatePasswordComplexity } from '../../utils/passwordComplexity.js'
 import preSaveHashHook from '../../utils/preSaveHashHook.js'
 import generateAuthToken from '../../utils/generateAuthToken.js'
@@ -7,34 +8,34 @@ import applyToJSON from '../../utils/applyToJSON.js'
 import 'dotenv/config'
 
 const AdminSchema = new mongoose.Schema({
-  fullName: { 
-    type: String, 
-    required: true, 
-    trim: true, 
+  fullName: {
+    type: String,
+    required: true,
+    trim: true,
     lowercase: true ,
-    minlength: 3 
+    minlength: 3
   },
-  email: { 
-    type: String, 
-    required: true, 
-    unique: true, 
-    trim: true, 
-    lowercase: true, 
-    validate: [validator.isEmail, 'Invalid email address'] 
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true,
+    lowercase: true,
+    validate: [validator.isEmail, 'Invalid email address']
   },
-  password: { 
-    type: String, 
-    required: true, 
+  password: {
+    type: String,
+    required: true,
     minlength: 8,
     validate: {
       validator: mongoosePasswordValidator,
       message: () => validatePasswordComplexity(this.password).message
-    } 
+    }
   },
-  phoneNumber: { 
-    type: String, 
-    trim: true, 
-    validate: [validator.isMobilePhone, 'Invalid phone number'] 
+  phoneNumber: {
+    type: String,
+    trim: true,
+    validate: [validator.isMobilePhone, 'Invalid phone number']
   },
   role: {type: String, required: true, default: 'admin'},
   tokens: [
@@ -68,10 +69,10 @@ AdminSchema.statics.createDefaultAdmin = async function() {
     }
 
     const admin = new this({
-      fullName: process.env.ADMIN_NAME, 
-      email: process.env.ADMIN_EMAIL, 
+      fullName: process.env.ADMIN_NAME,
+      email: process.env.ADMIN_EMAIL,
       password: process.env.ADMIN_PASSWORD ,
-      phoneNumber: process.env.ADMIN_PHONE 
+      phoneNumber: process.env.ADMIN_PHONE
     })
 
     const complexityCheck = validatePasswordComplexity(admin.password)

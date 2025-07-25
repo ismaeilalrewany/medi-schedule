@@ -1,6 +1,6 @@
 class CommonsController {
   static catchNotFound (req, res) {
-    res.status(404).json({ 
+    res.status(404).json({
       message: 'API endpoint not found',
       path: req.originalUrl,
       method: req.method,

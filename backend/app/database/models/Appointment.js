@@ -1,26 +1,27 @@
 import mongoose from 'mongoose'
+
 import PatientModel from './Patient.js'
 import DoctorModel from './Doctor.js'
 
 const AppointmentSchema = new mongoose.Schema({
-  patient: { 
-    type: mongoose.Schema.Types.ObjectId, 
+  patient: {
+    type: mongoose.Schema.Types.ObjectId,
     ref: PatientModel,
-    required: true 
+    required: true
   },
-  doctor: { 
-    type: mongoose.Schema.Types.ObjectId, 
+  doctor: {
+    type: mongoose.Schema.Types.ObjectId,
     ref: DoctorModel,
-    required: true 
+    required: true
   },
   date: { type: Date, required: true },
   startTime: { type: String, required: true, trim: true },
   endTime: { type: String, required: true, trim: true },
-  status: { 
-    type: String, 
+  status: {
+    type: String,
     enum: ['pending', 'confirmed', 'completed', 'canceled'],
-    default: 'pending', 
-    lowercase: true 
+    default: 'pending',
+    lowercase: true
   },
   reason: { type: String, trim: true },
   notes: { type: String, trim: true, default: '' },

@@ -1,5 +1,6 @@
 import 'dotenv/config'
 import jwt from 'jsonwebtoken'
+
 import PatientModel from '../database/models/Patient.js'
 import DoctorModel from '../database/models/Doctor.js'
 import AdminModel from '../database/models/Admin.js'
@@ -10,14 +11,14 @@ const sendUnauthorizedResponse = (res, message) => {
 
 const findUserByRole = (role, userId) => {
   switch (role) {
-    case 'patient':
-      return PatientModel.findById(userId)
-    case 'doctor':
-      return DoctorModel.findById(userId)
-    case 'admin':
-      return AdminModel.findById(userId)
-    default:
-      return null
+  case 'patient':
+    return PatientModel.findById(userId)
+  case 'doctor':
+    return DoctorModel.findById(userId)
+  case 'admin':
+    return AdminModel.findById(userId)
+  default:
+    return null
   }
 }
 

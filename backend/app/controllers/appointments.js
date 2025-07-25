@@ -1,7 +1,8 @@
+import { ObjectId } from 'mongodb'
+
 import AppointmentModel from '../database/models/Appointment.js'
 import PatientModel from '../database/models/Patient.js'
 import DoctorModel from '../database/models/Doctor.js'
-import { ObjectId } from 'mongodb'
 
 class AppointmentsController {
   static #dayNamesToNumbers = {
@@ -66,9 +67,9 @@ class AppointmentsController {
   }
 
   static #checkDoctorAvailability(doctor, index, date, startTime, endTime) {
-    let isAvailableDate = AppointmentsController.#getDayNumber(doctor.availableTimeSlots[index].day) === new Date(date).getDay()
-    let isAvailableTime = AppointmentsController.#greaterTimeOrEqual(doctor.availableTimeSlots[index].startTime, startTime) && AppointmentsController.#lesserTimeOrEqual(doctor.availableTimeSlots[index].endTime, endTime)
-    let isAvailable = doctor.availableTimeSlots[index].isAvailable
+    const isAvailableDate = AppointmentsController.#getDayNumber(doctor.availableTimeSlots[index].day) === new Date(date).getDay()
+    const isAvailableTime = AppointmentsController.#greaterTimeOrEqual(doctor.availableTimeSlots[index].startTime, startTime) && AppointmentsController.#lesserTimeOrEqual(doctor.availableTimeSlots[index].endTime, endTime)
+    const isAvailable = doctor.availableTimeSlots[index].isAvailable
     return isAvailable && isAvailableDate && isAvailableTime
   }
 
@@ -170,7 +171,7 @@ class AppointmentsController {
     })
 
     // Apply automatic sorting: status first, then date, then startTime
-    pipeline.push({ 
+    pipeline.push({
       $sort: {
         statusOrder: 1,    // Sort by status priority (pending -> confirmed -> completed -> canceled)
         date: 1,           // Then by date (earliest first)
@@ -267,7 +268,7 @@ class AppointmentsController {
 
       // Get aggregation pipeline
       const pipeline = AppointmentsController.#createAggregationPipeline(req, patientId, 'patient')
-      
+
       // Add pagination stages
       const paginationPipeline = [
         ...pipeline,
@@ -290,7 +291,7 @@ class AppointmentsController {
       const totalResult = await AppointmentModel.aggregate(countPipeline)
       const totalItems = totalResult.length > 0 ? totalResult[0].total : 0
 
-      return res.status(200).json({ 
+      return res.status(200).json({
         message: 'Patient appointments retrieved successfully',
         appointments,
         pagination: {
@@ -320,7 +321,7 @@ class AppointmentsController {
 
       // Get aggregation pipeline
       const pipeline = AppointmentsController.#createAggregationPipeline(req, doctorId, 'doctor')
-      
+
       // Add pagination stages
       const paginationPipeline = [
         ...pipeline,
@@ -343,7 +344,7 @@ class AppointmentsController {
       const totalResult = await AppointmentModel.aggregate(countPipeline)
       const totalItems = totalResult.length > 0 ? totalResult[0].total : 0
 
-      return res.status(200).json({ 
+      return res.status(200).json({
         message: 'Doctor appointments retrieved successfully',
         appointments,
         pagination: {
