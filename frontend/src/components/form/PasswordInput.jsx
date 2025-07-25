@@ -3,7 +3,7 @@ import { useState } from 'react'
 const PasswordInput = ({ password, setPassword }) => {
   const [error, setError] = useState('')
 
-  const validatePassword = (value) => {
+  const validatePassword = value => {
     const errors = []
 
     if (value.length < 8) {
@@ -25,7 +25,7 @@ const PasswordInput = ({ password, setPassword }) => {
     return errors
   }
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     const inputValue = e.target.value
     const errors = validatePassword(inputValue)
 
@@ -52,11 +52,7 @@ const PasswordInput = ({ password, setPassword }) => {
         onChange={handleChange}
         required
       />
-      {error && (
-        <div className="mt-1 text-sm text-error max-w-76">
-          {error}
-        </div>
-      )}
+      {error && <div className="mt-1 text-sm text-error max-w-76">{error}</div>}
     </div>
   )
 }

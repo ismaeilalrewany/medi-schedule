@@ -9,7 +9,7 @@ const TextareaInput = ({ label, value, setValue, placeholder }) => {
         placeholder={placeholder}
         className="textarea textarea-bordered h-24"
         value={value}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={e => setValue(e.target.value)}
         required
       />
     </div>

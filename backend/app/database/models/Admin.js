@@ -1,52 +1,58 @@
 import mongoose from 'mongoose'
 import validator from 'validator'
 
-import { mongoosePasswordValidator, validatePasswordComplexity } from '../../utils/passwordComplexity.js'
+import {
+  mongoosePasswordValidator,
+  validatePasswordComplexity,
+} from '../../utils/passwordComplexity.js'
 import preSaveHashHook from '../../utils/preSaveHashHook.js'
 import generateAuthToken from '../../utils/generateAuthToken.js'
 import applyToJSON from '../../utils/applyToJSON.js'
 import 'dotenv/config'
 
-const AdminSchema = new mongoose.Schema({
-  fullName: {
-    type: String,
-    required: true,
-    trim: true,
-    lowercase: true ,
-    minlength: 3
+const AdminSchema = new mongoose.Schema(
+  {
+    fullName: {
+      type: String,
+      required: true,
+      trim: true,
+      lowercase: true,
+      minlength: 3,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      lowercase: true,
+      validate: [validator.isEmail, 'Invalid email address'],
+    },
+    password: {
+      type: String,
+      required: true,
+      minlength: 8,
+      validate: {
+        validator: mongoosePasswordValidator,
+        message: () => validatePasswordComplexity(this.password).message,
+      },
+    },
+    phoneNumber: {
+      type: String,
+      trim: true,
+      validate: [validator.isMobilePhone, 'Invalid phone number'],
+    },
+    role: { type: String, required: true, default: 'admin' },
+    tokens: [
+      {
+        token: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
   },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true,
-    lowercase: true,
-    validate: [validator.isEmail, 'Invalid email address']
-  },
-  password: {
-    type: String,
-    required: true,
-    minlength: 8,
-    validate: {
-      validator: mongoosePasswordValidator,
-      message: () => validatePasswordComplexity(this.password).message
-    }
-  },
-  phoneNumber: {
-    type: String,
-    trim: true,
-    validate: [validator.isMobilePhone, 'Invalid phone number']
-  },
-  role: {type: String, required: true, default: 'admin'},
-  tokens: [
-    {
-      token: {
-        type: String,
-        required: true
-      }
-    }
-  ]
-}, { timestamps: true })
+  { timestamps: true }
+)
 
 preSaveHashHook(AdminSchema)
 
@@ -55,7 +61,7 @@ generateAuthToken(AdminSchema)
 applyToJSON(AdminSchema)
 
 // Create admin because there is no admin register api
-AdminSchema.statics.createDefaultAdmin = async function() {
+AdminSchema.statics.createDefaultAdmin = async function () {
   try {
     const existingAdmin = await this.findOne({ email: process.env.ADMIN_EMAIL })
 
@@ -71,8 +77,8 @@ AdminSchema.statics.createDefaultAdmin = async function() {
     const admin = new this({
       fullName: process.env.ADMIN_NAME,
       email: process.env.ADMIN_EMAIL,
-      password: process.env.ADMIN_PASSWORD ,
-      phoneNumber: process.env.ADMIN_PHONE
+      password: process.env.ADMIN_PASSWORD,
+      phoneNumber: process.env.ADMIN_PHONE,
     })
 
     const complexityCheck = validatePasswordComplexity(admin.password)

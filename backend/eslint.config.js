@@ -2,10 +2,12 @@ import js from '@eslint/js'
 import nodePlugin from 'eslint-plugin-n'
 import securityPlugin from 'eslint-plugin-security'
 import importPlugin from 'eslint-plugin-import'
+import prettierConfig from 'eslint-config-prettier'
 
 export default [
   js.configs.recommended,
   securityPlugin.configs.recommended,
+  prettierConfig, // Must be last to override other configs
   {
     files: ['**/*.js'],
     languageOptions: {
@@ -17,13 +19,13 @@ export default [
         __filename: 'readonly',
         console: 'readonly',
         Buffer: 'readonly',
-        global: 'readonly'
-      }
+        global: 'readonly',
+      },
     },
     plugins: {
       n: nodePlugin,
       security: securityPlugin,
-      import: importPlugin
+      import: importPlugin,
     },
     rules: {
       // Node.js specific rules
@@ -38,24 +40,33 @@ export default [
 
       // Code quality rules
       'no-console': 'off', // warn
-      'no-unused-vars': ['off', { // error
-        argsIgnorePattern: '^_',
-        varsIgnorePattern: '^_'
-      }],
+      'no-unused-vars': [
+        'off',
+        {
+          // error
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+        },
+      ],
       'prefer-const': 'error',
       'no-var': 'error',
-      'no-trailing-spaces': 'error',
-      'eol-last': 'error',
-      'indent': ['error', 2],
-      'quotes': ['error', 'single'],
-      'semi': ['error', 'never'],
+
+      // Remove formatting rules (Prettier handles these)
+      // 'no-trailing-spaces': 'error',
+      // 'eol-last': 'error',
+      // 'indent': ['error', 2],
+      // 'quotes': ['error', 'single'],
+      semi: ['error', 'never'],
 
       // Import/Export rules
       'import/no-unresolved': 'off', // Turn off as it conflicts with ES modules
-      'import/order': ['error', {
-        groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
-        'newlines-between': 'always'
-      }],
+      'import/order': [
+        'error',
+        {
+          groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
+          'newlines-between': 'always',
+        },
+      ],
       'import/newline-after-import': 'error',
       'import/no-duplicates': 'error',
 
@@ -67,7 +78,7 @@ export default [
       // Security rules (already included from security plugin config)
       'security/detect-object-injection': 'off', // warn
       'security/detect-non-literal-fs-filename': 'off', // warn
-      'security/detect-non-literal-regexp': 'off' // warn
-    }
-  }
+      'security/detect-non-literal-regexp': 'off', // warn
+    },
+  },
 ]

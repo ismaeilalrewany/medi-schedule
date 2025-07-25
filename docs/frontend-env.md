@@ -18,22 +18,26 @@ VITE_APP_NAME=MediSchedule
 ## Environment Variables Explanation
 
 ### API Configuration
+
 - **VITE_API_URL**: Backend API base URL
   - Development: `http://localhost:3000`
   - Production: Your deployed backend URL (e.g., `https://your-backend-domain.com`)
 
 ### reCAPTCHA Configuration
+
 - **VITE_RECAPTCHA_SITE_KEY**: Client-side reCAPTCHA site key from Google
   - Get this from Google reCAPTCHA admin console
   - Use different keys for development and production
 
 ### Application Configuration
+
 - **VITE_APP_NAME**: Application name for branding
 - **VITE_APP_VERSION**: Application version for tracking
 
 ## Development vs Production
 
 ### Development Environment
+
 ```bash
 VITE_API_URL=http://localhost:3000
 VITE_RECAPTCHA_SITE_KEY=your-development-recaptcha-site-key
@@ -41,6 +45,7 @@ VITE_APP_NAME=MediSchedule (Dev)
 ```
 
 ### Production Environment
+
 ```bash
 VITE_API_URL=https://your-backend-domain.com
 VITE_RECAPTCHA_SITE_KEY=your-production-recaptcha-site-key

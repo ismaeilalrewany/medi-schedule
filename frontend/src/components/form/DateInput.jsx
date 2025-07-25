@@ -3,11 +3,11 @@ import { useState } from 'react'
 const DateInput = ({ label, value, setValue }) => {
   const [error, setError] = useState('')
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     const inputValue = e.target.value
     const selectedDate = new Date(inputValue)
     const today = new Date()
-    
+
     // Validation logic
     if (!inputValue) {
       setError('Date is required')
@@ -33,11 +33,7 @@ const DateInput = ({ label, value, setValue }) => {
         onChange={handleChange}
         required
       />
-      {error && (
-        <div className="mt-1 text-sm text-error">
-          {error}
-        </div>
-      )}
+      {error && <div className="mt-1 text-sm text-error">{error}</div>}
     </div>
   )
 }

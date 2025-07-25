@@ -8,7 +8,7 @@ const Recaptcha = ({ setRecaptchaToken, recaptchaRef }) => {
       <ReCAPTCHA
         ref={recaptchaRef}
         sitekey={RECAPTCHA_SITE_KEY}
-        onChange={(token) => setRecaptchaToken(token)}
+        onChange={token => setRecaptchaToken(token)}
         className="mx-auto"
       />
     </div>

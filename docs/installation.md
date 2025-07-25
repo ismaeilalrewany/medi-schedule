@@ -228,6 +228,7 @@ npm start
 #### Backend Issues
 
 **Problem**: `MongoDB connection error`
+
 ```bash
 # Solution: Check if MongoDB is running
 # Windows:
@@ -241,6 +242,7 @@ sudo systemctl start mongod
 ```
 
 **Problem**: `JWT_SECRET not found`
+
 ```bash
 # Solution: Check .env file exists and has JWT_SECRET
 ls -la .env
@@ -248,6 +250,7 @@ cat .env | grep JWT_SECRET
 ```
 
 **Problem**: `Port 3000 already in use`
+
 ```bash
 # Solution: Change PORT in .env or kill process
 # Find process using port 3000
@@ -259,12 +262,14 @@ kill -9 <PID>
 #### Frontend Issues
 
 **Problem**: `VITE_API_URL not accessible`
+
 ```bash
 # Solution: Check if backend is running
 curl http://localhost:3000/api/check-server
 ```
 
 **Problem**: `reCAPTCHA not loading`
+
 ```bash
 # Solution: Check reCAPTCHA site key
 # Make sure VITE_RECAPTCHA_SITE_KEY is set
@@ -272,6 +277,7 @@ curl http://localhost:3000/api/check-server
 ```
 
 **Problem**: `Module not found errors`
+
 ```bash
 # Solution: Reinstall dependencies
 rm -rf node_modules package-lock.json
@@ -281,6 +287,7 @@ npm install
 #### CORS Issues
 
 **Problem**: `CORS error in browser`
+
 ```bash
 # Solution: Check FRONTEND_URL in backend .env
 # Make sure it matches your frontend URL
@@ -309,6 +316,7 @@ node scripts/seed.js
 ```
 
 This will create:
+
 - Sample admin user
 - Sample doctors
 - Sample patients
@@ -349,6 +357,7 @@ npm run lint     # Run linting
 ## Production Deployment
 
 For production deployment, see:
+
 - [Backend Deployment Guide](deployment-backend.md)
 - [Frontend Deployment Guide](deployment-frontend.md)
 
@@ -363,4 +372,4 @@ If you encounter issues:
 
 ---
 
-*This installation guide covers the basic setup. For advanced configuration and deployment, refer to the respective documentation files.*
+_This installation guide covers the basic setup. For advanced configuration and deployment, refer to the respective documentation files._

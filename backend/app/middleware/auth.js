@@ -11,14 +11,14 @@ const sendUnauthorizedResponse = (res, message) => {
 
 const findUserByRole = (role, userId) => {
   switch (role) {
-  case 'patient':
-    return PatientModel.findById(userId)
-  case 'doctor':
-    return DoctorModel.findById(userId)
-  case 'admin':
-    return AdminModel.findById(userId)
-  default:
-    return null
+    case 'patient':
+      return PatientModel.findById(userId)
+    case 'doctor':
+      return DoctorModel.findById(userId)
+    case 'admin':
+      return AdminModel.findById(userId)
+    default:
+      return null
   }
 }
 

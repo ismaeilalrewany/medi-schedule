@@ -3,7 +3,7 @@ import { useState } from 'react'
 const QualificationsInput = ({ qualifications, setQualifications }) => {
   const [input, setInput] = useState('')
 
-  const handleAdd = (e) => {
+  const handleAdd = e => {
     e.preventDefault()
     if (input.trim()) {
       setQualifications([...qualifications, input.trim()])
@@ -23,14 +23,16 @@ const QualificationsInput = ({ qualifications, setQualifications }) => {
           placeholder="Add qualification"
           className="input input-bordered flex-1"
           value={input}
-          onChange={(e) => setInput(e.target.value)}
+          onChange={e => setInput(e.target.value)}
         />
-        <button className="btn btn-outline" onClick={handleAdd}>Add</button>
+        <button className="btn btn-outline" onClick={handleAdd}>
+          Add
+        </button>
       </div>
       <div className="mt-2 flex flex-wrap gap-2">
         {qualifications.map((q, index) => (
           <div key={index} className="badge badge-neutral badge-lg gap-2 px-2">
-            <span className='pointer-events-none'>{q}</span>
+            <span className="pointer-events-none">{q}</span>
             <button
               type="button"
               onClick={() => setQualifications(qualifications.filter((_, i) => i !== index))}

@@ -4,6 +4,18 @@ echo "🔍 Running pre-commit checks..."
 # Store the root directory
 ROOT_DIR=$(pwd)
 
+# Format code with Prettier
+echo "🎨 Formatting code with Prettier..."
+cd "$ROOT_DIR" && npm run format
+if [ $? -ne 0 ]; then
+  echo "❌ Prettier formatting failed"
+  exit 1
+fi
+echo "✅ Code formatted successfully"
+
+# Add formatted files back to staging
+git add .
+
 # Test commands
 # npm test
 # cd frontend && npm test

@@ -4,9 +4,9 @@ const EmailInput = ({ email, setEmail }) => {
   const [error, setError] = useState('')
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     const inputValue = e.target.value.trim().toLowerCase()
-    
+
     // Validation logic
     if (inputValue === '') {
       setError('Email is required')
@@ -33,11 +33,7 @@ const EmailInput = ({ email, setEmail }) => {
         onChange={handleChange}
         required
       />
-      {error && (
-        <div className="mt-1 text-sm text-error">
-          {error}
-        </div>
-      )}
+      {error && <div className="mt-1 text-sm text-error">{error}</div>}
     </div>
   )
 }

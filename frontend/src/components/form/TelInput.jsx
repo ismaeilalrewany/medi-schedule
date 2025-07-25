@@ -4,9 +4,9 @@ const TelInput = ({ value, setValue, placeholder }) => {
   const [error, setError] = useState('')
   const phoneRegex = /^\+?(\d[\s-]*){9,}$/
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     const inputValue = e.target.value.trim()
-    
+
     // Validation logic
     if (inputValue === '') {
       setError('Phone number is required')
@@ -33,11 +33,7 @@ const TelInput = ({ value, setValue, placeholder }) => {
         onChange={handleChange}
         required
       />
-      {error && (
-        <div className="mt-1 text-sm text-error">
-          {error}
-        </div>
-      )}
+      {error && <div className="mt-1 text-sm text-error">{error}</div>}
     </div>
   )
 }

@@ -17,13 +17,15 @@ MediSchedule implements a secure authentication system using JWT (JSON Web Token
 ## User Roles
 
 ### Patient
-- **Permissions**: 
+
+- **Permissions**:
   - View own profile and appointments
   - Book new appointments
   - Cancel own appointments
 - **Access**: Patient-specific pages and endpoints
 
 ### Doctor
+
 - **Permissions**:
   - View own profile and appointments
   - Manage appointment status
@@ -31,6 +33,7 @@ MediSchedule implements a secure authentication system using JWT (JSON Web Token
 - **Access**: Doctor-specific pages and endpoints
 
 ### Admin
+
 - **Permissions**:
   - Full system access
   - Manage all users (patients and doctors)
@@ -52,6 +55,7 @@ MediSchedule implements a secure authentication system using JWT (JSON Web Token
 ## Security Features
 
 ### Password Security
+
 - **Hashing**: bcryptjs with salt rounds
 - **Complexity Requirements**:
   - Minimum 8 characters
@@ -61,6 +65,7 @@ MediSchedule implements a secure authentication system using JWT (JSON Web Token
   - At least one special character
 
 ### JWT Security
+
 - **HTTP-only Cookies**: Prevents XSS attacks
 - **Secure Flag**: HTTPS only in production
 - **SameSite**: CSRF protection
@@ -68,6 +73,7 @@ MediSchedule implements a secure authentication system using JWT (JSON Web Token
 - **Signed Cookies**: Prevents tampering
 
 ### reCAPTCHA Integration
+
 - **V2 Checkbox**: Human verification on login/register
 - **Server-side Validation**: Prevents automated attacks
 - **Rate Limiting**: Reduces brute force attempts
@@ -81,14 +87,14 @@ const auth = async (req, res, next) => {
     if (!token) {
       return res.status(401).json({ message: 'Unauthorized' })
     }
-    
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
     const user = await findUserByRole(decoded.role, decoded.userId)
-    
+
     if (!user) {
       return res.status(401).json({ message: 'User not found' })
     }
-    
+
     req.user = user
     req.token = token
     next()
@@ -101,23 +107,25 @@ const auth = async (req, res, next) => {
 ## Protected Routes
 
 ### Frontend Route Protection
+
 ```javascript
 const ProtectedRoute = ({ role }) => {
   const [userRole, setUserRole] = useState(null)
-  
+
   useEffect(() => {
     checkAuth().then(setUserRole)
   }, [])
-  
+
   if (!userRole || userRole !== role) {
     return <Navigate to="/login" />
   }
-  
+
   return <Outlet />
 }
 ```
 
 ### Backend Route Protection
+
 ```javascript
 // Patient routes
 router.get('/profile', auth, PatientsController.getProfile)
@@ -133,29 +141,33 @@ router.get('/patients/:id', auth, AdminsController.getPatient)
 ## Session Management
 
 ### Cookie Configuration
+
 ```javascript
 res.cookie('jwt', token, {
-  httpOnly: true,        // Prevents XSS
-  secure: true,          // HTTPS only
-  sameSite: 'none',      // CSRF protection
-  maxAge: 7 * 24 * 60 * 60 * 1000,  // 7 days
-  signed: true           // Prevents tampering
+  httpOnly: true, // Prevents XSS
+  secure: true, // HTTPS only
+  sameSite: 'none', // CSRF protection
+  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  signed: true, // Prevents tampering
 })
 ```
 
 ### Token Refresh
+
 - **Current**: Manual logout/login required
 - **Future Enhancement**: Automatic token refresh mechanism
 
 ## Error Handling
 
 ### Authentication Errors
+
 - **401 Unauthorized**: Missing or invalid token
 - **403 Forbidden**: Insufficient permissions
 - **400 Bad Request**: Invalid credentials
 - **429 Too Many Requests**: Rate limit exceeded (if implemented)
 
 ### Error Response Format
+
 ```json
 {
   "message": "Unauthorized access",
@@ -167,6 +179,7 @@ res.cookie('jwt', token, {
 ## Security Best Practices
 
 ### Client-Side
+
 1. **Never store tokens in localStorage**
 2. **Use HTTPS in production**
 3. **Implement proper error handling**
@@ -174,6 +187,7 @@ res.cookie('jwt', token, {
 5. **Validate user input**
 
 ### Server-Side
+
 1. **Use strong JWT secrets**
 2. **Implement proper CORS**
 3. **Validate all inputs**
@@ -184,6 +198,7 @@ res.cookie('jwt', token, {
 ## Environment Variables
 
 ### Required for Authentication
+
 ```bash
 # Backend
 JWT_SECRET=your-super-secret-jwt-key-here
@@ -198,6 +213,7 @@ VITE_RECAPTCHA_SITE_KEY=your-recaptcha-site-key
 ## Testing Authentication
 
 ### Manual Testing
+
 1. **Register/Login**: Test with valid/invalid credentials
 2. **Protected Routes**: Access without authentication
 3. **Role-based Access**: Try accessing other role's resources
@@ -205,6 +221,7 @@ VITE_RECAPTCHA_SITE_KEY=your-recaptcha-site-key
 5. **Logout**: Verify proper session cleanup
 
 ### Test Scenarios
+
 - Valid login with reCAPTCHA
 - Invalid email/password
 - Missing reCAPTCHA token

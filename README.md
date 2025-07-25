@@ -11,6 +11,7 @@ MediSchedule is a comprehensive medical appointment management system that facil
 ## 🚀 Features
 
 ### For Patients
+
 - **Patient Registration & Authentication** with reCAPTCHA verification
 - **Appointment Booking** with available time slots
 - **Appointment Management** (view, filter, and search appointments)
@@ -18,6 +19,7 @@ MediSchedule is a comprehensive medical appointment management system that facil
 - **Responsive Interface** for all device types
 
 ### For Doctors
+
 - **Doctor Registration & Authentication** with specialization details
 - **Appointment Management** with patient information
 - **Availability Scheduling** with customizable time slots
@@ -25,6 +27,7 @@ MediSchedule is a comprehensive medical appointment management system that facil
 - **Patient Appointment History** access
 
 ### For Administrators
+
 - **Admin Dashboard** with comprehensive overview
 - **User Management** (patients and doctors)
 - **Appointment Oversight** for all users
@@ -34,6 +37,7 @@ MediSchedule is a comprehensive medical appointment management system that facil
 ## 🛠️ Technology Stack
 
 ### Backend
+
 - **Runtime**: Node.js
 - **Framework**: Express.js
 - **Database**: MongoDB with Mongoose ODM
@@ -43,6 +47,7 @@ MediSchedule is a comprehensive medical appointment management system that facil
 - **Environment**: dotenv for configuration
 
 ### Frontend
+
 - **Framework**: React.js 19.0.0
 - **Routing**: React Router DOM
 - **Styling**: Tailwind CSS with DaisyUI
@@ -81,11 +86,13 @@ medi-schedule/
 ## 🔧 Installation & Setup
 
 ### Prerequisites
+
 - Node.js (v16 or higher)
 - MongoDB (local or cloud instance)
 - Git
 
 ### Backend Setup
+
 1. Navigate to backend directory:
    ```bash
    cd backend
@@ -101,6 +108,7 @@ medi-schedule/
    ```
 
 ### Frontend Setup
+
 1. Navigate to frontend directory:
    ```bash
    cd frontend
@@ -118,31 +126,35 @@ medi-schedule/
 ## 🔐 Environment Variables
 
 See the environment setup guides:
+
 - [Backend Environment Setup](docs/backend-env.md)
 - [Frontend Environment Setup](docs/frontend-env.md)
 
 ## 📚 API Documentation
 
 Comprehensive API documentation is available:
+
 - [API Endpoints](docs/api-endpoints.md)
 - [Authentication](docs/authentication.md)
 - [Database Schema](docs/database-schema.md)
 
 ## 🖥️ Application Screenshots
 
-| Page | Screenshot |
-|------|------------|
-| **Homepage** | ![Homepage](docs/images/MediSchedule-HomePage.png) |
-| **Login** | ![Login](docs/images/MediSchedule-LoginPage.png) |
-| **Dashboard** | ![Dashboard](docs/images/MediSchedule-DashboardPage.png) |
+| Page             | Screenshot                                                     |
+| ---------------- | -------------------------------------------------------------- |
+| **Homepage**     | ![Homepage](docs/images/MediSchedule-HomePage.png)             |
+| **Login**        | ![Login](docs/images/MediSchedule-LoginPage.png)               |
+| **Dashboard**    | ![Dashboard](docs/images/MediSchedule-DashboardPage.png)       |
 | **Appointments** | ![Appointments](docs/images/MediSchedule-AppointmentsPage.png) |
-| **Profile** | ![Profile](docs/images/MediSchedule-ProfilePage.png) |
-| **Register** | ![Register](docs/images/MediSchedule-RegisterPage.png) |
+| **Profile**      | ![Profile](docs/images/MediSchedule-ProfilePage.png)           |
+| **Register**     | ![Register](docs/images/MediSchedule-RegisterPage.png)         |
 
 ## 🚀 Deployment
 
 ### Backend Deployment (Vercel)
+
 The backend is configured for Vercel deployment with `vercel.json`:
+
 ```json
 {
   "version": 2,
@@ -152,7 +164,9 @@ The backend is configured for Vercel deployment with `vercel.json`:
 ```
 
 ### Frontend Deployment (Netlify)
+
 The frontend is configured for Netlify deployment with `netlify.toml`:
+
 ```toml
 [build]
   command = "npm run build"
@@ -180,6 +194,7 @@ This project is licensed under the Apache License 2.0.
 ## 👨‍💻 Developer
 
 **Ismaeil Alrewany**
+
 - 📧 Email: [ismailalrewany332@gmail.com](mailto:ismailalrewany332@gmail.com)
 - 📱 Phone: +201097227910
 - 🐱 GitHub: [github.com/ismaeilalrewany](https://github.com/ismaeilalrewany)
@@ -199,4 +214,4 @@ This project is licensed under the Apache License 2.0.
 
 ---
 
-*For detailed documentation, please refer to the [docs](docs/) directory.*
+_For detailed documentation, please refer to the [docs](docs/) directory._

@@ -17,17 +17,19 @@ export const startApp = async () => {
     await connect()
     // await AdminModel.createDefaultAdmin()
 
-    app.use(cors({
-      origin: (origin, callback) => {
-        const allowedOrigins = [process.env.FRONTEND_URL]
-        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-          callback(null, origin)
-        } else {
-          callback(new Error('Not allowed by CORS'))
-        }
-      },
-      credentials: true,
-    }))
+    app.use(
+      cors({
+        origin: (origin, callback) => {
+          const allowedOrigins = [process.env.FRONTEND_URL]
+          if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, origin)
+          } else {
+            callback(new Error('Not allowed by CORS'))
+          }
+        },
+        credentials: true,
+      })
+    )
 
     app.use(cookieParser(process.env.COOKIE_SECRET))
     app.use(express.json())
@@ -55,7 +57,7 @@ export const startApp = async () => {
       res.status(err.status || 500).json({
         message: err.message || 'Internal Server Error',
         ...(isDevelopment && { stack: err.stack }),
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       })
     })
 

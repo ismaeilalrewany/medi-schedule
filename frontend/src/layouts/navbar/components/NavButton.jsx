@@ -16,10 +16,9 @@ const NavButton = ({ authButton }) => {
           {authButton?.linkText || 'Button'}
         </Link>
       ) : (
-        <button
-          type='button'
-          onClick={handleLogout}
-          className="btn">Logout</button>
+        <button type="button" onClick={handleLogout} className="btn">
+          Logout
+        </button>
       )}
     </>
   )
@@ -27,9 +26,13 @@ const NavButton = ({ authButton }) => {
 
 const logout = async (baseURL, endpoint, navigate) => {
   try {
-    await axios.post(`${baseURL}/api${endpoint}`, {}, {
-      withCredentials: true
-    })
+    await axios.post(
+      `${baseURL}/api${endpoint}`,
+      {},
+      {
+        withCredentials: true,
+      }
+    )
 
     navigate('/login')
   } catch (err) {

@@ -9,7 +9,8 @@ class PatientsController {
       secure: true,
       sameSite: 'none',
       maxAge: 7 * 24 * 60 * 60 * 1000,
-      signed: true})
+      signed: true,
+    })
   }
 
   static #removeCookie(res, key) {
@@ -17,7 +18,8 @@ class PatientsController {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
-      signed: true})
+      signed: true,
+    })
   }
 
   static async register(req, res) {
@@ -116,11 +118,7 @@ class PatientsController {
       const search = req.query.search || ''
       const searchRegex = new RegExp(search.trim(), 'i')
       const searchQuery = {
-        $or: [
-          { fullName: searchRegex },
-          { email: searchRegex },
-          { phoneNumber: searchRegex },
-        ],
+        $or: [{ fullName: searchRegex }, { email: searchRegex }, { phoneNumber: searchRegex }],
       }
 
       // Fetch patients from the database
@@ -143,7 +141,7 @@ class PatientsController {
           itemsPerPage: limit,
           totalItems: totalPatients,
           totalPages,
-        }
+        },
       })
     } catch (error) {
       console.error(error)
@@ -151,7 +149,7 @@ class PatientsController {
     }
   }
 
-  static async getProfile (req, res) {
+  static async getProfile(req, res) {
     try {
       const patient = await PatientModel.findById(req.user._id).select('-password -tokens -_id')
 
@@ -162,7 +160,9 @@ class PatientsController {
       return res.status(200).json(patient)
     } catch (error) {
       console.error(error)
-      return res.status(500).json({ message: 'An error occurred while fetching the patient profile' })
+      return res
+        .status(500)
+        .json({ message: 'An error occurred while fetching the patient profile' })
     }
   }
 }

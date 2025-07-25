@@ -1,18 +1,20 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @plugin "daisyui" {
   themes: light --default;
 }
 
-.btn:hover, .btn:active {
+.btn:hover,
+.btn:active {
   @apply bg-neutral border-neutral text-neutral-content;
 }
 
 .input {
-  @apply outline-none
+  @apply outline-none;
 }
 
-.input:focus, .textarea:focus {
+.input:focus,
+.textarea:focus {
   @apply outline-none ring ring-neutral;
 }
 
@@ -20,6 +22,7 @@
   @apply border-neutral-300 bg-transparent;
 }
 
-label.input:focus, label.input:focus-within {
+label.input:focus,
+label.input:focus-within {
   @apply ring ring-neutral;
 }

@@ -1,7 +1,15 @@
 import { createPortal } from 'react-dom'
 import { useEffect } from 'react'
 
-const Modal = ({ isOpen, onClose, title, children, onSubmit, submitButtonText = 'Save Changes', showSubmitButton = true }) => {
+const Modal = ({
+  isOpen,
+  onClose,
+  title,
+  children,
+  onSubmit,
+  submitButtonText = 'Save Changes',
+  showSubmitButton = true,
+}) => {
   const portalRoot = document.getElementById('modal-root')
 
   useEffect(() => {
@@ -19,7 +27,7 @@ const Modal = ({ isOpen, onClose, title, children, onSubmit, submitButtonText = 
     return null
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault()
     if (onSubmit) {
       onSubmit(e)

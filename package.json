@@ -7,7 +7,13 @@
     "release": "semantic-release --no-ci",
     "release:dry": "semantic-release --dry-run",
     "commitlint:last": "commitlint --last",
-    "prepare": "husky"
+    "prepare": "husky",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint:frontend": "cd frontend && npm run lint",
+    "lint:backend": "cd backend && npm run lint",
+    "lint:all": "npm run lint:frontend && npm run lint:backend",
+    "fix:all": "npm run format && npm run lint:frontend -- --fix && npm run lint:backend -- --fix"
   },
   "repository": {
     "type": "git",
@@ -26,7 +32,10 @@
     "@commitlint/config-conventional": "^19.8.1",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.3",
     "husky": "^9.1.7",
+    "prettier": "^3.6.2",
     "semantic-release": "^24.2.7"
   }
 }

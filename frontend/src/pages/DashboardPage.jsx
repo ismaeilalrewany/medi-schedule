@@ -1,4 +1,4 @@
-import TableSection from "../components/table/TableSection.jsx"
+import TableSection from '../components/table/TableSection.jsx'
 
 const DashboardPage = () => {
   return (

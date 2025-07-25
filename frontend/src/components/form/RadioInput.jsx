@@ -12,7 +12,7 @@ const RadioInput = ({ name, options, checked, setChecked }) => {
     }
   }, [checked])
 
-  const handleChange = (value) => {
+  const handleChange = value => {
     setChecked(value)
     if (!value) {
       setError('Please select an option')
@@ -27,7 +27,7 @@ const RadioInput = ({ name, options, checked, setChecked }) => {
         <span className="label-text font-bold">{name}</span>
       </label>
       <div className="w-full">
-        {options.map((r) => (
+        {options.map(r => (
           <label
             key={`${r.toLowerCase()}`}
             className={`me-2 btn no-animation ${
@@ -46,11 +46,7 @@ const RadioInput = ({ name, options, checked, setChecked }) => {
           </label>
         ))}
       </div>
-      {error && (
-        <div className="mt-1 text-sm text-error">
-          {error}
-        </div>
-      )}
+      {error && <div className="mt-1 text-sm text-error">{error}</div>}
     </div>
   )
 }

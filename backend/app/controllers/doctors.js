@@ -9,7 +9,8 @@ class DoctorsController {
       secure: true,
       sameSite: 'none',
       maxAge: 7 * 24 * 60 * 60 * 1000,
-      signed: true})
+      signed: true,
+    })
   }
 
   static #removeCookie(res, key) {
@@ -17,7 +18,8 @@ class DoctorsController {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
-      signed: true})
+      signed: true,
+    })
   }
 
   static async register(req, res) {
@@ -82,7 +84,7 @@ class DoctorsController {
 
   static async logout(req, res) {
     try {
-      req.user.tokens = req.user.tokens.filter((tokenObj) => tokenObj.token !== req.token)
+      req.user.tokens = req.user.tokens.filter(tokenObj => tokenObj.token !== req.token)
       await DoctorModel.findByIdAndUpdate(req.user._id, { tokens: req.user.tokens })
 
       DoctorsController.#removeCookie(res, 'jwt')
@@ -104,11 +106,7 @@ class DoctorsController {
       const search = req.query.search || ''
       const searchRegex = new RegExp(search.trim(), 'i')
       const searchQuery = {
-        $or: [
-          { fullName: searchRegex },
-          { email: searchRegex },
-          { phoneNumber: searchRegex },
-        ],
+        $or: [{ fullName: searchRegex }, { email: searchRegex }, { phoneNumber: searchRegex }],
       }
 
       // Fetch doctors from the database
@@ -131,7 +129,7 @@ class DoctorsController {
           itemsPerPage: limit,
           totalItems: totalDoctors,
           totalPages,
-        }
+        },
       })
     } catch (error) {
       console.error(error)
@@ -150,7 +148,9 @@ class DoctorsController {
       return res.status(200).json(doctor)
     } catch (error) {
       console.error(error)
-      return res.status(500).json({ message: 'An error occurred while fetching the doctor profile' })
+      return res
+        .status(500)
+        .json({ message: 'An error occurred while fetching the doctor profile' })
     }
   }
 }

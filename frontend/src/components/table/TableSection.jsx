@@ -18,15 +18,17 @@ const TableSection = ({ title }) => {
 
   // Fetch users when title, paginationPage, or searchUser changes
   useEffect(() => {
-
     // console.log("paginationPage", paginationPage)
     // console.log("searchUser", searchUser)
 
     const fetchPatients = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/${title}s?limit=6&page=${paginationPage}&search=${searchUser}`, {
-          withCredentials: true,
-        })
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/${title}s?limit=6&page=${paginationPage}&search=${searchUser}`,
+          {
+            withCredentials: true,
+          }
+        )
 
         setUsers(response.data[`${title}s`])
         setPaginationData(response.data.pagination)
@@ -51,8 +53,12 @@ const TableSection = ({ title }) => {
     <section className="overflow-hidden rounded-lg ring-1 ring-neutral-300 bg-base-100 p-8 w-[900px] shadow">
       <header className="mb-6 text-neutral">
         <div className="flex items-center justify-between mb-4">
-          <h1 className="text-2xl font-bold text-base-content">{title.charAt(0).toUpperCase() + title.slice(1)}s</h1>
-          <Link to={`/${title}s/register`} className="btn btn-neutral btn-sm">Add {title.charAt(0).toUpperCase() + title.slice(1)}</Link>
+          <h1 className="text-2xl font-bold text-base-content">
+            {title.charAt(0).toUpperCase() + title.slice(1)}s
+          </h1>
+          <Link to={`/${title}s/register`} className="btn btn-neutral btn-sm">
+            Add {title.charAt(0).toUpperCase() + title.slice(1)}
+          </Link>
         </div>
         <SearchUser search={searchUser} setSearch={setSearchUser} />
       </header>
