@@ -1,4 +1,5 @@
 import express from 'express'
+
 import auth from '../middleware/auth.js'
 import CommonsController from '../controllers/commons.js'
 

@@ -9,7 +9,7 @@ const SubmitButton = ({ name, isSubmitting, recaptchaToken }) => {
         <span className="loading loading-spinner"></span>
       ) : (
         <>
-          <span>{ name }</span>
+          <span>{name}</span>
           <i className="fa-solid fa-circle-arrow-right"></i>
         </>
       )}

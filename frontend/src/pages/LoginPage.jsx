@@ -17,19 +17,22 @@ const LoginPage = () => {
   const recaptchaRef = useRef(null)
   const navigate = useNavigate()
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault()
     setIsSubmitting(true)
 
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/api/${role.toLowerCase()}s/login`, {
-        email,
-        password,
-        recaptchaToken
-      },
-      {
-        withCredentials: true,
-      })
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/${role.toLowerCase()}s/login`,
+        {
+          email,
+          password,
+          recaptchaToken,
+        },
+        {
+          withCredentials: true,
+        }
+      )
 
       if (role === 'patient' || role === 'doctor') {
         navigate(`/${role.toLowerCase()}s/appointments`)
@@ -59,10 +62,23 @@ const LoginPage = () => {
           <form className="space-y-4" onSubmit={handleSubmit}>
             <EmailInput email={email} setEmail={setEmail} />
             <PasswordInput password={password} setPassword={setPassword} />
-            <RadioInput name="Role" options={['Admin', 'Doctor', 'Patient']} checked={role} setChecked={setRole} />
+            <RadioInput
+              name="Role"
+              options={['Admin', 'Doctor', 'Patient']}
+              checked={role}
+              setChecked={setRole}
+            />
             <Recaptcha setRecaptchaToken={setRecaptchaToken} recaptchaRef={recaptchaRef} />
-            <SubmitButton name="Login" isSubmitting={isSubmitting} recaptchaToken={recaptchaToken} />
-            <RedirectLink text="Don't have an account? " linkText="Register" path="/patients/register" />
+            <SubmitButton
+              name="Login"
+              isSubmitting={isSubmitting}
+              recaptchaToken={recaptchaToken}
+            />
+            <RedirectLink
+              text="Don't have an account? "
+              linkText="Register"
+              path="/patients/register"
+            />
           </form>
         </div>
       </div>

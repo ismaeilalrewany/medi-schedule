@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs'
 import 'dotenv/config'
 
-const preSaveHashHook = (schema) => {
+const preSaveHashHook = schema => {
   schema.pre('save', async function (next) {
     try {
       if (this.isModified('password')) {

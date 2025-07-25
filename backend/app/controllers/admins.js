@@ -11,7 +11,8 @@ class AdminsController {
       secure: true,
       sameSite: 'none',
       maxAge: 7 * 24 * 60 * 60 * 1000,
-      signed: true})
+      signed: true,
+    })
   }
 
   static #removeCookie(res, key) {
@@ -19,7 +20,8 @@ class AdminsController {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
-      signed: true})
+      signed: true,
+    })
   }
 
   static async #getUserById(req, res, model, notFoundMessage) {
@@ -34,7 +36,9 @@ class AdminsController {
       return res.status(200).json(user)
     } catch (error) {
       console.log(error)
-      return res.status(500).json({ message: `An error occurred while fetching the ${notFoundMessage.toLowerCase()}` })
+      return res
+        .status(500)
+        .json({ message: `An error occurred while fetching the ${notFoundMessage.toLowerCase()}` })
     }
   }
 

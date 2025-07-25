@@ -30,28 +30,34 @@ RECAPTCHA_SECRET_KEY=your-recaptcha-secret-key-here
 ## Environment Variables Explanation
 
 ### Database Configuration
+
 - **MONGODB_URI**: MongoDB connection string
   - For local MongoDB: `mongodb://localhost:27017/medischedule`
   - For MongoDB Atlas: `mongodb+srv://username:password@cluster.mongodb.net/medischedule`
 
 ### JWT Configuration
+
 - **JWT_SECRET**: Secret key for signing JWT tokens (use a strong, random string)
 - **JWT_EXPIRES_IN**: Token expiration time (e.g., "7d" for 7 days)
 
 ### Cookie Configuration
+
 - **COOKIE_SECRET**: Secret key for signing cookies (use a strong, random string)
 
 ### Server Configuration
+
 - **PORT**: Server port (default: 3000)
 - **NODE_ENV**: Environment mode (development/production)
 - **USE_HTTPS**: Enable HTTPS for local development (true/false)
 
 ### Frontend Configuration
+
 - **FRONTEND_URL**: Frontend URL for CORS configuration
   - Development: `http://localhost:5173`
   - Production: Your deployed frontend URL
 
 ### reCAPTCHA Configuration
+
 - **RECAPTCHA_SECRET_KEY**: Server-side reCAPTCHA secret key from Google
 
 ## Security Notes

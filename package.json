@@ -1,31 +1,45 @@
 {
   "name": "medi-schedule",
-  "version": "1.3.0",
+  "version": "2.0.0",
   "description": "A simple scheduling app for medical appointments",
-  "main": "",
-  "directories": {
-    "doc": "docs"
-  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:all": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
     "release": "semantic-release --no-ci",
-    "release:dry": "semantic-release --dry-run"
+    "release:dry": "semantic-release --dry-run",
+    "commitlint:last": "commitlint --last",
+    "prepare": "husky",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint:frontend": "cd frontend && npm run lint",
+    "lint:backend": "cd backend && npm run lint",
+    "lint:all": "npm run lint:frontend && npm run lint:backend",
+    "fix:all": "npm run format && npm run lint:frontend -- --fix && npm run lint:backend -- --fix"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ismaeilalrewany/medi-schedule.git"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Ismaeil Alrewany <",
+  "license": "Apache-2.0",
   "type": "module",
   "bugs": {
     "url": "https://github.com/ismaeilalrewany/medi-schedule/issues"
   },
   "homepage": "https://github.com/ismaeilalrewany/medi-schedule#readme",
   "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
+    "concurrently": "^9.2.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.3",
+    "husky": "^9.1.7",
+    "prettier": "^3.6.2",
     "semantic-release": "^24.2.7"
   }
 }

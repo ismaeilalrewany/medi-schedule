@@ -1,0 +1,86 @@
+#!/bin/sh
+echo "🔍 Running pre-commit checks..."
+
+# Store the root directory
+ROOT_DIR=$(pwd)
+
+# Format code with Prettier
+echo "🎨 Formatting code with Prettier..."
+cd "$ROOT_DIR" && npm run format
+if [ $? -ne 0 ]; then
+  echo "❌ Prettier formatting failed"
+  exit 1
+fi
+echo "✅ Code formatted successfully"
+
+# Add formatted files back to staging
+git add .
+
+# Test commands
+# npm test
+# cd frontend && npm test
+# cd backend && npm test
+
+echo "📝 Checking frontend linting..."
+cd "$ROOT_DIR/frontend" && npm run lint
+if [ $? -ne 0 ]; then
+  echo "❌ Frontend linting failed"
+  exit 1
+fi
+echo "✅ Frontend linting passed"
+
+echo "🔨 Validating frontend build..."
+cd "$ROOT_DIR/frontend" && npm run build
+if [ $? -ne 0 ]; then
+  echo "❌ Frontend build failed"
+  exit 1
+fi
+echo "✅ Frontend build successful"
+
+echo "📝 Checking backend linting..."
+cd "$ROOT_DIR/backend" && npm run lint
+if [ $? -ne 0 ]; then
+  echo "❌ Backend linting failed"
+  exit 1
+fi
+echo "✅ Backend linting passed"
+
+echo "🔍 Validating backend startup..."
+cd "$ROOT_DIR/backend"
+# Check if backend can start without errors (quick validation)
+timeout 10s npm start > /dev/null 2>&1 &
+START_PID=$!
+sleep 3
+if kill -0 $START_PID 2>/dev/null; then
+  echo "✅ Backend starts successfully"
+  kill $START_PID 2>/dev/null
+else
+  echo "❌ Backend failed to start"
+  exit 1
+fi
+
+echo "🔍 Checking documentation..."
+cd "$ROOT_DIR"
+# Check if README exists and has content
+if [ ! -f "README.md" ] || [ ! -s "README.md" ]; then
+  echo "❌ README.md is missing or empty"
+  exit 1
+fi
+
+# Check if CHANGELOG exists (should be created by semantic-release)
+if [ ! -f "docs/CHANGELOG.md" ]; then
+  echo "⚠️ Warning: CHANGELOG.md not found (will be created by semantic-release)"
+fi
+
+# Check for TODO or FIXME comments in code
+echo "🔍 Checking for unresolved TODOs/FIXMEs..."
+TODO_COUNT=$(find frontend/src backend -path "*/node_modules" -prune -o \( -name "*.js" -o -name "*.jsx" \) -print | xargs grep -l "TODO\|FIXME" 2>/dev/null | wc -l)
+if [ $TODO_COUNT -gt 0 ]; then
+  echo "⚠️ Warning: Found $TODO_COUNT files with TODO/FIXME comments"
+  find frontend/src backend -path "*/node_modules" -prune -o \( -name "*.js" -o -name "*.jsx" \) -print | xargs grep -n "TODO\|FIXME" 2>/dev/null | head -5
+  echo "Consider resolving these before committing to main/production"
+fi
+
+echo "✅ Documentation checks completed"
+
+echo "🚀 All pre-commit checks passed!"

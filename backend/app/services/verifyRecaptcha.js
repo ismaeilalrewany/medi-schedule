@@ -4,7 +4,7 @@ import axios from 'axios'
 async function verifyRecaptcha(recaptchaToken) {
   const recaptchaSecret = process.env.RECAPTCHA_SECRET_KEY
   const recaptchaResponse = await axios.post(
-    `https://www.google.com/recaptcha/api/siteverify`,
+    'https://www.google.com/recaptcha/api/siteverify',
     null,
     {
       params: {

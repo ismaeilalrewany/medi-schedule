@@ -8,8 +8,8 @@ export default defineConfig({
   server: {
     https: {
       key: '../localssl/cert.key',
-      cert: '../localssl/cert.crt'
+      cert: '../localssl/cert.crt',
     },
     open: true,
-  }
+  },
 })

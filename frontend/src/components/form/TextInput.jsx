@@ -3,7 +3,7 @@ import { useState } from 'react'
 const TextInput = ({ label, value, setValue, placeholder }) => {
   const [error, setError] = useState('')
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     const inputValue = e.target.value
 
     // Validation logic
@@ -32,11 +32,7 @@ const TextInput = ({ label, value, setValue, placeholder }) => {
         onChange={handleChange}
         required
       />
-      {error && (
-        <div className="mt-1 text-sm text-error">
-          {error}
-        </div>
-      )}
+      {error && <div className="mt-1 text-sm text-error">{error}</div>}
     </div>
   )
 }

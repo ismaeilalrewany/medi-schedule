@@ -1,4 +1,5 @@
 import express from 'express'
+
 import PatientsController from '../controllers/patients.js'
 import AppointmentsController from '../controllers/appointments.js'
 import auth from '../middleware/auth.js'

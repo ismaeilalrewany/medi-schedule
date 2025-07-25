@@ -1,5 +1,6 @@
 import 'dotenv/config'
 import jwt from 'jsonwebtoken'
+
 import PatientModel from '../database/models/Patient.js'
 import DoctorModel from '../database/models/Doctor.js'
 import AdminModel from '../database/models/Admin.js'

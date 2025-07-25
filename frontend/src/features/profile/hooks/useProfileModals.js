@@ -14,30 +14,30 @@ const useProfileModals = (currentUser, setCurrentUser) => {
     setModalFormData({})
   }
 
-  const handleModalInputChange = (event) => {
+  const handleModalInputChange = event => {
     const { name, value } = event.target
     setModalFormData(prev => ({ ...prev, [name]: value }))
   }
 
-  const handleGenderChangeInModal = (newGender) => {
+  const handleGenderChangeInModal = newGender => {
     setModalFormData(prev => ({ ...prev, gender: newGender }))
   }
 
-  const handleRoleChangeInModal = (newRole) => {
+  const handleRoleChangeInModal = newRole => {
     setModalFormData(prev => ({ ...prev, role: newRole }))
   }
 
-  const handleQualificationsChange = (event) => {
+  const handleQualificationsChange = event => {
     setModalFormData(prev => ({
       ...prev,
-      qualifications: event.target.value.split(',').map(q => q.trim())
+      qualifications: event.target.value.split(',').map(q => q.trim()),
     }))
   }
 
-  const handleTimeSlotsChange = (event) => {
+  const handleTimeSlotsChange = event => {
     setModalFormData(prev => ({
       ...prev,
-      availableTimeSlots: event.target.value.split(',').map(t => t.trim())
+      availableTimeSlots: event.target.value.split(',').map(t => t.trim()),
     }))
   }
 
@@ -96,7 +96,7 @@ const useProfileModals = (currentUser, setCurrentUser) => {
     handleQualificationsChange,
     handleTimeSlotsChange,
     handleSaveChanges,
-    handleDeleteAccount
+    handleDeleteAccount,
   }
 }
 

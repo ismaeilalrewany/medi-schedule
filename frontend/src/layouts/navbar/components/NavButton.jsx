@@ -1,9 +1,8 @@
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 
-const NavButton = ({ authButton, path }) => {
+const NavButton = ({ authButton }) => {
   const navigate = useNavigate()
-  const route = path?.split('/')[1]
   const baseURL = import.meta.env.VITE_API_URL
 
   const handleLogout = async () => {
@@ -17,10 +16,9 @@ const NavButton = ({ authButton, path }) => {
           {authButton?.linkText || 'Button'}
         </Link>
       ) : (
-        <button
-          type='button'
-          onClick={handleLogout}
-          className="btn">Logout</button>
+        <button type="button" onClick={handleLogout} className="btn">
+          Logout
+        </button>
       )}
     </>
   )
@@ -28,9 +26,13 @@ const NavButton = ({ authButton, path }) => {
 
 const logout = async (baseURL, endpoint, navigate) => {
   try {
-    await axios.post(`${baseURL}/api${endpoint}`, {}, {
-      withCredentials: true
-    })
+    await axios.post(
+      `${baseURL}/api${endpoint}`,
+      {},
+      {
+        withCredentials: true,
+      }
+    )
 
     navigate('/login')
   } catch (err) {

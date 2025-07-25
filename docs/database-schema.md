@@ -30,10 +30,12 @@ MediSchedule uses MongoDB with Mongoose ODM for data modeling. The database cons
 ```
 
 **Indexes:**
+
 - `email` (unique)
 - `createdAt` (sorting)
 
 **Validation:**
+
 - Email format validation
 - Phone number validation
 - Password complexity requirements
@@ -70,11 +72,13 @@ MediSchedule uses MongoDB with Mongoose ODM for data modeling. The database cons
 ```
 
 **Indexes:**
+
 - `email` (unique)
 - `specialization` (filtering)
 - `createdAt` (sorting)
 
 **Validation:**
+
 - Email format validation
 - Phone number validation
 - Password complexity requirements
@@ -101,6 +105,7 @@ MediSchedule uses MongoDB with Mongoose ODM for data modeling. The database cons
 ```
 
 **Indexes:**
+
 - `email` (unique)
 - `createdAt` (sorting)
 
@@ -124,6 +129,7 @@ MediSchedule uses MongoDB with Mongoose ODM for data modeling. The database cons
 ```
 
 **Indexes:**
+
 - `patient` (filtering)
 - `doctor` (filtering)
 - `date` (filtering and sorting)
@@ -131,6 +137,7 @@ MediSchedule uses MongoDB with Mongoose ODM for data modeling. The database cons
 - `createdAt` (sorting)
 
 **Compound Indexes:**
+
 - `{patient: 1, date: 1}` (patient appointments by date)
 - `{doctor: 1, date: 1}` (doctor appointments by date)
 - `{doctor: 1, date: 1, startTime: 1}` (conflict detection)
@@ -138,16 +145,19 @@ MediSchedule uses MongoDB with Mongoose ODM for data modeling. The database cons
 ## Relationships
 
 ### Patient → Appointments
+
 - **Type**: One-to-Many
 - **Relationship**: One patient can have multiple appointments
 - **Reference**: `appointment.patient` → `patient._id`
 
 ### Doctor → Appointments
+
 - **Type**: One-to-Many
 - **Relationship**: One doctor can have multiple appointments
 - **Reference**: `appointment.doctor` → `doctor._id`
 
 ### Doctor → Available Time Slots
+
 - **Type**: One-to-Many (Embedded)
 - **Relationship**: Each doctor has multiple time slots
 - **Storage**: Embedded array in doctor document
@@ -155,6 +165,7 @@ MediSchedule uses MongoDB with Mongoose ODM for data modeling. The database cons
 ## Data Validation
 
 ### Password Complexity
+
 ```javascript
 {
   minLength: 8,
@@ -166,26 +177,30 @@ MediSchedule uses MongoDB with Mongoose ODM for data modeling. The database cons
 ```
 
 ### Email Validation
+
 - Uses validator.js `isEmail()` function
 - Automatically converts to lowercase
 - Unique constraint enforced
 
 ### Phone Number Validation
+
 - Uses validator.js `isMobilePhone()` function
 - Supports international formats
 
 ### Time Format Validation
+
 - Format: "HH:mm" (24-hour format)
 - Examples: "09:00", "14:30", "23:59"
 
 ## Security Features
 
 ### Password Hashing
+
 ```javascript
 // Pre-save hook
-UserSchema.pre('save', async function(next) {
+UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next()
-  
+
   const salt = await bcrypt.genSalt(10)
   this.password = await bcrypt.hash(this.password, salt)
   next()
@@ -193,14 +208,13 @@ UserSchema.pre('save', async function(next) {
 ```
 
 ### JWT Token Management
+
 ```javascript
-UserSchema.methods.generateAuthToken = async function() {
-  const token = jwt.sign(
-    { userId: this._id, role: this.role },
-    process.env.JWT_SECRET,
-    { expiresIn: process.env.JWT_EXPIRES_IN }
-  )
-  
+UserSchema.methods.generateAuthToken = async function () {
+  const token = jwt.sign({ userId: this._id, role: this.role }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN,
+  })
+
   this.tokens = this.tokens.concat({ token })
   await this.save()
   return token
@@ -208,6 +222,7 @@ UserSchema.methods.generateAuthToken = async function() {
 ```
 
 ### Data Sanitization
+
 - Automatic trimming of string fields
 - Lowercase conversion for emails and names
 - XSS protection through validation
@@ -215,6 +230,7 @@ UserSchema.methods.generateAuthToken = async function() {
 ## Aggregation Pipelines
 
 ### Appointment Queries with Population
+
 ```javascript
 const pipeline = [
   { $match: { patient: ObjectId(patientId) } },
@@ -223,16 +239,16 @@ const pipeline = [
       from: 'patients',
       localField: 'patient',
       foreignField: '_id',
-      as: 'patient'
-    }
+      as: 'patient',
+    },
   },
   {
     $lookup: {
       from: 'doctors',
       localField: 'doctor',
       foreignField: '_id',
-      as: 'doctor'
-    }
+      as: 'doctor',
+    },
   },
   { $unwind: '$patient' },
   { $unwind: '$doctor' },
@@ -246,22 +262,24 @@ const pipeline = [
       notes: 1,
       'patient.fullName': 1,
       'doctor.fullName': 1,
-      'doctor.specialization': 1
-    }
+      'doctor.specialization': 1,
+    },
   },
-  { $sort: { date: 1, startTime: 1 } }
+  { $sort: { date: 1, startTime: 1 } },
 ]
 ```
 
 ## Performance Considerations
 
 ### Query Optimization
+
 - Use indexes for frequently queried fields
 - Limit results with pagination
 - Project only necessary fields
 - Use aggregation for complex queries
 
 ### Data Size Management
+
 - Implement soft deletes for historical data
 - Archive old appointments
 - Limit token array size per user
@@ -270,12 +288,14 @@ const pipeline = [
 ## Backup and Recovery
 
 ### Backup Strategy
+
 - Daily automated backups
 - Point-in-time recovery
 - Cross-region replication
 - Regular backup testing
 
 ### Data Retention
+
 - Appointments: 7 years (medical records)
 - User sessions: 30 days
 - Logs: 90 days
@@ -284,6 +304,7 @@ const pipeline = [
 ## Environment-Specific Configurations
 
 ### Development
+
 ```javascript
 {
   mongoUri: "mongodb://localhost:27017/medischedule_dev",
@@ -295,6 +316,7 @@ const pipeline = [
 ```
 
 ### Production
+
 ```javascript
 {
   mongoUri: process.env.MONGODB_URI,
@@ -311,13 +333,14 @@ const pipeline = [
 ## Migration Scripts
 
 ### Initial Setup
+
 ```javascript
 // Create admin user
 const admin = new AdminModel({
   fullName: 'System Admin',
   email: 'admin@medischedule.com',
   password: 'AdminPassword123!',
-  role: 'admin'
+  role: 'admin',
 })
 await admin.save()
 
@@ -328,6 +351,7 @@ await AdminModel.collection.createIndex({ email: 1 }, { unique: true })
 ```
 
 ### Data Migration
+
 - Version-controlled migration scripts
 - Rollback procedures
 - Data validation after migration
@@ -336,12 +360,14 @@ await AdminModel.collection.createIndex({ email: 1 }, { unique: true })
 ## Monitoring and Alerts
 
 ### Database Metrics
+
 - Connection pool usage
 - Query performance
 - Index usage statistics
 - Storage utilization
 
 ### Alert Thresholds
+
 - High query response times (>1s)
 - Connection pool exhaustion
 - Storage usage >80%

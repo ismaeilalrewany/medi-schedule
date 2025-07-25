@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { fetchUserData } from '../services/profileService'
 
-const useProfileData = (endpoint) => {
+const useProfileData = endpoint => {
   const [currentUser, setCurrentUser] = useState({})
   const baseURL = import.meta.env.VITE_API_URL
   const params = useParams()
@@ -35,7 +35,7 @@ const useProfileData = (endpoint) => {
     currentUserRole,
     isAdmin,
     isDoctor,
-    isPatient
+    isPatient,
   }
 }
 

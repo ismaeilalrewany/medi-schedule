@@ -37,6 +37,7 @@ All protected routes require JWT authentication via HTTP-only cookies. The authe
 ### Authentication
 
 #### Register Patient
+
 - **POST** `/patients/register`
 - **Body**:
   ```json
@@ -54,6 +55,7 @@ All protected routes require JWT authentication via HTTP-only cookies. The authe
 - **Response**: `201 Created` with success message and JWT token
 
 #### Login Patient
+
 - **POST** `/patients/login`
 - **Body**:
   ```json
@@ -66,6 +68,7 @@ All protected routes require JWT authentication via HTTP-only cookies. The authe
 - **Response**: `200 OK` with success message
 
 #### Logout Patient
+
 - **POST** `/patients/logout`
 - **Auth**: Required
 - **Response**: `200 OK` with success message
@@ -73,11 +76,13 @@ All protected routes require JWT authentication via HTTP-only cookies. The authe
 ### Profile Management
 
 #### Get Patient Profile
+
 - **GET** `/patients/profile`
 - **Auth**: Required
 - **Response**: `200 OK` with patient profile data
 
 #### Get All Patients (Admin/Doctor Access)
+
 - **GET** `/patients`
 - **Auth**: Required (Admin/Doctor)
 - **Query Parameters**:
@@ -89,6 +94,7 @@ All protected routes require JWT authentication via HTTP-only cookies. The authe
 ### Appointments
 
 #### Create Appointment
+
 - **POST** `/patients/appointments`
 - **Auth**: Required
 - **Body**:
@@ -105,6 +111,7 @@ All protected routes require JWT authentication via HTTP-only cookies. The authe
 - **Response**: `201 Created` with appointment details
 
 #### Get Patient Appointments
+
 - **GET** `/patients/appointments`
 - **Auth**: Required
 - **Query Parameters**:
@@ -122,6 +129,7 @@ All protected routes require JWT authentication via HTTP-only cookies. The authe
 ### Authentication
 
 #### Register Doctor
+
 - **POST** `/doctors/register`
 - **Body**:
   ```json
@@ -147,6 +155,7 @@ All protected routes require JWT authentication via HTTP-only cookies. The authe
 - **Response**: `201 Created` with success message
 
 #### Login Doctor
+
 - **POST** `/doctors/login`
 - **Body**:
   ```json
@@ -159,6 +168,7 @@ All protected routes require JWT authentication via HTTP-only cookies. The authe
 - **Response**: `200 OK` with success message
 
 #### Logout Doctor
+
 - **POST** `/doctors/logout`
 - **Auth**: Required
 - **Response**: `200 OK` with success message
@@ -166,11 +176,13 @@ All protected routes require JWT authentication via HTTP-only cookies. The authe
 ### Profile Management
 
 #### Get Doctor Profile
+
 - **GET** `/doctors/profile`
 - **Auth**: Required
 - **Response**: `200 OK` with doctor profile data
 
 #### Get All Doctors
+
 - **GET** `/doctors`
 - **Auth**: Required
 - **Query Parameters**:
@@ -182,6 +194,7 @@ All protected routes require JWT authentication via HTTP-only cookies. The authe
 ### Appointments
 
 #### Get Doctor Appointments
+
 - **GET** `/doctors/appointments`
 - **Auth**: Required
 - **Query Parameters**:
@@ -199,6 +212,7 @@ All protected routes require JWT authentication via HTTP-only cookies. The authe
 ### Authentication
 
 #### Login Admin
+
 - **POST** `/admins/login`
 - **Body**:
   ```json
@@ -211,6 +225,7 @@ All protected routes require JWT authentication via HTTP-only cookies. The authe
 - **Response**: `200 OK` with success message
 
 #### Logout Admin
+
 - **POST** `/admins/logout`
 - **Auth**: Required
 - **Response**: `200 OK` with success message
@@ -218,16 +233,19 @@ All protected routes require JWT authentication via HTTP-only cookies. The authe
 ### Profile Management
 
 #### Get Admin Profile
+
 - **GET** `/admins/profile`
 - **Auth**: Required
 - **Response**: `200 OK` with admin profile data
 
 #### Get Patient by ID
+
 - **GET** `/admins/patients/:id`
 - **Auth**: Required (Admin)
 - **Response**: `200 OK` with patient details
 
 #### Get Doctor by ID
+
 - **GET** `/admins/doctors/:id`
 - **Auth**: Required (Admin)
 - **Response**: `200 OK` with doctor details
@@ -235,18 +253,21 @@ All protected routes require JWT authentication via HTTP-only cookies. The authe
 ### Admin Appointment Management
 
 #### Create Appointment for Patient
+
 - **POST** `/admins/patients/:id/appointments`
 - **Auth**: Required (Admin)
 - **Body**: Same as patient appointment creation
 - **Response**: `201 Created` with appointment details
 
 #### Get Patient Appointments
+
 - **GET** `/admins/patients/:id/appointments`
 - **Auth**: Required (Admin)
 - **Query Parameters**: Same as patient appointments
 - **Response**: `200 OK` with appointments list
 
 #### Get Doctor Appointments
+
 - **GET** `/admins/doctors/:id/appointments`
 - **Auth**: Required (Admin)
 - **Query Parameters**: Same as doctor appointments
@@ -257,15 +278,18 @@ All protected routes require JWT authentication via HTTP-only cookies. The authe
 ## Common Endpoints
 
 ### Health Check
+
 - **GET** `/check-server`
 - **Response**: `200 OK` with server status
 
 ### Authentication Check
+
 - **GET** `/check-auth`
 - **Auth**: Required
 - **Response**: `200 OK` with authentication status and user role
 
 ### 404 Handler
+
 - **ALL** `/*` (unmatched routes)
 - **Response**: `404 Not Found` with error details
 
@@ -292,6 +316,7 @@ CORS is configured to allow requests from the frontend URL specified in the `FRO
 ## Security Headers
 
 The API implements several security measures:
+
 - HTTP-only cookies for JWT storage
 - Secure cookie flags in production
 - CORS origin validation

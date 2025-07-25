@@ -13,14 +13,24 @@ const Table = ({ users }) => {
           </tr>
         </thead>
         <tbody>
-          {users.map((user) => (
+          {users.map(user => (
             <tr key={user.id} className="border-b border-neutral-300">
               <td className="border-r border-neutral-300 p-4 font-medium">{user.fullName}</td>
               <td className="border-r border-neutral-300 p-4">{user.email}</td>
               <td className="border-r border-neutral-300 p-4">{user.phoneNumber}</td>
               <td className="p-4">
-                <Link to={`/admins/${user.role}s/${user.id}`} className="text-neutral underline hover:text-neutral/80 me-4">Profile</Link>
-                <Link to={`/admins/${user.role}s/${user.id}/appointments`} className="text-neutral underline hover:text-neutral/80">Appointments</Link>
+                <Link
+                  to={`/admins/${user.role}s/${user.id}`}
+                  className="text-neutral underline hover:text-neutral/80 me-4"
+                >
+                  Profile
+                </Link>
+                <Link
+                  to={`/admins/${user.role}s/${user.id}/appointments`}
+                  className="text-neutral underline hover:text-neutral/80"
+                >
+                  Appointments
+                </Link>
               </td>
             </tr>
           ))}

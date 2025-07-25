@@ -1,25 +1,26 @@
+import { ObjectId } from 'mongodb'
+
 import AppointmentModel from '../database/models/Appointment.js'
 import PatientModel from '../database/models/Patient.js'
 import DoctorModel from '../database/models/Doctor.js'
-import { ObjectId } from 'mongodb'
 
 class AppointmentsController {
   static #dayNamesToNumbers = {
-    'sunday': 0,
-    'monday': 1,
-    'tuesday': 2,
-    'wednesday': 3,
-    'thursday': 4,
-    'friday': 5,
-    'saturday': 6
+    sunday: 0,
+    monday: 1,
+    tuesday: 2,
+    wednesday: 3,
+    thursday: 4,
+    friday: 5,
+    saturday: 6,
   }
 
   static #pagination = {
-    limit : 6,
-    page : 1,
+    limit: 6,
+    page: 1,
     get skip() {
       return (this.page - 1) * this.limit
-    }
+    },
   }
 
   static #setPagination(req) {
@@ -33,7 +34,10 @@ class AppointmentsController {
   static async #getUserId(req, model) {
     if (req.user.role === 'admin') {
       const userId = req.params.id
-      const user = model === 'patient' ? await PatientModel.findById(userId) : await DoctorModel.findById(userId)
+      const user =
+        model === 'patient'
+          ? await PatientModel.findById(userId)
+          : await DoctorModel.findById(userId)
 
       if (!user) {
         return null
@@ -56,19 +60,26 @@ class AppointmentsController {
   static #greaterTimeOrEqual(time1, time2) {
     const [hours1, minutes1] = AppointmentsController.#getHoursAndMinutes(time1)
     const [hours2, minutes2] = AppointmentsController.#getHoursAndMinutes(time2)
-    return (hours1 < hours2) || (hours1 === hours2 && minutes1 <= minutes2)
+    return hours1 < hours2 || (hours1 === hours2 && minutes1 <= minutes2)
   }
 
   static #lesserTimeOrEqual(time1, time2) {
     const [hours1, minutes1] = AppointmentsController.#getHoursAndMinutes(time1)
     const [hours2, minutes2] = AppointmentsController.#getHoursAndMinutes(time2)
-    return (hours1 > hours2) || (hours1 === hours2 && minutes1 >= minutes2)
+    return hours1 > hours2 || (hours1 === hours2 && minutes1 >= minutes2)
   }
 
   static #checkDoctorAvailability(doctor, index, date, startTime, endTime) {
-    let isAvailableDate = AppointmentsController.#getDayNumber(doctor.availableTimeSlots[index].day) === new Date(date).getDay()
-    let isAvailableTime = AppointmentsController.#greaterTimeOrEqual(doctor.availableTimeSlots[index].startTime, startTime) && AppointmentsController.#lesserTimeOrEqual(doctor.availableTimeSlots[index].endTime, endTime)
-    let isAvailable = doctor.availableTimeSlots[index].isAvailable
+    const isAvailableDate =
+      AppointmentsController.#getDayNumber(doctor.availableTimeSlots[index].day) ===
+      new Date(date).getDay()
+    const isAvailableTime =
+      AppointmentsController.#greaterTimeOrEqual(
+        doctor.availableTimeSlots[index].startTime,
+        startTime
+      ) &&
+      AppointmentsController.#lesserTimeOrEqual(doctor.availableTimeSlots[index].endTime, endTime)
+    const isAvailable = doctor.availableTimeSlots[index].isAvailable
     return isAvailable && isAvailableDate && isAvailableTime
   }
 
@@ -79,7 +90,7 @@ class AppointmentsController {
     const objectId = typeof userId === 'string' ? new ObjectId(userId) : userId
 
     // Match by role (patient or doctor)
-    const matchStage = {[role]: objectId}
+    const matchStage = { [role]: objectId }
 
     // Filter by status
     if (req.query.status && req.query.status !== 'all') {
@@ -100,22 +111,22 @@ class AppointmentsController {
           from: 'patients',
           localField: 'patient',
           foreignField: '_id',
-          as: 'patient'
-        }
+          as: 'patient',
+        },
       },
       {
         $lookup: {
           from: 'doctors',
           localField: 'doctor',
           foreignField: '_id',
-          as: 'doctor'
-        }
+          as: 'doctor',
+        },
       },
       {
-        $unwind: '$patient'
+        $unwind: '$patient',
       },
       {
-        $unwind: '$doctor'
+        $unwind: '$doctor',
       }
     )
 
@@ -125,8 +136,8 @@ class AppointmentsController {
       const searchField = role === 'patient' ? 'doctor.fullName' : 'patient.fullName'
       pipeline.push({
         $match: {
-          [searchField]: searchRegex
-        }
+          [searchField]: searchRegex,
+        },
       })
     }
 
@@ -135,11 +146,11 @@ class AppointmentsController {
       $project: {
         _id: 1,
         patient: {
-          fullName: 1
+          fullName: 1,
         },
         doctor: {
           fullName: 1,
-          specialization: 1
+          specialization: 1,
         },
         date: 1,
         startTime: 1,
@@ -147,8 +158,8 @@ class AppointmentsController {
         reason: 1,
         notes: 1,
         status: 1,
-        createdBy: 1
-      }
+        createdBy: 1,
+      },
     })
 
     // Sort logic
@@ -161,21 +172,21 @@ class AppointmentsController {
               { case: { $eq: ['$status', 'pending'] }, then: 0 },
               { case: { $eq: ['$status', 'confirmed'] }, then: 1 },
               { case: { $eq: ['$status', 'completed'] }, then: 2 },
-              { case: { $eq: ['$status', 'canceled'] }, then: 3 }
+              { case: { $eq: ['$status', 'canceled'] }, then: 3 },
             ],
-            default: 4
-          }
-        }
-      }
+            default: 4,
+          },
+        },
+      },
     })
 
     // Apply automatic sorting: status first, then date, then startTime
-    pipeline.push({ 
+    pipeline.push({
       $sort: {
-        statusOrder: 1,    // Sort by status priority (pending -> confirmed -> completed -> canceled)
-        date: 1,           // Then by date (earliest first)
-        startTime: 1       // Finally by start time (earliest first)
-      }
+        statusOrder: 1, // Sort by status priority (pending -> confirmed -> completed -> canceled)
+        date: 1, // Then by date (earliest first)
+        startTime: 1, // Finally by start time (earliest first)
+      },
     })
 
     return pipeline
@@ -184,7 +195,7 @@ class AppointmentsController {
   static async createAppointment(req, res) {
     try {
       // Don't need status and notes because doctors put them
-      const {doctorId, date, startTime, endTime, reason, notes} = req.body
+      const { doctorId, date, startTime, endTime, reason, notes } = req.body
 
       // Check if the appointment creator is a patient or an admin and set patientId accordingly
       const patientId = await AppointmentsController.#getUserId(req, 'patient')
@@ -204,14 +215,16 @@ class AppointmentsController {
       const existingAppointment = await AppointmentModel.findOne({
         patient: patientId,
         date: new Date(date),
-        startTime: startTime
+        startTime: startTime,
       })
       if (existingAppointment) {
-        return res.status(400).json({ message: 'Appointment already exists for this date and time' })
+        return res
+          .status(400)
+          .json({ message: 'Appointment already exists for this date and time' })
       }
 
       // Check if doctor is available at the given date and time
-      for(let i = 0; i < doctor.availableTimeSlots.length; i++) {
+      for (let i = 0; i < doctor.availableTimeSlots.length; i++) {
         if (AppointmentsController.#checkDoctorAvailability(doctor, i, date, startTime, endTime)) {
           break
         }
@@ -246,7 +259,9 @@ class AppointmentsController {
       })
 
       const savedAppointment = await appointment.save()
-      return res.status(201).json({message: 'Appointment created successfully', appointment: savedAppointment})
+      return res
+        .status(201)
+        .json({ message: 'Appointment created successfully', appointment: savedAppointment })
     } catch (error) {
       console.error(error)
       return res.status(500).json({ message: 'An error occurred while creating the appointment' })
@@ -267,13 +282,9 @@ class AppointmentsController {
 
       // Get aggregation pipeline
       const pipeline = AppointmentsController.#createAggregationPipeline(req, patientId, 'patient')
-      
+
       // Add pagination stages
-      const paginationPipeline = [
-        ...pipeline,
-        { $skip: skip },
-        { $limit: limit }
-      ]
+      const paginationPipeline = [...pipeline, { $skip: skip }, { $limit: limit }]
 
       // Execute aggregation
       const appointments = await AppointmentModel.aggregate(paginationPipeline)
@@ -283,26 +294,25 @@ class AppointmentsController {
       }
 
       // Get total count for pagination
-      const countPipeline = [
-        ...pipeline,
-        { $count: 'total' }
-      ]
+      const countPipeline = [...pipeline, { $count: 'total' }]
       const totalResult = await AppointmentModel.aggregate(countPipeline)
       const totalItems = totalResult.length > 0 ? totalResult[0].total : 0
 
-      return res.status(200).json({ 
+      return res.status(200).json({
         message: 'Patient appointments retrieved successfully',
         appointments,
         pagination: {
           currentPage: page,
           itemsPerPage: limit,
           totalItems: totalItems,
-          totalPages: Math.ceil(totalItems / limit)
-        }
+          totalPages: Math.ceil(totalItems / limit),
+        },
       })
     } catch (error) {
       console.error(error)
-      return res.status(500).json({ message: 'An error occurred while retrieving patient appointments' })
+      return res
+        .status(500)
+        .json({ message: 'An error occurred while retrieving patient appointments' })
     }
   }
 
@@ -320,13 +330,9 @@ class AppointmentsController {
 
       // Get aggregation pipeline
       const pipeline = AppointmentsController.#createAggregationPipeline(req, doctorId, 'doctor')
-      
+
       // Add pagination stages
-      const paginationPipeline = [
-        ...pipeline,
-        { $skip: skip },
-        { $limit: limit }
-      ]
+      const paginationPipeline = [...pipeline, { $skip: skip }, { $limit: limit }]
 
       // Execute aggregation
       const appointments = await AppointmentModel.aggregate(paginationPipeline)
@@ -336,26 +342,25 @@ class AppointmentsController {
       }
 
       // Get total count for pagination
-      const countPipeline = [
-        ...pipeline,
-        { $count: 'total' }
-      ]
+      const countPipeline = [...pipeline, { $count: 'total' }]
       const totalResult = await AppointmentModel.aggregate(countPipeline)
       const totalItems = totalResult.length > 0 ? totalResult[0].total : 0
 
-      return res.status(200).json({ 
+      return res.status(200).json({
         message: 'Doctor appointments retrieved successfully',
         appointments,
         pagination: {
           currentPage: page,
           itemsPerPage: limit,
           totalItems: totalItems,
-          totalPages: Math.ceil(totalItems / limit)
-        }
+          totalPages: Math.ceil(totalItems / limit),
+        },
       })
     } catch (error) {
       console.error(error)
-      return res.status(500).json({ message: 'An error occurred while retrieving doctor appointments' })
+      return res
+        .status(500)
+        .json({ message: 'An error occurred while retrieving doctor appointments' })
     }
   }
 }

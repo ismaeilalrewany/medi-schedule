@@ -1,5 +1,5 @@
 const Pagination = ({ data, setPage }) => {
-  const { currentPage, itemsPerPage, totalItems, totalPages } = data
+  const { currentPage, totalPages } = data
   const pagesLeft = totalPages - currentPage
 
   const nextPage = () => {
