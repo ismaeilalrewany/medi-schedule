@@ -138,6 +138,13 @@ Comprehensive API documentation is available:
 - [Authentication](docs/authentication.md)
 - [Database Schema](docs/database-schema.md)
 
+## 📖 Additional Documentation
+
+- [Installation Guide](docs/installation.md) - Detailed setup instructions
+- [Features Overview](docs/features.md) - Complete feature documentation
+- [Code Formatting](docs/code-formatting.md) - Development style guide
+- [Changelog](docs/CHANGELOG.md) - Version history and updates
+
 ## 🖥️ Application Screenshots
 
 | Page             | Screenshot                                                     |
