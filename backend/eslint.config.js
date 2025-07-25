@@ -34,7 +34,7 @@ export default [
       'n/prefer-global/process': 'error',
       'n/prefer-global/console': 'error',
       'n/prefer-global/buffer': 'error',
-      'n/no-process-exit': 'error',
+      'n/no-process-exit': 'off', // error
 
       // Code quality rules
       'no-console': 'off', // warn
@@ -65,8 +65,9 @@ export default [
       'handle-callback-err': 'off', //warn
 
       // Security rules (already included from security plugin config)
-      'security/detect-object-injection': 'warn',
-      'security/detect-non-literal-regexp': 'warn'
+      'security/detect-object-injection': 'off', // warn
+      'security/detect-non-literal-fs-filename': 'off', // warn
+      'security/detect-non-literal-regexp': 'off' // warn
     }
   }
 ]

@@ -25,6 +25,14 @@ if [ $? -ne 0 ]; then
 fi
 echo "✅ Frontend build successful"
 
+echo "📝 Checking backend linting..."
+cd "$ROOT_DIR/backend" && npm run lint
+if [ $? -ne 0 ]; then
+  echo "❌ Backend linting failed"
+  exit 1
+fi
+echo "✅ Backend linting passed"
+
 echo "🔍 Validating backend startup..."
 cd "$ROOT_DIR/backend"
 # Check if backend can start without errors (quick validation)
