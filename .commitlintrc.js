@@ -1,5 +1,11 @@
 export default {
   extends: ['@commitlint/config-conventional'],
+  // Ignore semantic-release commits and commits with [skip ci]
+  ignores: [
+    message => message.includes('[skip ci]'),
+    message => message.startsWith('chore(release):'),
+    message => message.includes('semantic-release'),
+  ],
   rules: {
     // Customize rules if needed
     'type-enum': [
