@@ -13,6 +13,7 @@ import DateInput from '../components/form/DateInput.jsx'
 import Recaptcha from '../components/form/Recaptcha.jsx'
 import SubmitButton from '../components/form/SubmitButton.jsx'
 import RedirectLink from '../components/form/RedirectLink.jsx'
+import useDocumentTitle from '../hooks/useDocumentTitle.jsx'
 
 const RegisterPage = ({ role }) => {
   const [fullName, setFullName] = useState('')
@@ -34,6 +35,8 @@ const RegisterPage = ({ role }) => {
 
   const recaptchaRef = useRef(null)
   const navigate = useNavigate()
+
+  useDocumentTitle(`MediSchedule - Register as ${role.charAt(0).toUpperCase() + role.slice(1)}`)
 
   const handleSubmit = async e => {
     e.preventDefault()

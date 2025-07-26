@@ -8,6 +8,7 @@ import AvailableTimeSection from '../features/profile/components/AvilableTimeSec
 import useProfileData from '../features/profile/hooks/useProfileData'
 import useProfileModals from '../features/profile/hooks/useProfileModals'
 import { getInitialModalValue } from '../features/profile/utils/profileUtils'
+import useDocumentTitle from '../hooks/useDocumentTitle.jsx'
 
 const ProfilePage = ({ endpoint, isViewerAdmin = false }) => {
   const { currentUser, setCurrentUser, isAdmin, isDoctor, isPatient } = useProfileData(endpoint)
@@ -25,6 +26,8 @@ const ProfilePage = ({ endpoint, isViewerAdmin = false }) => {
     handleSaveChanges,
     handleDeleteAccount,
   } = useProfileModals(currentUser, setCurrentUser)
+
+  useDocumentTitle(`MediSchedule - ${isAdmin ? 'Admin' : isDoctor ? 'Doctor' : 'Patient'} Profile`)
 
   return (
     <>

@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom'
+import useDocumentTitle from '../hooks/useDocumentTitle.jsx'
 
 const HomePage = () => {
+  useDocumentTitle('MediSchedule - Home')
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-base-200 to-base-100">
       <div className="container mx-auto px-2">

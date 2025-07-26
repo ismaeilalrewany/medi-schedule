@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom'
+import useDocumentTitle from '../hooks/useDocumentTitle.jsx'
 
 const NotFoundPage = () => {
+  useDocumentTitle('MediSchedule - Page Not Found')
+
   return (
     <main className="bg-gradient-to-br from-base-200 to-base-100">
       <div className="container mx-auto px-2">

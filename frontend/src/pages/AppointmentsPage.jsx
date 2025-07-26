@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import Pagination from '../components/table/Pagination.jsx'
 import Modal from '../components/modal/Modal.jsx'
 import axios from 'axios'
+import useDocumentTitle from '../hooks/useDocumentTitle.jsx'
 
 const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
   const [appointments, setAppointments] = useState([])
@@ -22,6 +23,8 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
 
   const baseURL = import.meta.env.VITE_API_URL
   const params = useParams()
+
+  useDocumentTitle(`MediSchedule - ${role.charAt(0).toUpperCase() + role.slice(1)} Appointments`)
 
   // Unified function to handle all appointment fetching (filtering, pagination, initial load)
   const fetchAppointments = useCallback(

@@ -1,6 +1,9 @@
 import TableSection from '../components/table/TableSection.jsx'
+import useDocumentTitle from '../hooks/useDocumentTitle.jsx'
 
 const DashboardPage = () => {
+  useDocumentTitle('MediSchedule - Dashboard')
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-base-200 to-base-100 py-8">
       <div className="container mx-auto px-2">

@@ -7,6 +7,7 @@ import RadioInput from '../components/form/RadioInput.jsx'
 import Recaptcha from '../components/form/Recaptcha.jsx'
 import SubmitButton from '../components/form/SubmitButton.jsx'
 import RedirectLink from '../components/form/RedirectLink.jsx'
+import useDocumentTitle from '../hooks/useDocumentTitle.jsx'
 
 const LoginPage = () => {
   const [email, setEmail] = useState('')
@@ -16,6 +17,8 @@ const LoginPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const recaptchaRef = useRef(null)
   const navigate = useNavigate()
+
+  useDocumentTitle('MediSchedule - Login')
 
   const handleSubmit = async e => {
     e.preventDefault()
