@@ -1,8 +1,26 @@
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import useDocumentTitle from '../hooks/useDocumentTitle.jsx'
+import checkAuth from '../services/checkAuth.js'
 
 const HomePage = () => {
+  const [userRole, setUserRole] = useState('patient')
+
   useDocumentTitle('MediSchedule - Home')
+
+  useEffect(() => {
+    const fetchAuthStatus = async () => {
+      try {
+        const role = await checkAuth()
+        if (role) setUserRole(role)
+      } catch (error) {
+        console.error('Auth check failed:', error)
+        setUserRole('patient')
+      }
+    }
+
+    fetchAuthStatus()
+  }, [])
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-base-200 to-base-100">
@@ -17,10 +35,14 @@ const HomePage = () => {
           </p>
           <div>
             <Link
-              to="/patients/appointments"
+              to={`${userRole === 'patient' ? '/patients/appointments' : userRole === 'doctor' ? '/doctors/appointments' : '/admins/dashboard'}`}
               className="btn btn-neutral text-neutral-content btn-sm md:btn-lg"
             >
-              Book New Appointment
+              {userRole === 'patient'
+                ? 'Book New Appointment'
+                : userRole === 'doctor'
+                  ? 'View Appointments'
+                  : 'Go To Dashboard'}
             </Link>
           </div>
         </header>
