@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import NavButton from './components/NavButton.jsx'
 import checkAuth from '../../services/checkAuth.js'
+import NavLinks from './components/NavLinks.jsx'
 
 const Navbar = () => {
   const location = useLocation()
@@ -78,42 +79,16 @@ const Navbar = () => {
                 tabIndex={0}
                 className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
               >
-                <li>
-                  <Link to="/patients/appointments" className="btn btn-ghost">
-                    Appointments
-                  </Link>
-                </li>
+                <NavLinks role={userRole} />
               </ul>
             </div>
-            <Link to={'/patients/appointments'} className="btn btn-ghost text-xl">
+            <Link to={'/'} className="btn btn-ghost text-xl">
               MediSchedule
             </Link>
           </div>
           <div className="navbar-end hidden lg:flex">
             <ul className="menu menu-horizontal px-1">
-              <li>
-                <Link to="/" className="btn btn-ghost">
-                  Home
-                </Link>
-              </li>
-              {userRole === 'admin' ? (
-                <li>
-                  <Link to="/admins/dashboard" className="btn btn-ghost">
-                    Dashboard
-                  </Link>
-                </li>
-              ) : (
-                <li>
-                  <Link to={`/${userRole || 'patient'}s/appointments`} className="btn btn-ghost">
-                    Appointments
-                  </Link>
-                </li>
-              )}
-              <li>
-                <Link to={`/${userRole || 'patient'}s/profile`} className="btn btn-ghost">
-                  Profile
-                </Link>
-              </li>
+              <NavLinks role={userRole} />
             </ul>
             <div className="">
               <NavButton authButton={authButton} />
