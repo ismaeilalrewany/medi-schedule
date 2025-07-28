@@ -41,10 +41,7 @@ const Navbar = () => {
   useEffect(() => {
     const fetchAuthStatus = async () => {
       const role = await checkAuth()
-
-      if (role) {
-        setUserRole(role)
-      }
+      setUserRole(role || '') // Always sync state with auth status
     }
 
     fetchAuthStatus()
