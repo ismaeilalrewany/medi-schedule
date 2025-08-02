@@ -8,7 +8,7 @@ const NotFoundPage = () => {
     <main className="bg-gradient-to-br from-base-200 to-base-100">
       <div className="container mx-auto px-2">
         <section className="flex justify-center items-center h-screen">
-          <article className="card w-full max-w-lg bg-white shadow-lg text-center">
+          <article className="card ring-1 ring-neutral-300 w-full max-w-lg bg-white shadow text-center">
             <div className="card-body p-10 flex flex-col items-center">
               <h1 className="text-8xl font-semibold text-neutral">404</h1>
               <h2 className="card-title text-3xl font-semibold mt-4 text-neutral/80">

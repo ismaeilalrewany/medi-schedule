@@ -49,7 +49,7 @@ const HomePage = () => {
 
         <section className="pb-16">
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8">
-            <div className="card bg-base-100 shadow-md">
+            <div className="card ring-1 ring-neutral-300 bg-base-100 shadow-md">
               <div className="card-body items-center text-center p-4">
                 <i className="fa-solid fa-clock text-neutral text-2xl md:text-3xl"></i>
                 <h2 className="card-title text-lg md:text-2xl mt-2">Easy Scheduling</h2>
@@ -58,7 +58,7 @@ const HomePage = () => {
                 </p>
               </div>
             </div>
-            <div className="card bg-base-100 shadow-md">
+            <div className="card ring-1 ring-neutral-300 bg-base-100 shadow-md">
               <div className="card-body items-center text-center p-4">
                 <i className="fa-solid fa-briefcase-medical text-neutral text-2xl md:text-3xl"></i>
                 <h2 className="card-title text-lg md:text-2xl mt-2">Expert Doctors</h2>
@@ -67,7 +67,7 @@ const HomePage = () => {
                 </p>
               </div>
             </div>
-            <div className="card bg-base-100 shadow-md">
+            <div className="card ring-1 ring-neutral-300 bg-base-100 shadow-md">
               <div className="card-body items-center text-center p-4">
                 <i className="fa-solid fa-user-shield text-neutral text-2xl md:text-3xl"></i>
                 <h2 className="card-title text-lg md:text-2xl mt-2">Secure & Private</h2>
@@ -123,7 +123,7 @@ const HomePage = () => {
           <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-neutral">
             What Our Patients Say
           </h2>
-          <div className="card max-w-2xl mx-auto bg-white shadow">
+          <div className="card ring-1 ring-neutral-300 max-w-2xl mx-auto bg-white shadow">
             <div className="card-body p-4">
               <p className="text-sm sm:text-[16px] italic text-neutral-600">
                 "MediSchedule made booking an appointment so simple and stress-free. I found a great
