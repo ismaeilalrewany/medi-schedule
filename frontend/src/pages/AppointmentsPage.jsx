@@ -301,7 +301,8 @@ const AppointmentsPage = ({ endpoint, isViewerAdmin = false, role }) => {
                 {appointments.map(appointment => (
                   <div
                     key={appointment._id}
-                    className={`bg-white rounded-lg p-5 ring-1 ring-neutral-300 shadow hover:shadow-lg hover:-translate-y-1 transition-all duration-200`}
+                    className={`bg-white rounded-lg p-5 ring-1 ring-neutral-300 shadow`}
+                    // className={`bg-white rounded-lg p-5 ring-1 ring-neutral-300 shadow hover:shadow-lg hover:-translate-y-1 transition-all duration-200`}
                   >
                     <div className="flex justify-between items-start mb-3">
                       <h3 className="text-lg font-semibold text-neutral capitalize">
