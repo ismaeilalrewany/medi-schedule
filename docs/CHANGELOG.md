@@ -1,3 +1,15 @@
+# [2.1.0](https://github.com/ismaeilalrewany/medi-schedule/compare/v2.0.0...v2.1.0) (2025-08-04)
+
+### Bug Fixes
+
+- **logout:** Sync navbar auth state after logout ([8d1e07d](https://github.com/ismaeilalrewany/medi-schedule/commit/8d1e07dbc89f115cbde4f1fa23cf8f5341ec5794))
+
+### Features
+
+- Add useDocumentTitle hook for dynamic page titles ([8fe4d88](https://github.com/ismaeilalrewany/medi-schedule/commit/8fe4d887bc38b2ff47ea84f65746b49daa160175))
+- **home:** Add role-based dynamic navigation button ([5c08c13](https://github.com/ismaeilalrewany/medi-schedule/commit/5c08c137b2c9c941df9353ea43074e760b8c4437))
+- **navbar:** Add complete navigation links to mobile menu ([aa24e5c](https://github.com/ismaeilalrewany/medi-schedule/commit/aa24e5ccdb1145e9d3464a810f45b346c7c91849))
+
 # [2.0.0](https://github.com/ismaeilalrewany/medi-schedule/compare/v1.3.0...v2.0.0) (2025-07-25)
 
 ### Bug Fixes
